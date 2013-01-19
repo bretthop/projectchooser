@@ -7,12 +7,19 @@ class ProposalBean():
     hasUserVoted = False
     votes = []
 
-    def fromEntity(self, entity):
-        self.id = entity.key().id()
-        self.name = entity.name
-        self.description = entity.description
-        self.technologiesUsed = entity.technologiesUsed
-        self.rating = -1    #entity.rating
+    @staticmethod
+    def fromEntity(entity):
+        return ProposalBean(
+            id = entity.key().id(),
+            name = entity.name,
+            description = entity.description,
+            technologiesUsed = entity.technologiesUsed,
+            rating = -1,    #entity.rating
+        )
+
+    @staticmethod
+    def compare(a, b):
+        return cmp(b.rating, a.rating)
 
 class BackerBean():
     id = 0
