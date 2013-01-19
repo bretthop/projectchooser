@@ -5,35 +5,53 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 from app.data.models import *
-from app.data.beans import ProposalBean
+from app.data.beans import *
 
 # Handlers
 # TODO: Move to separate files
 class ProposalsHandler(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
-		
+
+		currentBacker = BackerBean()
+		currentBacker.userId           = user.email()
+		currentBacker.remaining_gold   = 0
+		currentBacker.remaining_silver = 1
+		currentBacker.remaining_bronze = 1
+
 		if user:
-			propBeans = []
+			proposalBeans = []
 			proposals = db.GqlQuery('SELECT * FROM Proposal')
-			
+
 			for proposal in proposals:
 				propBean = ProposalBean()
 				propBean.fromEntity(proposal)
-				
-				userVote = db.GqlQuery('SELECT * FROM Vote WHERE userId = \'' +  user.nickname() + '\' AND proposalId = ' + str(proposal.key().id())) 
+				proposalTotalRating = 0
+
+				userVote = db.GqlQuery('SELECT * FROM Vote WHERE userId = \'' +  user.email() + '\' AND proposalId = ' + str(proposal.key().id()))
+				proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = ' + str(proposal.key().id()))
 
 				if userVote.count() > 0:
+					propBean.votes = proposalVotes
 					propBean.hasUserVoted = True
-								
-				propBeans.append(propBean)
-			
-			data = { 'proposals': propBeans }
+
+					#calculate SUM of all votes for proposal
+					#TODO: fetch SUM from DB if possible using db.GqlQuery('SELECT SUM(weight) FROM Vote WHERE proposalId = ' + str(proposal.key().id()))
+					for vote in proposalVotes:
+						proposalTotalRating += vote.weight
+
+				propBean.rating = proposalTotalRating
+
+				proposalBeans.append(propBean)
+
+			#TODO: sort proposals based on rating (highest on top)
+
+			data = { 'proposals': proposalBeans, 'currentBacker': currentBacker }
 
 			self.response.out.write(template.render('templates/proposals.html', data))
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
-			
+
 	def post(self):
 		proposal = Proposal(
 			name = self.request.get('name'),
@@ -41,9 +59,9 @@ class ProposalsHandler(webapp.RequestHandler):
 			technologiesUsed = self.request.get('technologiesUsed'),
 			rating = 0
 		)
-		
+
 		proposal.put()
-		
+
 		self.redirect('/')
 
 class VoteHandler(webapp.RequestHandler):
@@ -51,7 +69,7 @@ class VoteHandler(webapp.RequestHandler):
 		proposalId = int(self.request.get('id'))
 		votingWeight = self.request.get('weight')
 		votingWeightInt = 0
-		
+
 		# TODO: Make this an enum or a model
 		if votingWeight == 'gold':
 			votingWeightInt = 8
@@ -59,27 +77,27 @@ class VoteHandler(webapp.RequestHandler):
 			votingWeightInt = 5
 		elif votingWeight == 'bronze':
 			votingWeightInt = 3
-		
+
 		# Apply vote to proposal
 		proposal = Proposal.get_by_id(proposalId)
-		proposal.rating += votingWeightInt
 		proposal.put()
-		
+
 		# Record the vote for the user
 		user = users.get_current_user()
 		Vote(
 			userId = user.nickname(),
-			proposalId = proposalId
+			proposalId = proposalId,
+			weight = votingWeightInt
 		).put()
-		
+
 		self.redirect('/')
-		
+
 def main():
 	app = webapp.WSGIApplication(
 		[('/', ProposalsHandler),
 		 ('/vote', VoteHandler)],
 		debug=True)
-		
+
 	run_wsgi_app(app)
 
 if __name__ == "__main__":

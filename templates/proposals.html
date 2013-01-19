@@ -7,8 +7,12 @@
 	<style type="text/css">
 		.name { font-weight: bold; }
 		.description { font-style: italic; }
-		.technologies { font-size: 12px; }
-		
+		.technologies { }
+
+        table {font-size: 14px;}
+        table tr {padding:3px;}
+        table tr td {padding:3px; vertical-align: top;}
+
 		.vote .gold { color: gold; }
 		.vote .silver{ color: silver; }
 		.vote .bronze { color: brown; }
@@ -20,40 +24,77 @@
 <body>
 	<div class="container">
 		<h1>Project Chooser</h1>
-		<p>Below you can see a list of existing proposals for the current domain. You can vote on any one you like, or add your own</p>
+
+        <br>
+
+		<h4>Welcome {{ currentBacker.userId }},</h4>
+		<p>Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own</p>
+
 		{% if proposals %}
-			{% for proposal in proposals %}
-				<div class="container padd">
-					<span class="name">Name:</span>
-					<span class="name">{{proposal.name}}</span><br />
-					
-					<span class="name">Description:</span>
-					<span class="description">{{proposal.description}}</span><br />
-					
-					<span class="name">Technologies Used:</span>
-					<span class="technologies">{{proposal.technologiesUsed}}</span><br />
-					
-					<span class="name">Rating:</span>
-					<span class="rating">{{proposal.rating}}</span><br />
-					<div class="vote">			
-						{% if proposal.hasUserVoted %}
-							<p class="text-success">Thank you for your vote!</p>
-						{% else %}
-							<form method="post" action="/vote?weight=gold&id={{proposal.id}}">
-								<input type="submit" value="Vote!" class="gold" />
-							</form>
-							
-							<form method="post" action="/vote?weight=silver&id={{proposal.id}}">
-								<input type="submit" value="Vote!" class="silver" />
-							</form>
-							
-							<form method="post" action="/vote?weight=bronze&id={{proposal.id}}">
-								<input type="submit" value="Vote!" class="bronze" />
-							</form>
-						{% endif %}
-					</div>
-				</div>
-			{% endfor %}
+            <table cellspacing="0" cellpadding="0" border="1">
+                <thead>
+                    <tr>
+                        <td>Rating</td>
+                        <td>Name</td>
+                        <td>Description</td>
+                        <td>Technologies Used</td>
+                        <td>Backers</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                {% for proposal in proposals %}
+                    <tr>
+                        <td><span class="rating">{{proposal.rating}}</span></td>
+                        <td><span class="name">{{proposal.name}}</span></td>
+                        <td><span class="description">{{proposal.description}}</span></td>
+                        <td><span class="technologies">{{proposal.technologiesUsed}}</span></td>
+                        <td>
+                            {% if proposal.votes %}
+                                {% for vote in proposal.votes %}
+                                    <li class="text-success">[{{ vote.weight }}] {{ vote.userId }}</li>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-error">Be the first backer!</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if proposal.hasUserVoted %}
+                                <p class="text-success">Thank you for your vote!</p>
+                                <form method="post" action="/withdraw?id={{proposal.id}}">
+                                    <input type="submit" value="Withdraw" disabled="disabled" />
+                                </form>
+                            {% else %}
+                                {% if currentBacker.remaining_gold  %}
+                                    <form method="post" action="/vote?weight=gold&id={{proposal.id}}">
+                                        <input type="submit" value="Gold" class="gold" />
+                                    </form>
+                                {% endif %}
+
+                                {% if currentBacker.remaining_silver %}
+                                    <form method="post" action="/vote?weight=silver&id={{proposal.id}}">
+                                        <input type="submit" value="Silver" class="silver" />
+                                    </form>
+                                {% endif %}
+
+                                {% if currentBacker.remaining_bronze %}
+                                    <form method="post" action="/vote?weight=bronze&id={{proposal.id}}">
+                                        <input type="submit" value="Bronze" class="bronze" />
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% comment %}
+                    <div class="container padd">
+
+                        <div class="vote">
+
+                        </div>
+                    </div>
+                    {% endcomment %}
+                {% endfor %}
+            </table>
 		{% else %}
 			<p class="text-warning">There are currently no proposals, use the form below to add one</p>
 		{% endif %}
