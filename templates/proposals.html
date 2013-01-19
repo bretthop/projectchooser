@@ -1,0 +1,78 @@
+<html>
+<head>
+	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="all">
+	<script src="js/jquery-1.8.2.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<style type="text/css">
+		.name { font-weight: bold; }
+		.description { font-style: italic; }
+		.technologies { font-size: 12px; }
+		
+		.vote .gold { color: gold; }
+		.vote .silver{ color: silver; }
+		.vote .bronze { color: brown; }
+		
+		.vote form { display: inline-block; }
+		.padd { padding-bottom: 10px; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Project Chooser</h1>
+		<p>Below you can see a list of exisiting proposals for the current project. You can vote on any one you like, or add your own</p>
+		{% if proposals %}
+			{% for proposal in proposals %}
+				<div class="container padd">
+					<span class="name">Name:</span>
+					<span class="name">{{proposal.name}}</span><br />
+					
+					<span class="name">Description:</span>
+					<span class="description">{{proposal.description}}</span><br />
+					
+					<span class="name">Technologies Used:</span>
+					<span class="technologies">{{proposal.technologiesUsed}}</span><br />
+					
+					<span class="name">Rating:</span>
+					<span class="rating">{{proposal.rating}}</span><br />
+					<div class="vote">			
+						{% if proposal.hasUserVoted %}
+							<p class="text-success">Thank you for your vote!</p>
+						{% else %}
+							<form method="post" action="/vote?weight=gold&id={{proposal.id}}">
+								<input type="submit" value="Vote!" class="gold" />
+							</form>
+							
+							<form method="post" action="/vote?weight=silver&id={{proposal.id}}">
+								<input type="submit" value="Vote!" class="silver" />
+							</form>
+							
+							<form method="post" action="/vote?weight=bronze&id={{proposal.id}}">
+								<input type="submit" value="Vote!" class="bronze" />
+							</form>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		{% else %}
+			<p class="text-warning">There are currently no proposals, use the form below to add one</p>
+		{% endif %}
+		
+	</div>
+	<div class="container">
+		<h2>Add Proposal</h2>
+		<form method="post" action="/">
+			<input type="text" name="name" id="name" placeholder="Name" />
+			<br />
+			
+			<input type="text" name="description" id="description" placeholder="Description" />
+			<br />
+			
+			<input type="text" name="technologiesUsed" id="technologiesUsed" placeholder="Technologies Used" />
+			<br />
+	
+			<input type="submit" value="Add Proposal"/>
+		</form>
+	</div>
+</body>
+</html>
