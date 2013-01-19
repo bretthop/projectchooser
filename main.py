@@ -82,7 +82,7 @@ class VoteHandler(webapp.RequestHandler):
 		
 		# TODO: Make this an enum or a model
 		if votingWeight == 'gold':
-			votingWeightInt = 10
+			votingWeightInt = 8
 		elif votingWeight == 'silver':
 			votingWeightInt = 5
 		elif votingWeight == 'bronze':
