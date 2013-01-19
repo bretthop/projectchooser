@@ -13,42 +13,32 @@ class ProposalsHandler(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        if user:
-            currentBacker = BackerBean()
-            currentBacker.userId           = user.email()
-            currentBacker.remaining_gold   = 0
-            currentBacker.remaining_silver = 1
-            currentBacker.remaining_bronze = 1
+        currentBacker = BackerBean()
+        currentBacker.userId           = user.email()
+        currentBacker.remaining_gold   = 0
+        currentBacker.remaining_silver = 1
+        currentBacker.remaining_bronze = 1
 
-            proposalBeans = []
-            proposals = db.GqlQuery('SELECT * FROM Proposal')
+        proposalBeans = []
+        proposals = db.GqlQuery('SELECT * FROM Proposal')
 
-            for proposal in proposals:
-                propBean = ProposalBean.fromEntity(proposal)
-                proposalTotalRating = 0
+        for proposal in proposals:
+            propBean = ProposalBean.fromEntity(proposal)
 
-                userVote = db.GqlQuery('SELECT * FROM Vote WHERE userId = \'{userId}\' AND proposalId = {proposalId}'
-                    .format(userId = user.email(), proposalId = proposal.key().id()))
+            userVote = db.GqlQuery('SELECT * FROM Vote WHERE userId = \'{userId}\' AND proposalId = {proposalId}'
+                .format(userId = user.email(), proposalId = proposal.key().id()))
 
+            if userVote.count() > 0:
                 proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = {proposalId}'
                     .format(proposalId = proposal.key().id()))
+                propBean.setVotes(proposalVotes)
 
-                if userVote.count() > 0:
-                    propBean.votes = proposalVotes
-                    propBean.hasUserVoted = True
+                propBean.hasUserVoted = True
 
-                    #calculate SUM of all votes for proposal
-                    #TODO: fetch SUM from DB if possible using db.GqlQuery('SELECT SUM(weight) FROM Vote WHERE proposalId = ' + str(proposal.key().id()))
-                    for vote in proposalVotes:
-                        proposalTotalRating += vote.weight
+            proposalBeans.append(propBean)
 
-                propBean.rating = proposalTotalRating
-                proposalBeans.append(propBean)
-
-            data = { 'proposals': sorted(proposalBeans, ProposalBean.compare), 'currentBacker': currentBacker }
-            self.response.out.write(template.render('templates/proposals.html', data))
-        else:
-            self.redirect(users.create_login_url(self.request.uri))
+        data = { 'proposals': sorted(proposalBeans, ProposalBean.compare), 'currentBacker': currentBacker }
+        self.response.out.write(template.render('templates/proposals.html', data))
 
     def post(self):
         proposal = Proposal(

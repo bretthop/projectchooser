@@ -12,6 +12,7 @@ handlers:
 
 - url: /.*
   script: main.py
+  login: required
   
 builtins:
 - datastore_admin: on
