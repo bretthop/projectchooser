@@ -4,39 +4,11 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-# Models
-# TODO: Move to seperate files
-class Proposal(db.Model):
-	name = db.StringProperty()
-	description = db.StringProperty()
-	technologiesUsed = db.StringProperty()
-	rating = db.IntegerProperty()
-
-class Vote(db.Model):
-	userId = db.StringProperty()
-	proposalId = db.IntegerProperty()
-
-
-# Beans
-# TODO: Move to seperate files
-class ProposalBean():
-	id = 0
-	name = ''
-	description = ''
-	technologiesUsed = ''
-	rating = 0
-	hasUserVoted = False
-	
-	def fromEntity(self, entity):
-		self.id = entity.key().id()
-		self.name = entity.name
-		self.description = entity.description
-		self.technologiesUsed = entity.technologiesUsed
-		self.rating = entity.rating
-
+from app.data.models import *
+from app.data.beans import ProposalBean
 
 # Handlers
-# TODO: Move to seperate files
+# TODO: Move to separate files
 class ProposalsHandler(webapp.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
