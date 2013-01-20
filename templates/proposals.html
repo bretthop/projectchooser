@@ -73,19 +73,19 @@
                                 </form>
                             {% else %}
                                 {% if currentBacker.remaining_gold %}
-                                    <form method="post" action="/vote?weight=gold&id={{proposal.id}}">
+                                    <form method="post" action="/vote?proposalId={{proposal.id}}&weight=gold">
                                         <input type="submit" value="Gold" class="gold" />
                                     </form>
                                 {% endif %}
 
                                 {% if currentBacker.remaining_silver %}
-                                    <form method="post" action="/vote?weight=silver&id={{proposal.id}}">
+                                    <form method="post" action="/vote?proposalId={{proposal.id}}&weight=silver">
                                         <input type="submit" value="Silver" class="silver" />
                                     </form>
                                 {% endif %}
 
                                 {% if currentBacker.remaining_bronze %}
-                                    <form method="post" action="/vote?weight=bronze&id={{proposal.id}}">
+                                    <form method="post" action="/vote?proposalId={{proposal.id}}&weight=bronze">
                                         <input type="submit" value="Bronze" class="bronze" />
                                     </form>
                                 {% endif %}
@@ -93,14 +93,6 @@
                         </td>
                     </tr>
 
-                    {% comment %}
-                    <div class="container padd">
-
-                        <div class="vote">
-
-                        </div>
-                    </div>
-                    {% endcomment %}
                 {% endfor %}
             </table>
 		{% else %}
@@ -109,6 +101,10 @@
 		
 	</div>
 	<div class="container">
+        {% block ProposalModelContent %}
+
+        {% endblock %}
+
 		<h2>Add Proposal</h2>
 		<form method="post" action="/">
 			<input type="text" name="name" id="name" placeholder="Name" />

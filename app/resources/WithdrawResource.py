@@ -1,17 +1,14 @@
 from google.appengine.ext import webapp
 
-from app.data.models import *
+from app.services import VoteService
 
 class WithdrawResource(webapp.RequestHandler):
+
+    _voteService = VoteService.VoteService()
+
     def post(self):
         voteId = int(self.request.get('voteId'))
 
-        if voteId:
-            vote = Vote.get_by_id(voteId)
-
-            #TODO: give vote (weight) back to Backer (to be able to use it again)
-
-            if vote:
-                vote.delete()
+        self._voteService.WithdrawVote(voteId)
 
         self.redirect('/')
