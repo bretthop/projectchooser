@@ -5,6 +5,7 @@ class ProposalBean():
     technologiesUsed = ''
     rating = 0
     hasUserVoted = False
+    userVote = None,
     votes = []
 
     @staticmethod
@@ -23,13 +24,17 @@ class ProposalBean():
     def compare(a, b):
         return cmp(b.rating, a.rating)
 
-    def setVotes(self, votes):
+    def setVotes(self, votes, currentUser):
         self.votes = votes
         weight = 0
 
-        #TODO: fetch SUM from DB if possible using db.GqlQuery('SELECT SUM(weight) FROM Vote WHERE proposalId = ' + str(proposal.key().id()))
+        # sum up total rating based on all votes
         for v in votes:
             weight += v.weight
+            # if vote belongs to current user, set is as user's vote
+            if v.userId == currentUser.email():
+                self.hasUserVoted = True
+                self.userVote = v
 
         self.rating = weight
 

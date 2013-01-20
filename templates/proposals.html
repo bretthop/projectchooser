@@ -44,11 +44,19 @@
                 </thead>
                 {% for proposal in proposals %}
                     <tr>
-                        <td><span class="rating">{{proposal.rating}}</span></td>
-                        <td><span class="name">{{proposal.name}}</span></td>
-                        <td><span class="description">{{proposal.description}}</span></td>
-                        <td><span class="technologies">{{proposal.technologiesUsed}}</span></td>
-                        <td>
+                        <td> <!-- Proposal Rating -->
+                            <span class="rating">{{proposal.rating}}</span>
+                        </td>
+                        <td> <!-- Proposal Name -->
+                            <span class="name">{{proposal.name}}</span>
+                        </td>
+                        <td> <!-- Proposal Description -->
+                            <span class="description">{{proposal.description}}</span>
+                        </td>
+                        <td> <!-- Proposal Technologies -->
+                            <span class="technologies">{{proposal.technologiesUsed}}</span>
+                        </td>
+                        <td> <!-- Proposal Backers -->
                             {% if proposal.votes %}
                                 {% for vote in proposal.votes %}
                                     <li class="text-success">[{{ vote.weight }}] {{ vote.userId }}</li>
@@ -57,14 +65,14 @@
                                 <p class="text-error">Be the first backer!</p>
                             {% endif %}
                         </td>
-                        <td>
+                        <td> <!-- Proposal Actions -->
                             {% if proposal.hasUserVoted %}
                                 <p class="text-success">Thank you for your vote!</p>
-                                <form method="post" action="/withdraw?id={{proposal.id}}">
-                                    <input type="submit" value="Withdraw" disabled="disabled" />
+                                <form method="post" action="/withdraw?voteId={{proposal.userVote.key.id}}">
+                                    <input type="submit" value="Withdraw" />
                                 </form>
                             {% else %}
-                                {% if currentBacker.remaining_gold  %}
+                                {% if currentBacker.remaining_gold %}
                                     <form method="post" action="/vote?weight=gold&id={{proposal.id}}">
                                         <input type="submit" value="Gold" class="gold" />
                                     </form>

@@ -8,13 +8,13 @@ from app.data.models import *
 
 class ProposalResource(webapp.RequestHandler):
     def get(self):
-        user = users.get_current_user()
+        currentUser = users.get_current_user()
 
         currentBacker = BackerBean()
-        currentBacker.userId           = user.email()
-        currentBacker.remaining_gold   = 0
-        currentBacker.remaining_silver = 1
-        currentBacker.remaining_bronze = 1
+        currentBacker.userId           = currentUser.email()
+        currentBacker.remaining_gold   = 1  #TODO: get actual value from model
+        currentBacker.remaining_silver = 1  #TODO: get actual value from model
+        currentBacker.remaining_bronze = 1  #TODO: get actual value from model
 
         proposalBeans = []
         proposals = db.GqlQuery('SELECT * FROM Proposal')
@@ -25,13 +25,7 @@ class ProposalResource(webapp.RequestHandler):
             proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = {proposalId}'
             .format(proposalId = proposal.key().id()))
 
-            propBean.setVotes(proposalVotes)
-
-            userVote = db.GqlQuery('SELECT * FROM Vote WHERE userId = \'{userId}\' AND proposalId = {proposalId}'
-            .format(userId = user.email(), proposalId = proposal.key().id()))
-
-            if userVote.count() > 0:
-                propBean.hasUserVoted = True
+            propBean.setVotes(proposalVotes, currentUser)
 
             proposalBeans.append(propBean)
 
