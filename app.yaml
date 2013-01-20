@@ -4,15 +4,14 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /bootstrap
-  static_dir: static/bootstrap
-  
-- url: /js
-  static_dir: static/js
+- url: /static
+  static_dir: static
+
+- url: /api/.*
+  script: app/APIDispatcher.py
+  login: required
+  auth_fail_action: unauthorized
 
 - url: /.*
   script: main.py
   login: required
-  
-builtins:
-- datastore_admin: on

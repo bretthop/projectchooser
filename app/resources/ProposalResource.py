@@ -23,13 +23,13 @@ class ProposalResource(webapp.RequestHandler):
             propBean = ProposalBean.fromEntity(proposal)
 
             proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = {proposalId}'
-            .format(proposalId = proposal.key().id()))
+                .format(proposalId = proposal.key().id()))
 
             propBean.setVotes(proposalVotes, currentUser)
 
             proposalBeans.append(propBean)
 
-        data = { 'proposals': sorted(proposalBeans, ProposalBean.compare), 'currentBacker': currentBacker }
+        data = { 'proposals': sorted(proposalBeans, ProposalBean.compareTo), 'currentBacker': currentBacker }
         self.response.out.write(template.render('templates/proposals.html', data))
 
     def post(self):
