@@ -23,7 +23,7 @@ class ProposalBean():
         bean.description = entity.description
         bean.technologiesUsed = entity.technologiesUsed
         bean.votes = VoteBean.fromEntities(entity.votes)
-#
+
 #        # sum up total rating based on all votes
 #        for v in bean.votes:
 #            bean.rating += v.weight
@@ -45,7 +45,6 @@ class BackerBean():
     remaining_silver = 0
     remaining_bronze = 0
 
-#TODO: This may not be needed, but has been committed just in case
 class VoteBean():
     id = None
     userId = None
