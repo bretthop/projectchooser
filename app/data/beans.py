@@ -47,6 +47,7 @@ class BackerBean():
 
 #TODO: This may not be needed, but has been committed just in case
 class VoteBean():
+    id = None
     userId = None
     proposalId = None
     weight = 0
@@ -58,6 +59,7 @@ class VoteBean():
         for e in entities:
             bean = VoteBean()
 
+            bean.id = e.key().id()
             bean.userId = e.userId
             bean.proposalId = e.proposalId
             bean.weight = e.weight

@@ -1,49 +1,30 @@
 import json
-from app.data.beans import *
 
-class JsonTmpl:
-    pass
-
-# TODO: This class will definitely be re-written soon, this is here purely because it wasn't super easy to encode objects into JSON
 class JsonUtil:
     @staticmethod
-    def jsonEncodeList(list):
-        jsonString = "["
+    def simpleEncodeList(l):
+        jsonString = ""
 
-        for index, el in enumerate(list):
-            jsonTmpl = []
+        for el in l:
+            jsonString += JsonUtil.simpleEncodeObject(el) + ","
 
-            if isinstance(el, ProposalBean):
-                jsonTmpl = JsonUtil._createProposalTmpl(el)
-            elif isinstance(el, VoteBean):
-                jsonTmpl = JsonUtil._createVoteTmpl(el)
-
-            jsonString += json.dumps(jsonTmpl.__dict__)
-
-            if index < (len(list) - 1):
-                jsonString += ","
-
-        jsonString += "]"
-
-        return jsonString
+        return "[" + jsonString[0:len(jsonString)-1] + "]"
 
     @staticmethod
-    def _createProposalTmpl(p):
-        proposalTmpl = JsonTmpl()
+    def simpleEncodeObject(o):
+        jsonStr = ""
 
-        proposalTmpl.id = p.id
-        proposalTmpl.name = p.name
-        proposalTmpl.description = p.description
-        proposalTmpl.technologiesUsed = p.technologiesUsed
-        proposalTmpl.rating = p.rating
+        dic = o.__dict__
 
-        return proposalTmpl
+        for j, v in enumerate(dic):
+            try:
+                jsonProp = json.dumps({v: dic[v]})
 
-    @staticmethod
-    def _createVoteTmpl(v):
-        voteTmpl = JsonTmpl()
+                jsonStr += jsonProp[1:len(jsonProp)-1] + ","
+            except TypeError:
+                if isinstance(dic[v], list):
+                    jsonStr += "\"" + str(v) + "\":" + JsonUtil.simpleEncodeList(dic[v]) + ","
+                else:
+                    jsonStr += "\"" + str(v) + "\":" + JsonUtil.simpleEncodeObject(dic[v]) + ","
 
-        voteTmpl.userId = v.userId
-        voteTmpl.weight = v.weight
-
-        return voteTmpl
+        return "{" + jsonStr[0:len(jsonStr)-1] + "}"

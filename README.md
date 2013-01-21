@@ -34,9 +34,8 @@ Current Development Status
 Known issues
 --------------
 
-* Some backend code is still in one file (main.py)
-* There is no way (through the application) to delete Votes or Proposals
-* A user can not un-vote
+* There is no way (through the application) to delete Proposals
+* The JSON encoding is not bullet-proof, some objects may not be encoded correctly (I'm on the hunt for a library)
 
 Glossary
 --------------

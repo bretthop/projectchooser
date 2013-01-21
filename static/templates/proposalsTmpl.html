@@ -1,0 +1,55 @@
+<table class="table-bordered table-striped">
+    <thead>
+    <tr>
+        <td>Rating</td>
+        <td>Name</td>
+        <td>Description</td>
+        <td>Technologies Used</td>
+        <td>Backers</td>
+        <td>Action</td>
+    </tr>
+    </thead>
+    <% _.each(proposals, function(proposal) { %>
+        <tr>
+            <td> <!-- Proposal Rating -->
+                <span class="rating"><%= proposal.rating %></span>
+            </td>
+            <td> <!-- Proposal Name -->
+                <span class="name"><%= proposal.name %></span>
+            </td>
+            <td> <!-- Proposal Description -->
+                <span class="description"><%= proposal.description %></span>
+            </td>
+            <td> <!-- Proposal Technologies -->
+                <span class="technologies"><%= proposal.technologiesUsed %></span>
+            </td>
+            <td><!-- Proposal Backers -->
+                <% if (proposal.votes.length > 0) { %>
+                    <% _.each(proposal.votes, function(vote) { %>
+                        <li class="text-success">[<%= vote.weight %>]  <%= vote.userId %></li>
+                    <% }); %>
+                <% } else { %>
+                    <p class="text-error">Be the first backer!</p>
+                <% } %>
+            </td>
+            <td><!-- Proposal Actions -->
+                <% if (proposal.hasUserVoted) { %>
+                    <p class="text-success">Thank you for your vote!</p>
+                    <a href="javascript:withdraw(<%=proposal.userVote.id%>)">Withdraw</a>
+                <% } else { %>
+                    <% if (currentBacker.remaining_gold > 0) { %>
+                        <a href="javascript:vote(<%=proposal.id%>, 'gold')" class="gold">Gold</a>
+                    <% } %>
+
+                    <% if (currentBacker.remaining_silver > 0) { %>
+                        <a href="javascript:vote(<%=proposal.id%>, 'silver')" class="silver">Silver</a>
+                    <% } %>
+
+                    <% if (currentBacker.remaining_bronze) { %>
+                        <a href="javascript:vote(<%=proposal.id%>, 'bronze')" class="bronze">Bronze</a>
+                    <% } %>
+                <% } %>
+            </td>
+        </tr>
+    <% }); %>
+</table>

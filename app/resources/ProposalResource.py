@@ -1,38 +1,34 @@
 from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
 
 from app.data.beans import *
-from app.data.models import *
+from app.data.models import * # Must import every model we want to use in a GQL Statement
+
+from app.util.JsonUtil import JsonUtil
 
 class ProposalResource(webapp.RequestHandler):
     def get(self):
-        currentUser = users.get_current_user()
-
-        currentBacker = BackerBean()
-        currentBacker.userId           = currentUser.email()
-        currentBacker.remaining_gold   = 1  #TODO: get actual value from model
-        currentBacker.remaining_silver = 1  #TODO: get actual value from model
-        currentBacker.remaining_bronze = 1  #TODO: get actual value from model
-
-        proposalBeans = []
         proposals = db.GqlQuery('SELECT * FROM Proposal')
+        proposalBeans = []
 
         for proposal in proposals:
             propBean = ProposalBean.fromEntity(proposal)
 
             proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = {proposalId}'
-                .format(proposalId = proposal.key().id()))
+            .format(proposalId = proposal.key().id()))
 
-            propBean.setVotes(proposalVotes, currentUser)
+            propBean.setVotes(VoteBean.fromEntities(proposalVotes), users.get_current_user())
 
             proposalBeans.append(propBean)
 
-        data = { 'proposals': sorted(proposalBeans, ProposalBean.compareTo), 'currentBacker': currentBacker }
-        self.response.out.write(template.render('templates/proposals.html', data))
+        proposalBeans = sorted(proposalBeans, ProposalBean.compareTo)
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(JsonUtil.simpleEncodeList(proposalBeans))
 
     def post(self):
+        # TODO: Refactor this to be fully REST (the client should POST a vote object in the request body that we simply save
         proposal = Proposal(
             name = self.request.get('name'),
             description = self.request.get('description'),
@@ -41,5 +37,3 @@ class ProposalResource(webapp.RequestHandler):
         )
 
         proposal.put()
-
-        self.redirect('/')

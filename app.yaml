@@ -12,6 +12,7 @@ handlers:
   login: required
   auth_fail_action: unauthorized
 
-- url: /.*
-  script: main.py
+- url: /|/index.html
+  static_files: static/index.html
+  upload: static/index.html
   login: required
