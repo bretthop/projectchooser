@@ -22,7 +22,7 @@ class ProposalBean():
         bean.name = entity.name
         bean.description = entity.description
         bean.technologiesUsed = entity.technologiesUsed
-        bean.votes = entity.votes
+        bean.votes = VoteBean.fromEntities(entity.votes)
 #
 #        # sum up total rating based on all votes
 #        for v in bean.votes:
@@ -61,7 +61,7 @@ class VoteBean():
 
             bean.id = e.key().id()
             bean.userId = e.userId
-            bean.proposalId = e.proposalId
+            bean.proposalId = e.proposal.key().id()
             bean.weight = e.weight
 
             beans.append(bean)
