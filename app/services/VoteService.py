@@ -16,15 +16,14 @@ class VoteService:
             votingWeightInt = 3
 
         # Apply vote to proposal
-        proposal = Proposal.get_by_id(proposalId)
-        proposal.put()
+        _proposal = Proposal.get_by_id(proposalId)
 
         # Record the vote for the user
         user = users.get_current_user()
         Vote(
-            userId = user.nickname(),
-            proposalId = proposalId,
-            weight = votingWeightInt
+            userId = user.email(),
+            weight = votingWeightInt,
+            proposal = _proposal
         ).put()
 
     def WithdrawVote(self, voteId):

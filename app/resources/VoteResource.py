@@ -1,10 +1,10 @@
 from google.appengine.ext import webapp
 
-from app.services import VoteService
+from app.services.VoteService import *
 
 class VoteResource(webapp.RequestHandler):
 
-    _voteService = VoteService.VoteService()
+    _voteService = VoteService()
 
     def post(self):
         # TODO: Refactor this to be fully REST (the client should POST a vote object in the request body that we simply save

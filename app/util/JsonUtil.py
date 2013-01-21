@@ -1,3 +1,5 @@
+from google.appengine.ext import db
+
 import json
 
 class JsonUtil:
@@ -14,6 +16,7 @@ class JsonUtil:
     def simpleEncodeObject(o):
         jsonStr = ""
 
+        #TODO: throws 'dict' object has no attribute '__dict__' on Proposal.datastore_types.Key
         dic = o.__dict__
 
         for j, v in enumerate(dic):

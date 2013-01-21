@@ -18,7 +18,7 @@ class ProposalResource(webapp.RequestHandler):
             proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = {proposalId}'
             .format(proposalId = proposal.key().id()))
 
-            propBean.setVotes(VoteBean.fromEntities(proposalVotes), users.get_current_user())
+            #propBean.setVotes(VoteBean.fromEntities(proposalVotes), users.get_current_user())
 
             proposalBeans.append(propBean)
 

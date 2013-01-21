@@ -1,3 +1,5 @@
+from google.appengine.api import users
+
 class ProposalBean():
     id = 0
     name = ''
@@ -10,33 +12,31 @@ class ProposalBean():
 
     @staticmethod
     def fromEntity(entity):
+        """
+        :type entity: Proposal
+        """
         bean = ProposalBean()
+        currentUser = users.get_current_user()
 
         bean.id = entity.key().id()
         bean.name = entity.name
         bean.description = entity.description
         bean.technologiesUsed = entity.technologiesUsed
-        bean.rating = 0 #entity.rating
+        bean.votes = entity.votes
+#
+#        # sum up total rating based on all votes
+#        for v in bean.votes:
+#            bean.rating += v.weight
+#            # if vote belongs to current user, set it as user's vote
+#            if v.userId == currentUser.email():
+#                bean.hasUserVoted = True
+#                bean.userVote = v
 
         return bean
 
     @staticmethod
     def compareTo(a, b):
         return cmp(b.rating, a.rating)
-
-    def setVotes(self, votes, currentUser):
-        self.votes = votes
-        weight = 0
-
-        # sum up total rating based on all votes
-        for v in votes:
-            weight += v.weight
-            # if vote belongs to current user, set it as user's vote
-            if v.userId == currentUser.email():
-                self.hasUserVoted = True
-                self.userVote = v
-
-        self.rating = weight
 
 class BackerBean():
     id = 0

@@ -25,9 +25,11 @@
             </td>
             <td><!-- Proposal Backers -->
                 <% if (proposal.votes.length > 0) { %>
+                    <ul>
                     <% _.each(proposal.votes, function(vote) { %>
                         <li class="text-success">[<%= vote.weight %>]  <%= vote.userId %></li>
                     <% }); %>
+                    </ul>
                 <% } else { %>
                     <p class="text-error">Be the first backer!</p>
                 <% } %>
@@ -35,7 +37,7 @@
             <td><!-- Proposal Actions -->
                 <% if (proposal.hasUserVoted) { %>
                     <p class="text-success">Thank you for your vote!</p>
-                    <a href="javascript:withdraw(<%=proposal.userVote.id%>)">Withdraw</a>
+                    <a href="javascript:withdraw(<%= proposal.userVote.id %>)">Withdraw</a>
                 <% } else { %>
                     <% if (currentBacker.remaining_gold > 0) { %>
                         <a href="javascript:vote(<%=proposal.id%>, 'gold')" class="gold">Gold</a>
