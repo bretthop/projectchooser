@@ -25,9 +25,13 @@ class JsonUtil:
 
                 jsonStr += jsonProp[1:len(jsonProp)-1] + ","
             except TypeError:
+                jsonStr += "\"" + str(v) + "\":"
+
                 if isinstance(dic[v], list):
-                    jsonStr += "\"" + str(v) + "\":" + JsonUtil.simpleEncodeList(dic[v]) + ","
+                    jsonStr += JsonUtil.simpleEncodeList(dic[v])
                 else:
-                    jsonStr += "\"" + str(v) + "\":" + JsonUtil.simpleEncodeObject(dic[v]) + ","
+                    jsonStr += JsonUtil.simpleEncodeObject(dic[v])
+
+                jsonStr += ","
 
         return "{" + jsonStr[0:len(jsonStr)-1] + "}"

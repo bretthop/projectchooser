@@ -1,30 +1,20 @@
 <html>
 <head>
     <link href="/static/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="all">
-    <link href="/static/css/main.css" rel="stylesheet" media="all">
-    <style type="text/css">
-        .name { font-weight: bold; }
-        .description { font-style: italic; }
-        .technologies { }
-
-        .vote .gold { color: gold; }
-        .vote .silver{ color: silver; }
-        .vote .bronze { color: brown; }
-
-        .vote form { display: inline-block; }
-        .padd { padding-bottom: 10px; }
-    </style>
+    <link href="/static/resources/css/main.css" rel="stylesheet" media="all">
 </head>
 <body>
     <div class="container">
-        <h1>Project Chooser</h1>
+        <h1 class="inline-block">Project Chooser</h1>
+        <span class="ajax-loader inline-block hidden"></span>
 
         <br>
 
-        <h4>Welcome <span class="userId"></span></h4>
+        <div class="container backerTmpl-rendered alert alert-info"></div>
+
         <p>Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own</p>
 
-        <div class="container proposalsGet-HTML"></div>
+        <div class="container proposalsTmpl-rendered"></div>
     </div>
     <div class="container">
         <h2>Add Proposal</h2>
@@ -49,33 +39,57 @@
     <script type="text/javascript">
         function addProposal()
         {
+            showAjaxLoader();
+
             ajax('post', '/api/proposals?name=' + $('#name').val() + '&description=' + $('#description').val() + '&technologiesUsed=' + $('#technologiesUsed').val(), '', function() { loadPage(); })
         }
 
         function withdraw(voteId)
         {
+            showAjaxLoader();
+
             ajax('delete', '/api/votes?voteId=' + voteId, '', function() { loadPage(); });
         }
 
         function vote(proposalId, weight)
         {
+            showAjaxLoader();
+
             ajax('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', function() { loadPage(); });
         }
 
         function loadPage()
         {
+            showAjaxLoader();
+
             resetAddProposalForm();
 
             ajax('get', '/api/backers', '', function(backer) {
-                $('.userId').html(backer.userId);
+                fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
+                    var renderedHtml = _.template(tmpl, backer);
+                    $('.backerTmpl-rendered').html(renderedHtml);
 
-                ajax('get', '/api/proposals', '', function(proposals) {
-                    fetchTmpl(PROPOSALS_TMPL_URL, function(tmpl) {
-                        var renderedHtml = _.template(tmpl, { proposals: proposals, currentBacker: backer });
-                        $('.proposalsGet-HTML').html(renderedHtml);
+                    ajax('get', '/api/proposals', '', function(proposals) {
+                        fetchTmpl(PROPOSALS_TMPL_URL, function(tmpl) {
+                            var renderedHtml = _.template(tmpl, { proposals: proposals, currentBacker: backer });
+                            $('.proposalsTmpl-rendered').html(renderedHtml);
+
+                            hideAjaxLoader();
+                        });
                     });
                 });
             });
+        }
+
+        //TODO: Move 'show/hide ajax loader' into the 'ajax' request, or make it generic so all requests (or request ques) show it
+        function showAjaxLoader()
+        {
+            $('.ajax-loader').removeClass('hidden').addClass('visible');
+        }
+
+        function hideAjaxLoader()
+        {
+            $('.ajax-loader').removeClass('visible').addClass('hidden');
         }
 
         function resetAddProposalForm()
