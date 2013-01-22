@@ -1,0 +1,8 @@
+table {font-size: 14px;}
+table tr {padding:3px;}
+table tr td {padding:3px; vertical-align: top;}
+
+table.table-bordered thead tr td {padding:3px; border-bottom:1px solid #ddd;}
+table.table-bordered tbody tr td {padding:3px; border-bottom:1px solid #ddd;}
+table.table-bordered tbody tr:last-child td {padding:3px; border-bottom:0 #ddd;}
+

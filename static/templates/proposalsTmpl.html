@@ -3,15 +3,16 @@
 <% } else { %>
     <table class="table-bordered table-striped">
         <thead>
-        <tr>
-            <td>Rating</td>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Technologies Used</td>
-            <td>Backers</td>
-            <td>Action</td>
-        </tr>
+            <tr>
+                <td>Rating</td>
+                <td>Name</td>
+                <td>Description</td>
+                <td>Technologies Used</td>
+                <td>Backers</td>
+                <td>Action</td>
+            </tr>
         </thead>
+        <tbody>
             <% _.each(proposals, function(proposal) { %>
                 <tr>
                     <td> <!-- Proposal Rating -->
@@ -57,5 +58,6 @@
                     </td>
                 </tr>
             <% }); %>
+        </tbody>
     </table>
 <% } %>

@@ -24,13 +24,14 @@ class ProposalBean():
         bean.technologiesUsed = entity.technologiesUsed
         bean.votes = VoteBean.fromEntities(entity.votes)
 
-#        # sum up total rating based on all votes
-#        for v in bean.votes:
-#            bean.rating += v.weight
-#            # if vote belongs to current user, set it as user's vote
-#            if v.userId == currentUser.email():
-#                bean.hasUserVoted = True
-#                bean.userVote = v
+        # sum up total rating based on all votes
+        bean.rating = 0
+        for v in bean.votes:
+            bean.rating += v.weight
+            # if vote belongs to current user, set it as user's vote
+            if v.userId == currentUser.email():
+                bean.hasUserVoted = True
+                bean.userVote = v
 
         return bean
 

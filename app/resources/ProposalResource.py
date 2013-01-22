@@ -1,26 +1,19 @@
-from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 
 from app.data.beans import *
 from app.data.models import * # Must import every model we want to use in a GQL Statement
 
+from app.services.ProposalService import *
+
 from app.util.JsonUtil import JsonUtil
 
 class ProposalResource(webapp.RequestHandler):
+
+    _proposalService = ProposalService()
+
     def get(self):
-        proposals = db.GqlQuery('SELECT * FROM Proposal')
-        proposalBeans = []
-
-        for proposal in proposals:
-            propBean = ProposalBean.fromEntity(proposal)
-
-            proposalVotes = db.GqlQuery('SELECT * FROM Vote WHERE proposalId = {proposalId}'
-            .format(proposalId = proposal.key().id()))
-
-            #propBean.setVotes(VoteBean.fromEntities(proposalVotes), users.get_current_user())
-
-            proposalBeans.append(propBean)
+        proposalBeans = self._proposalService.GetProposalBeansByStatus('OPEN')
 
         proposalBeans = sorted(proposalBeans, ProposalBean.compareTo)
 
@@ -29,11 +22,8 @@ class ProposalResource(webapp.RequestHandler):
 
     def post(self):
         # TODO: Refactor this to be fully REST (the client should POST a vote object in the request body that we simply save
-        proposal = Proposal(
-            name = self.request.get('name'),
-            description = self.request.get('description'),
-            technologiesUsed = self.request.get('technologiesUsed'),
-            rating = 0
-        )
-
-        proposal.put()
+        propName = self.request.get('name')
+        propDesc = self.request.get('description')
+        if propName != '' and propDesc != '':
+            proposal = self._proposalService.ProposalFactory(propName, propDesc, self.request.get('technologiesUsed'))
+            proposal.put()
