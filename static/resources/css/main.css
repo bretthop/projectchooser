@@ -12,4 +12,4 @@ table.table-bordered tbody tr:last-child td {padding:3px; border-bottom:0 #ddd;}
 
 .remaining-title { width: 50px; }
 
-.ajax-loader { width: 32px; height: 32px; margin-left: 5px; background: url('/static/resources/images/ajax-loader-wheel.gif'); }
+.ajax-loader { width: 32px; height: 32px; vertical-align: bottom; margin-bottom: 12px; margin-left: 5px; background: url('/static/resources/images/ajax-loader-wheel2.gif'); }
