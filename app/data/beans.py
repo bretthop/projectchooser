@@ -1,4 +1,5 @@
 from google.appengine.api import users
+from app.data.models import *
 
 class ProposalBean():
     id = 0
@@ -35,9 +36,30 @@ class ProposalBean():
 
         return bean
 
+    def toEntity(self):
+        return Proposal(
+            name = self.name,
+            description = self.description,
+            technologiesUsed = self.technologiesUsed,
+            status = self.status
+        )
+
     @staticmethod
     def compareTo(a, b):
         return cmp(b.rating, a.rating)
+
+    #TODO: Replace with a proper JSON library
+    @staticmethod
+    def fromJson(json):
+        bean = ProposalBean()
+
+        bean.name = json['name']
+        bean.description = json['description']
+        bean.technologiesUsed = json['technologiesUsed']
+        bean.status = 'OPEN'
+
+        return bean
+
 
 class BackerBean():
     id = 0

@@ -6,14 +6,10 @@ from app.services.BackerService import *
 
 class ProposalService:
 
-    def ProposalFactory(self, name, description, technologies):
-        result = Proposal(
-            name             = name,
-            description      = description,
-            technologiesUsed = technologies,
-            status           = 'OPEN'
-        )
-        return result
+    def saveProposal(self, proposalBean):
+        entity = proposalBean.toEntity()
+
+        entity.put()
 
     def GetProposalBeansByStatus(self, status):
         result = []

@@ -35,3 +35,7 @@ class JsonUtil:
                 jsonStr += ","
 
         return "{" + jsonStr[0:len(jsonStr)-1] + "}"
+
+    @staticmethod
+    def decodeToDict(jsonStr):
+        return json.loads(jsonStr)

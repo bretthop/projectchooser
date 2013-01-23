@@ -21,9 +21,8 @@ class ProposalResource(webapp.RequestHandler):
         self.response.out.write(JsonUtil.simpleEncodeList(proposalBeans))
 
     def post(self):
-        # TODO: Refactor this to be fully REST (the client should POST a vote object in the request body that we simply save
-        propName = self.request.get('name')
-        propDesc = self.request.get('description')
-        if propName != '' and propDesc != '':
-            proposal = self._proposalService.ProposalFactory(propName, propDesc, self.request.get('technologiesUsed'))
-            proposal.put()
+        proposalJson = JsonUtil.decodeToDict(self.request.body)
+        proposalBean = ProposalBean.fromJson(proposalJson)
+
+        if proposalBean.name != '' and proposalBean.description != '':
+            self._proposalService.saveProposal(proposalBean)
