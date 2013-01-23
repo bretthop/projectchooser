@@ -27,12 +27,12 @@ class ProposalBean():
 
         # sum up total rating based on all votes
         bean.rating = 0
-        for v in bean.votes:
-            bean.rating += v.weight
+        for voteBean in bean.votes:
+            bean.rating += voteBean.weight
             # if vote belongs to current user, set it as user's vote
-            if v.userId == currentUser.email():
+            if voteBean.userId == currentUser.email():
                 bean.hasUserVoted = True
-                bean.userVote = v
+                bean.userVote = voteBean
 
         return bean
 
@@ -84,7 +84,7 @@ class VoteBean():
             bean.id = e.key().id()
             bean.userId = e.userId
             bean.proposalId = e.proposal.key().id()
-            bean.weight = e.weight
+            bean.weight = e.voteType.weight
 
             beans.append(bean)
 

@@ -1,5 +1,9 @@
 from google.appengine.ext import db
 
+class VoteType(db.Model):
+    weight          = db.IntegerProperty()
+    label           = db.StringProperty()
+
 class Proposal(db.Model):
     name             = db.StringProperty()
     description      = db.StringProperty()
@@ -8,10 +12,8 @@ class Proposal(db.Model):
 
 class Vote(db.Model):
     userId      = db.StringProperty()
-    weight      = db.IntegerProperty()
     proposal    = db.ReferenceProperty(Proposal, collection_name='votes')
-    #voteType    = db.ReferenceProperty(VoteType, )
-
+    voteType    = db.ReferenceProperty(VoteType)
 
 class Backer(db.Model):
     userId           = db.StringProperty()
@@ -24,6 +26,4 @@ class BackerVote(db.Model):
     #voteType        = db.ReferenceProperty(VoteType, required=True)
     quantity        = db.IntegerProperty()
 
-class VoteType(db.Model):
-    weight          = db.IntegerProperty()
-    label           = db.StringProperty()
+
