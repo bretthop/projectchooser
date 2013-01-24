@@ -1,6 +1,28 @@
 from google.appengine.api import users
 from app.data.models import *
 
+class VoteBean():
+    id = None
+    userId = None
+    proposalId = None
+    weight = 0
+
+    @staticmethod
+    def fromEntities(entities):
+        beans = []
+
+        for e in entities:
+            bean = VoteBean()
+
+            bean.id = e.key().id()
+            bean.userId = e.userId
+            bean.proposalId = e.proposal.key().id()
+            bean.weight = e.voteType.weight
+
+            beans.append(bean)
+
+        return beans
+
 class ProposalBean():
     id = 0
     name = ''
@@ -68,24 +90,20 @@ class BackerBean():
     remaining_silver = 0
     remaining_bronze = 0
 
-class VoteBean():
-    id = None
-    userId = None
-    proposalId = None
-    weight = 0
-
     @staticmethod
-    def fromEntities(entities):
-        beans = []
+    def fromEntity(entity):
+        bean = BackerBean()
+        bean.id               = entity.key().id()
+        bean.userId           = entity.userId
 
-        for e in entities:
-            bean = VoteBean()
+        for bv in entity.remainingVotes:
+            if bv.voteType.label == 'GOLD':
+                bean.remaining_gold = bv.quantity
 
-            bean.id = e.key().id()
-            bean.userId = e.userId
-            bean.proposalId = e.proposal.key().id()
-            bean.weight = e.voteType.weight
+            if bv.voteType.label == 'SILVER':
+                bean.remaining_silver = bv.quantity
 
-            beans.append(bean)
+            if bv.voteType.label == 'BRONZE':
+                bean.remaining_bronze = bv.quantity
 
-        return beans
+        return bean

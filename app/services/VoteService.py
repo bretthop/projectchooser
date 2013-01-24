@@ -1,8 +1,11 @@
 from google.appengine.api import users
 
 from app.data.models import *
+#from app.util.EnumUtil import enum
 
 class VoteService:
+
+    #_voteTypeEnum = enum('GOLD', 'SILVER', 'BRONZE')
 
     def VoteForProposal(self, proposalId, votingWeight):
         votingWeightInt = 0
@@ -46,6 +49,7 @@ class VoteService:
     def PopulateVoteTypes(self):
         vt = VoteType()
         vt.label = 'GOLD'
+#        vt.label = self._voteTypeEnum.GOLD
         vt.weight = 8
         vt.put()
 
@@ -58,3 +62,10 @@ class VoteService:
         vt.label = 'BRONZE'
         vt.weight = 3
         vt.put()
+
+    @staticmethod
+    def GetVoteTypeByLabel(label):
+        _voteTypeId = db.GqlQuery("SELECT __key__ FROM VoteType WHERE label = '" + label + "'").get().id()
+        result = VoteType.get_by_id(_voteTypeId)
+
+        return result
