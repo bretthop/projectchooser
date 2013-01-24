@@ -4,107 +4,54 @@
     <link href="/static/resources/css/main.css" rel="stylesheet" media="all">
 </head>
 <body>
-    <div class="container">
-        <h1 class="inline-block">Project Chooser</h1>
-        <span class="ajax-loader inline-block hidden"></span>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div class="backerTmpl-rendered alert alert-info minHeight500"></div>
+            </div>
+            <div class="span10">
+                <h1 class="inline-block">Project Chooser</h1>
+                <span class="ajax-loader inline-block hidden"></span>
 
-        <br>
+                <br>
+                <p>Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own</p>
 
-        <div class="container backerTmpl-rendered alert alert-info"></div>
+                <div class="proposalsTmpl-rendered"></div>
 
-        <p>Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own</p>
+                <div>
+                    <h2>Add Proposal</h2>
+                    <form>
+                        <input type="text" name="name" id="name" placeholder="Name" />
+                        <br />
 
-        <div class="container proposalsTmpl-rendered"></div>
+                        <input type="text" name="description" id="description" placeholder="Description" />
+                        <br />
+
+                        <input type="text" name="technologiesUsed" id="technologiesUsed" placeholder="Technologies Used" />
+                        <br />
+
+                        <input type="submit" value="Add Proposal" onclick="addProposal(); return false;"/>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="container">
-        <h2>Add Proposal</h2>
-        <form>
-            <input type="text" name="name" id="name" placeholder="Name" />
-            <br />
 
-            <input type="text" name="description" id="description" placeholder="Description" />
-            <br />
-
-            <input type="text" name="technologiesUsed" id="technologiesUsed" placeholder="Technologies Used" />
-            <br />
-
-            <input type="submit" value="Add Proposal" onclick="addProposal(); return false;"/>
-        </form>
-    </div>
+    <!-- Utils -->
     <script src="/static/resources/js/ajax-utils.js"></script>
     <script src="/static/resources/js/tmpl-fetcher.js"></script>
+
+    <!-- Libs -->
     <script src="/static/resources/js/lib/underscore.js"></script>
     <script src="/static/resources/js/lib/jquery-1.8.2.min.js"></script>
     <script src="/static/resources/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Application Logic -->
+    <script src="/static/resources/js/frontend.js"></script>
+    <script src="/static/resources/js/api-functions.js"></script>
+
+    <!-- Kick things off -->
     <script type="text/javascript">
-        function addProposal()
-        {
-            showAjaxLoader();
-
-            var data = {
-                name: $('#name').val(),
-                description: $('#description').val(),
-                technologiesUsed: $('#technologiesUsed').val()
-            };
-
-            ajax('post', '/api/proposals', data, DataType.JSON, function() { loadPage(); })
-        }
-
-        function withdraw(voteId)
-        {
-            showAjaxLoader();
-
-            ajax('delete', '/api/votes?voteId=' + voteId, '', DataType.DEFAULT, function() { loadPage(); });
-        }
-
-        function vote(proposalId, weight)
-        {
-            showAjaxLoader();
-
-            ajax('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadPage(); });
-        }
-
-        function loadPage()
-        {
-            showAjaxLoader();
-
-            resetAddProposalForm();
-
-            ajax('get', '/api/backers', '', DataType.DEFAULT, function(backer) {
-                fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
-                    var renderedHtml = _.template(tmpl, backer);
-                    $('.backerTmpl-rendered').html(renderedHtml);
-
-                    ajax('get', '/api/proposals', '', DataType.DEFAULT, function(proposals) {
-                        fetchTmpl(PROPOSALS_TMPL_URL, function(tmpl) {
-                            var renderedHtml = _.template(tmpl, { proposals: proposals, currentBacker: backer });
-                            $('.proposalsTmpl-rendered').html(renderedHtml);
-
-                            hideAjaxLoader();
-                        });
-                    });
-                });
-            });
-        }
-
-        //TODO: Move 'show/hide ajax loader' into the 'ajax' request, or make it generic so all requests (or request ques) show it
-        function showAjaxLoader()
-        {
-            $('.ajax-loader').removeClass('hidden').addClass('visible');
-        }
-
-        function hideAjaxLoader()
-        {
-            $('.ajax-loader').removeClass('visible').addClass('hidden');
-        }
-
-        function resetAddProposalForm()
-        {
-            $('#name').val('');
-            $('#description').val('');
-            $('#technologiesUsed').val('');
-        }
-
         loadPage();
     </script>
 </body>

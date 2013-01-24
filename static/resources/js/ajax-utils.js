@@ -16,11 +16,11 @@ function ajax(method, url, data, dataType, successCallback)
         type: method,
         url: url,
         contentType: contentType,
-        data: data,
-        success: function(data) {
-            if (successCallback) {
-                successCallback(data);
-            }
+        data: data
+    })
+    .done(function(data) {
+        if (successCallback) {
+            successCallback(data);
         }
     });
 }
