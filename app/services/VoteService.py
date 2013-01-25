@@ -8,25 +8,16 @@ class VoteService:
     #_voteTypeEnum = enum('GOLD', 'SILVER', 'BRONZE')
 
     def VoteForProposal(self, proposalId, votingWeight):
-        votingWeightInt = 0
-        _voteType = None
 
-        # TODO: Make this an enum or a model
-        if votingWeight == 'gold':
-            votingWeightInt = 8
-        elif votingWeight == 'silver':
-            votingWeightInt = 5
-        elif votingWeight == 'bronze':
-            votingWeightInt = 3
+        # get the vote type
+        _voteType = VoteService.GetVoteTypeByLabel(str(votingWeight).upper())
 
-        #VoteType.gql("WHERE weight = 8").get()._entity.key().id()
-        _voteTypeId = db.GqlQuery("SELECT __key__ FROM VoteType WHERE weight = " + str(votingWeightInt)).get().id()
-        _voteType = VoteType.get_by_id(_voteTypeId)
+        #TODO: validate if backer still has enough remaining votes of _voteType
 
-        # Apply vote to proposal
+        # get the proposal user is voting for
         _proposal = Proposal.get_by_id(proposalId)
 
-        # Record the vote for the user
+        # save the vote for the proposal (with user)
         user = users.get_current_user()
         Vote(
             userId = user.email(),
