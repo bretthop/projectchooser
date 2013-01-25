@@ -1,29 +1,36 @@
 from google.appengine.api import users
 
 from app.data.models import *
-#from app.util.EnumUtil import enum
+from app.services.BackerService import BackerService
+from app.util.VoteTypeUtil import VoteTypeUtil
 
 class VoteService:
 
-    #_voteTypeEnum = enum('GOLD', 'SILVER', 'BRONZE')
+    _backerService = BackerService()
 
     def VoteForProposal(self, proposalId, votingWeight):
+        #get current user
+        userEmail = users.get_current_user().email()
 
-        # get the vote type
-        _voteType = VoteService.GetVoteTypeByLabel(str(votingWeight).upper())
+        # ensure label name is all in uppercase
+        votingWeight = str(votingWeight).upper()
 
-        #TODO: validate if backer still has enough remaining votes of _voteType
+        # get the vote type by label
+        _voteType = VoteTypeUtil.GetVoteTypeByLabel(votingWeight)
 
-        # get the proposal user is voting for
-        _proposal = Proposal.get_by_id(proposalId)
+        #validate if backer still has enough remaining votes of _voteType
+        if self._backerService.BackerHasVoteType(userEmail, _voteType):
+            # get the proposal user is voting for
+            _proposal = Proposal.get_by_id(proposalId)
 
-        # save the vote for the proposal (with user)
-        user = users.get_current_user()
-        Vote(
-            userId = user.email(),
-            proposal = _proposal,
-            voteType = _voteType
-        ).put()
+            # save the vote for the proposal (with user)
+            Vote(
+                userId = userEmail,
+                proposal = _proposal,
+                voteType = _voteType
+            ).put()
+
+            #TODO: remove _voteType from BackerVote pool
 
     def WithdrawVote(self, voteId):
         if voteId:
@@ -53,10 +60,3 @@ class VoteService:
         vt.label = 'BRONZE'
         vt.weight = 3
         vt.put()
-
-    @staticmethod
-    def GetVoteTypeByLabel(label):
-        _voteTypeId = db.GqlQuery("SELECT __key__ FROM VoteType WHERE label = '" + label + "'").get().id()
-        result = VoteType.get_by_id(_voteTypeId)
-
-        return result

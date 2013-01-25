@@ -1,6 +1,7 @@
 from app.data.beans import *
 from app.data.models import Backer
-from app.services.VoteService import VoteService
+from app.data.enums.VoteTypeEnum import VoteTypeEnum
+from app.util.VoteTypeUtil import VoteTypeUtil
 
 class BackerService:
 
@@ -24,22 +25,27 @@ class BackerService:
 
             BackerVote(
                 backer = entity,
-                voteType = VoteService.GetVoteTypeByLabel('GOLD'),
+                voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.GOLD),
                 quantity = 1
             ).put()
 
             BackerVote(
                 backer = entity,
-                voteType = VoteService.GetVoteTypeByLabel('SILVER'),
+                voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.SILVER),
                 quantity = 2
             ).put()
 
             BackerVote(
                 backer = entity,
-                voteType = VoteService.GetVoteTypeByLabel('BRONZE'),
-                quantity = 3
+                voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.BRONZE),
+                quantity = 4
             ).put()
 
             result = BackerBean.fromEntity(entity)
 
         return result
+
+    def BackerHasVoteType(self, email, voteType):
+        #TODO: implement
+
+        return True

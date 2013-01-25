@@ -1,14 +1,10 @@
-from google.appengine.api import users
-
 from app.data.models import *
 from app.data.beans import *
-from app.services.BackerService import *
 
 class ProposalService:
 
     def saveProposal(self, proposalBean):
         entity = proposalBean.toEntity()
-
         entity.put()
 
     def GetProposalBeansByStatus(self, status):
