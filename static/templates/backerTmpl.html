@@ -2,20 +2,20 @@
 <h4><%= userId %></h4>
 <table class="table table-hover table-condensed">
     <thead>
-        <tr>
-            <td colspan="2">Remaining Votes:</td>
-        </tr>
+    <tr>
+        <td colspan="2">Remaining Votes:</td>
+    </tr>
     </thead>
     <tbody>
+    <% _.each(remainingVotes, function(remainingVote) { %>
         <tr>
-            <td class="remaining-title">Gold</td><td><%= remaining_gold %></td>
+            <td class="remaining-title">
+                <%= remainingVote.voteType.friendlyLabel %>
+            </td>
+            <td>
+                <%= remainingVote.quantity %>
+            </td>
         </tr>
-        <tr>
-            <td class="remaining-title">Silver</td><td><%= remaining_silver %></td>
-        </tr>
-
-        <tr>
-            <td class="remaining-title">Bronze</td><td><%= remaining_bronze %></td>
-        </tr>
+    <% }); %>
     </tbody>
 </table>

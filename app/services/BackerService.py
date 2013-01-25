@@ -1,5 +1,6 @@
-from app.data.beans import *
-from app.data.models import Backer
+from google.appengine.api import users
+
+from app.data.models import *
 from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
 
@@ -10,7 +11,6 @@ class BackerService:
         return result
 
     def BackerFactory(self, email):
-        result = BackerBean()
         entity = Backer()
 
         backerKeyQuery = db.GqlQuery("SELECT __key__ FROM Backer WHERE userId = '" + email + "'")
@@ -18,7 +18,6 @@ class BackerService:
 
         if backerKey:
             entity = Backer.get_by_id(backerKey.id())
-            result = BackerBean.fromEntity(entity)
         else:
             entity.userId = email
             entity.put()
@@ -41,9 +40,7 @@ class BackerService:
                 quantity = 4
             ).put()
 
-            result = BackerBean.fromEntity(entity)
-
-        return result
+        return entity
 
     def BackerHasVoteType(self, email, voteType):
         #TODO: implement

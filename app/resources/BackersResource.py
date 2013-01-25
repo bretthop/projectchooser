@@ -1,14 +1,11 @@
 from google.appengine.ext import webapp
+from app.decorator.ProduceJson import *
 
 from app.services.BackerService import *
-
-from app.util.JsonUtil import JsonUtil
 
 class BackersResource(webapp.RequestHandler):
     _backerService = BackerService()
 
+    @JsonSingleResult
     def get(self):
-        currentBacker = self._backerService.GetCurrentBackerBean()
-
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(JsonUtil.simpleEncodeObject(currentBacker))
+        return self._backerService.GetCurrentBackerBean()
