@@ -6,11 +6,11 @@ from app.util.VoteTypeUtil import VoteTypeUtil
 
 class BackerService:
 
-    def GetCurrentBackerBean(self):
-        result = self.GetBackerBeanByEmail(users.get_current_user().email())
+    def GetCurrentBacker(self):
+        result = self.GetBackerByEmail(users.get_current_user().email())
         return result
 
-    def GetBackerBeanByEmail(self, email):
+    def GetBackerByEmail(self, email):
         result = self.BackerFactory(email)
         return result
 
@@ -48,7 +48,7 @@ class BackerService:
 
     def BackerHasVoteType(self, email, voteTypeLabel):
         result = False
-        _backer = self.GetBackerBeanByEmail(email)
+        _backer = self.GetBackerByEmail(email)
 
         for bv in _backer.remainingVotes:
             if bv.voteType.label == voteTypeLabel:
@@ -59,7 +59,7 @@ class BackerService:
 
     def AddBackerVote(self, email, voteTypeLabel):
         processed = False
-        _backer = self.GetBackerBeanByEmail(email)
+        _backer = self.GetBackerByEmail(email)
 
         for bv in _backer.remainingVotes:
             if bv.voteType.label == voteTypeLabel:
@@ -76,7 +76,7 @@ class BackerService:
 
     def RemoveBackerVote(self, email, voteTypeLabel):
         processed = False
-        _backer = self.GetBackerBeanByEmail(email)
+        _backer = self.GetBackerByEmail(email)
 
         for bv in _backer.remainingVotes:
             if bv.voteType.label == voteTypeLabel:
