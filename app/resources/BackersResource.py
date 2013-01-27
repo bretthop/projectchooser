@@ -8,4 +8,4 @@ class BackersResource(webapp.RequestHandler):
 
     @JsonSingleResult
     def get(self):
-        return self._backerService.GetCurrentBackerBean()
+        return self._backerService.GetCurrentBacker()
