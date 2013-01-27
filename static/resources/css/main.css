@@ -18,3 +18,6 @@ table.table-bordered tbody tr:last-child td {padding:3px; border-bottom:0 #ddd;}
 
 /* Twitter bootstrap class additions (this will add to already existent twitter bootstrap classes) */
 .container-fluid { padding-top: 20px; }
+
+ul.backers { list-style:none; margin:0; }
+ul.backers li {}

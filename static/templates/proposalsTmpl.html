@@ -27,24 +27,36 @@
         <td> <!-- Proposal Technologies -->
             <span class="technologies"><%= proposal.technologiesUsed %></span>
         </td>
-        <td><!-- Proposal Backers -->
+
+        <!-- Proposal Backers -->
+        <td>
             <% if (proposal.votes.length > 0) { %>
-            <ul>
+            <ul class="backers">
                 <% _.each(proposal.votes, function(vote) { %>
-                <li class="text-success">[<%= vote.voteType.weight %>]  <%= vote.userId %></li>
+                <li class="text-success">
+                    <img src="/static/resources/images/vote_<%= vote.voteType.label %>.png" height="32" width="32" title="<%= vote.voteType.label %>" />
+                    <%= vote.userId %>
+                    <!--[<%= vote.voteType.weight %>]  <%= vote.userId %>-->
+                </li>
                 <% }); %>
             </ul>
             <% } else { %>
             <p class="text-error">Be the first backer!</p>
             <% } %>
         </td>
-        <td><!-- Proposal Actions -->
+
+        <!-- Proposal Actions -->
+        <td>
             <% if (proposal.hasUserVoted) { %>
                 <p class="text-success">Thank you for your vote!</p>
                 <a href="javascript:withdraw(<%= proposal.userVote.id %>)">Withdraw</a>
             <% } else { %>
                 <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>
-                    <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" class="gold"><%= remainingVote.voteType.friendlyLabel %></a>
+                    <% if (remainingVote.quantity > 0) { %>
+                        <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" class="gold">
+                            <img src="/static/resources/images/vote_<%= remainingVote.voteType.friendlyLabel %>.png" height="32" width="32" title="<%= remainingVote.voteType.friendlyLabel %>" />
+                        </a>
+                    <% } %>
                 <% }); %>
             <% } %>
         </td>
