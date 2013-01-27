@@ -9,6 +9,11 @@ function hideAjaxLoader()
     $('.ajax-loader').removeClass('visible').addClass('hidden');
 }
 
+function showAddProposalModal()
+{
+    $(".addProposalForm").dialog("open");
+}
+
 function resetAddProposalForm()
 {
     $('#name').val('');

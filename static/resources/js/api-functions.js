@@ -1,14 +1,23 @@
 function addProposal()
 {
-    showAjaxLoader();
+    var valid = addProposalValidator.form();
 
-    var data = {
-        name: $('#name').val(),
-        description: $('#description').val(),
-        technologiesUsed: $('#technologiesUsed').val()
-    };
+    if (valid) {
+        showAjaxLoader();
 
-    ajax('post', '/api/proposals', data, DataType.JSON, function() { loadPage(); })
+        var data = {
+            name: $('#name').val(),
+            description: $('#description').val(),
+            technologiesUsed: $('#technologiesUsed').val()
+        };
+
+        ajax('post', '/api/proposals', data, DataType.JSON, function() { loadPage(); });
+
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 function withdraw(voteId)
