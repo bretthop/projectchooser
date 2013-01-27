@@ -20,7 +20,7 @@
                             <ul class="backers">
                                 <% _.each(proposal.votes, function(vote) { %>
                                 <li class="text-success">
-                                    <img src="/static/resources/images/vote_<%= vote.voteType.label %>.png" height="32" width="32" title="<%= vote.voteType.label %>" />
+                                    <img src="/static/resources/images/vote_<%= vote.voteType.labelLower %>.png" height="32" width="32" title="<%= vote.voteType.labelLower %>" />
                                     <%= vote.userId %>
                                 </li>
                                 <% }); %>
@@ -45,7 +45,7 @@
                             <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>
                                 <% if (remainingVote.quantity > 0) { %>
                                     <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" style="text-decoration:none;">
-                                        <img src="/static/resources/images/vote_<%= remainingVote.voteType.label %>.png" height="32" width="32" title="<%= remainingVote.voteType.label %>" />
+                                        <img src="/static/resources/images/vote_<%= remainingVote.voteType.labelLower %>.png" height="32" width="32" title="<%= remainingVote.voteType.labelLower %>" />
                                     </a>
                                 <% } %>
                             <% }); %>

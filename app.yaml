@@ -4,14 +4,29 @@ runtime: python
 api_version: 1
 
 handlers:
+# Base static mapping (handles all static file requests)
 - url: /static
   static_dir: static
 
+# Backend Database mapping (handles all calls to the database scripts)
+- url: /database/.*
+  script: database/BuildDBDispatcher.py
+  login: required
+  auth_fail_action: unauthorized
+
+# Backend API mapping (handles all calls to the API)
 - url: /api/.*
   script: app/APIDispatcher.py
   login: required
   auth_fail_action: unauthorized
 
+# Front end Database mappings (gives an entry point to the database backend)
+- url: /db
+  static_files: static/buildDb.html
+  upload: static/buildDb.html
+  login: required
+
+# Front end index mapping (main starting point of the application)
 - url: /|/index.html
   static_files: static/index.html
   upload: static/index.html
