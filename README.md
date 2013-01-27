@@ -27,15 +27,20 @@ This application is currently using the following technologies:
 Current Development Status
 --------------
 
-* A user can vote on and add as many proposals as they want
+* A user can add as many new proposals as they want
+* A user has limited (1xGOLD, 1xSILVER, 1xBRONZE) votes as their resource
+* A user can see their profile and vote resources
+* Voting for a proposal will decrease number of remaining votes
+* Withdrawing from a proposal will increase number of remaining votes
 * Anyone with a Google Account can log in and add/vote for project proposals
-* There are no AJAX requests, all requests result in the server reloading the page and rendering everything again
+* All client request are done via AJAX using JSON (de)serialisation
 
 Known issues
 --------------
 
 * There is no way (through the application) to delete Proposals
-* The JSON encoding is not bullet-proof, some objects may not be encoded correctly (I'm on the hunt for a library)
+* The JSON encoding is not bullet-proof
+* Current JSON library seems to be doing solid job but strongly depends on custom static jsonFields() method
 
 Glossary
 --------------
@@ -44,5 +49,5 @@ This section will contain a list of project jargon and their meanings
 
 * Project Domain (or Project) - A domain that Proposals will belong to, and Users can vote on which Proposal gets implements next within that project
 * Proposal - An idea, feature, or unit of work that belongs to a Project Domain. Users vote for Proposals and, when the Voting Duration has finished, the Proposal with the most votes will be selected to be next implemented
-* User - A user of the system, there role is to add, and vote for, Proposals
+* User - A user of the system, their role is to add, and vote for, Proposals
 * Voting Duration - An amount of time where a User can vote on Proposals for a given Project Domain. Each Project Domain can have its own Voting Duration.
