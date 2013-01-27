@@ -42,8 +42,6 @@ function loadPage()
 
     ajax('get', '/api/backers', '', DataType.DEFAULT, function(backer) {
         fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
-            addFriendlyLabel(backer);
-
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
@@ -62,15 +60,6 @@ function loadPage()
                 });
             });
         });
-    });
-}
-
-function addFriendlyLabel(currentBacker)
-{
-    // TODO: Move this to the template (work out the syntax to calculate it on the fly and print it in the tmpl)
-    _.each(currentBacker.remainingVotes, function(remainingVote) {
-        remainingVote.voteType.labelLower = remainingVote.voteType.label.toLowerCase();
-        remainingVote.voteType.friendlyLabel = toStartCase(remainingVote.voteType.label);
     });
 }
 
@@ -100,9 +89,6 @@ function applyCurrentBackerContext(proposals, currentBacker)
                 hasUserVoted = true;
                 userVote = vote;
             }
-
-            // TODO: Move this to the template (work out the syntax to calculate it on the fly and print it in the tmpl)
-            vote.voteType.labelLower = vote.voteType.label.toLowerCase();
         }
 
         proposal.rating = rating;

@@ -1,7 +1,9 @@
 application: projectchooser
 version: 1
-runtime: python
+runtime: python27
 api_version: 1
+# TODO: Change threadsafe to 'true' by replacing the current CGI handlers with WSGI ones (see https://developers.google.com/appengine/docs/python/python25/migrate27)
+threadsafe: false
 
 handlers:
 # Base static mapping (handles all static file requests)

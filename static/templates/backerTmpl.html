@@ -10,7 +10,7 @@
     <% _.each(remainingVotes, function(remainingVote) { %>
         <tr>
             <td class="remaining-title">
-                <%= remainingVote.voteType.friendlyLabel %>
+                <%= toStartCase(remainingVote.voteType.label) %>
             </td>
             <td>
                 <%= remainingVote.quantity %>

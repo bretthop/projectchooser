@@ -1,5 +1,4 @@
-# In order to use JSON in the deployed App Engine, we must import the following json wrapper from django utils
-from django.utils import simplejson as json
+import json
 
 class JsonUtil:
     @staticmethod
