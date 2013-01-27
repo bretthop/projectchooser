@@ -1,67 +1,61 @@
 <% if (proposals == undefined || proposals.length <=  0) { %>
-<p class="text-warning">There are currently no proposals, use the form below to add one</p>
+    <p class="text-warning">There are currently no proposals, use the form below to add one</p>
 <% } else { %>
-<table class="table-bordered table-striped">
-    <thead>
-    <tr>
-        <td>Rating</td>
-        <td>Name</td>
-        <td>Description</td>
-        <td>Technologies Used</td>
-        <td>Backers</td>
-        <td>Action</td>
-    </tr>
-    </thead>
-    <tbody>
+
     <% _.each(proposals, function(proposal) { %>
-    <tr>
-        <td> <!-- Proposal Rating -->
-            <span class="rating"><%= proposal.rating %></span>
-        </td>
-        <td> <!-- Proposal Name -->
-            <span class="name"><%= proposal.name %></span>
-        </td>
-        <td> <!-- Proposal Description -->
-            <span class="description"><%= proposal.description %></span>
-        </td>
-        <td> <!-- Proposal Technologies -->
-            <span class="technologies"><%= proposal.technologiesUsed %></span>
-        </td>
-
-        <!-- Proposal Backers -->
-        <td>
-            <% if (proposal.votes.length > 0) { %>
-            <ul class="backers">
-                <% _.each(proposal.votes, function(vote) { %>
-                <li class="text-success">
-                    <img src="/static/resources/images/vote_<%= vote.voteType.label %>.png" height="32" width="32" title="<%= vote.voteType.label %>" />
-                    <%= vote.userId %>
-                    <!--[<%= vote.voteType.weight %>]  <%= vote.userId %>-->
-                </li>
-                <% }); %>
-            </ul>
-            <% } else { %>
-            <p class="text-error">Be the first backer!</p>
-            <% } %>
-        </td>
-
-        <!-- Proposal Actions -->
-        <td>
-            <% if (proposal.hasUserVoted) { %>
-                <p class="text-success">Thank you for your vote!</p>
-                <a href="javascript:withdraw(<%= proposal.userVote.id %>)">Withdraw</a>
-            <% } else { %>
-                <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>
-                    <% if (remainingVote.quantity > 0) { %>
-                        <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" class="gold">
-                            <img src="/static/resources/images/vote_<%= remainingVote.voteType.friendlyLabel %>.png" height="32" width="32" title="<%= remainingVote.voteType.friendlyLabel %>" />
-                        </a>
-                    <% } %>
-                <% }); %>
-            <% } %>
-        </td>
-    </tr>
+        <table class="table-bordered"> <!--table-striped-->
+            <thead>
+                <tr>
+                    <td class="col1 highlightedCell"></td>
+                    <td class="col2 highlightedCell largeFont"><%= proposal.name %></td>
+                    <td class="col3 highlightedCell alightRight">Rating: <%= proposal.rating %></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="highlightedCell"></td>
+                    <td><%= proposal.description %></td>
+                    <td rowspan="2">
+                        <% if (proposal.votes.length > 0) { %>
+                            <ul class="backers">
+                                <% _.each(proposal.votes, function(vote) { %>
+                                <li class="text-success">
+                                    <img src="/static/resources/images/vote_<%= vote.voteType.label %>.png" height="32" width="32" title="<%= vote.voteType.label %>" />
+                                    <%= vote.userId %>
+                                </li>
+                                <% }); %>
+                            </ul>
+                        <% } else { %>
+                            <p class="text-error">Be the first backer!</p>
+                        <% } %>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="highlightedCell"></td>
+                    <td><%= proposal.technologiesUsed %></td>
+                </tr>
+                <tr>
+                    <td class="highlightedCell"></td>
+                    <td colspan="2" class="alightRight">
+                        <% if (proposal.hasUserVoted) { %>
+                            <span class="text-success">Thank you for your vote!</span>
+                            <span class="text-success">(click to <a href="javascript:withdraw(<%= proposal.userVote.id %>)">withdraw</a>)</span>
+                        <% } else { %>
+                            <span class="text-success">Add a </span>
+                            <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>
+                                <% if (remainingVote.quantity > 0) { %>
+                                    <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" style="text-decoration:none;">
+                                        <img src="/static/resources/images/vote_<%= remainingVote.voteType.label %>.png" height="32" width="32" title="<%= remainingVote.voteType.label %>" />
+                                    </a>
+                                <% } %>
+                            <% }); %>
+                            <span class="text-success">level of support to this proposal.</span>
+                        <% } %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-bottom:15px;"></div>
     <% }); %>
-    </tbody>
-</table>
+
 <% } %>
