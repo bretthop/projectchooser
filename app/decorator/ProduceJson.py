@@ -1,4 +1,5 @@
 from app.util.JsonUtil import *
+import inspect
 
 # The following two methods generate JSON encoded responses.
 # These work by decorating a resource method with either decoration,
@@ -14,10 +15,10 @@ from app.util.JsonUtil import *
 
 def JsonSingleResult(func):
     def jsonSingleResult(self):
-        resources = func(self)
+        resource = func(self)
 
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(JsonUtil.encodeModel(resources))
+        self.response.out.write(JsonUtil.encodeModel(resource))
 
     return jsonSingleResult
 

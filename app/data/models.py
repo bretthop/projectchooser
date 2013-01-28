@@ -7,10 +7,6 @@ class Proposal(db.Model):
     technologiesUsed = db.StringProperty()
     status           = db.StringProperty()
 
-    @staticmethod
-    def jsonFields():
-        return ['name', 'description', 'technologiesUsed', 'status', 'votes']
-
     #TODO: Replace with a proper JSON library
     @staticmethod
     def fromJson(json):
@@ -28,24 +24,10 @@ class Vote(db.Model):
     proposal    = db.ReferenceProperty(Proposal, required=True, collection_name='votes')
     voteType    = db.ReferenceProperty(VoteType, required=True)
 
-    @staticmethod
-    def jsonFields():
-        return ['userId', 'voteType']
-
 class Backer(db.Model):
     userId           = db.StringProperty()
-
-    @staticmethod
-    def jsonFields():
-        return ['userId', 'remainingVotes']
 
 class BackerVote(db.Model):
     backer          = db.ReferenceProperty(Backer, required=True, collection_name='remainingVotes')
     voteType        = db.ReferenceProperty(VoteType, required=True)
     quantity        = db.IntegerProperty()
-
-    @staticmethod
-    def jsonFields():
-        return ['voteType', 'quantity']
-
-
