@@ -40,6 +40,8 @@
                         <% if (proposal.hasUserVoted) { %>
                             <span class="text-success">Thank you for your vote!</span>
                             <span class="text-success">(click to <a href="javascript:withdraw(<%= proposal.userVote.id %>)">withdraw</a>)</span>
+                        <% } else if (_.filter(currentBacker.remainingVotes, function(vote) { return vote.quantity > 0; }).length <= 0) { %>
+                            <span class="text-info">You have reached the maximum allowed votes for this Project. Thank you for your vote(s)!</span>
                         <% } else { %>
                             <span class="text-success">Add a </span>
                             <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>

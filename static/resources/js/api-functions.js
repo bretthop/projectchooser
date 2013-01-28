@@ -3,7 +3,7 @@ function addProposal()
     var valid = addProposalValidator.form();
 
     if (valid) {
-        showAjaxLoader();
+        ajax.showAjaxLoader();
 
         var data = {
             name: $('#name').val(),
@@ -11,7 +11,7 @@ function addProposal()
             technologiesUsed: $('#technologiesUsed').val()
         };
 
-        ajax('post', '/api/proposals', data, DataType.JSON, function() { loadPage(); });
+        ajax.req('post', '/api/proposals', data, DataType.JSON, function() { loadPage(); });
 
         return true;
     }
@@ -22,30 +22,30 @@ function addProposal()
 
 function withdraw(voteId)
 {
-    showAjaxLoader();
+    ajax.showAjaxLoader();
 
-    ajax('delete', '/api/votes?voteId=' + voteId, '', DataType.DEFAULT, function() { loadPage(); });
+    ajax.req('delete', '/api/votes?voteId=' + voteId, '', DataType.DEFAULT, function() { loadPage(); });
 }
 
 function vote(proposalId, weight)
 {
-    showAjaxLoader();
+    ajax.showAjaxLoader();
 
-    ajax('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadPage(); });
+    ajax.req('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadPage(); });
 }
 
 function loadPage()
 {
-    showAjaxLoader();
+    ajax.showAjaxLoader();
 
     resetAddProposalForm();
 
-    ajax('get', '/api/backers', '', DataType.DEFAULT, function(backer) {
+    ajax.req('get', '/api/backers', '', DataType.DEFAULT, function(backer) {
         fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
-            ajax('get', '/api/proposals', '', DataType.DEFAULT, function(proposals) {
+            ajax.req('get', '/api/proposals', '', DataType.DEFAULT, function(proposals) {
                 //Apply current backer information to the returned list of proposals
                 applyCurrentBackerContext(proposals, backer);
 
@@ -56,7 +56,7 @@ function loadPage()
                     var renderedHtml = _.template(tmpl, { proposals: proposals, currentBacker: backer });
                     $('.proposalsTmpl-rendered').html(renderedHtml);
 
-                    hideAjaxLoader();
+                    ajax.hideAjaxLoader();
                 });
             });
         });
