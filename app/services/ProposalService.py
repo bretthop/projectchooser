@@ -6,6 +6,7 @@ class ProposalService:
 
     def saveProposal(self, proposal):
         proposal.put()
+        return proposal
 
-    def GetProposalBeansByStatus(self, status):
+    def GetProposalsByStatus(self, status):
         return Proposal.gql("WHERE status = '" + status +"'")

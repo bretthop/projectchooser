@@ -14,7 +14,7 @@ class ProposalResource(webapp.RequestHandler):
 
     @JsonListResult
     def get(self):
-        return self._proposalService.GetProposalBeansByStatus('OPEN')
+        return self._proposalService.GetProposalsByStatus('OPEN')
 
     def post(self):
         proposalJson = JsonUtil.decodeToDict(self.request.body)

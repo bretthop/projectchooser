@@ -14,8 +14,8 @@ class BaseUnitTest(unittest2.TestCase):
     def tearDown(self):
         pass
 
-    def reportResult(self):
-        print '[OK] ' + self._testMethodName
+    def reportResult(self, message = ''):
+        print '[PASS] ' + self._testMethodName + (message if message != '' else '')
 
 #    if __name__ == '__main__':
 #        unittest2.main()
