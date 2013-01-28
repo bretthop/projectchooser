@@ -1,7 +1,6 @@
 <html>
 <head>
     <link href="/static/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="all">
-    <link href="/static/resources/css/jquery-ui.css" rel="stylesheet" media="all">
 
     <link href="/static/resources/css/main.css" rel="stylesheet" media="all">
 </head>
@@ -24,17 +23,38 @@
 
                 <div class="proposalsTmpl-rendered"></div>
 
-                <div class="addProposalForm" title="Add Proposal">
-                    <form>
-                        <input type="text" name="name" id="name" placeholder="Name" class="required" />
-                        <br />
-
-                        <input type="text" name="description" id="description" placeholder="Description" class="required" />
-                        <br />
-
-                        <input type="text" name="technologiesUsed" id="technologiesUsed" placeholder="Technologies Used" />
-                        <br />
-                    </form>
+                <!-- Add Proposal Modal -->
+                <div id="addProposalModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 id="myModalLabel">Add Proposal</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="name">Name</label>
+                                <div class="controls">
+                                    <input type="text" name="name" id="name" placeholder="Name" class="required" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="description">Description</label>
+                                <div class="controls">
+                                    <input type="text" name="description" id="description" placeholder="Description" class="required" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="technologiesUsed">Technologies Used</label>
+                                <div class="controls">
+                                    <input type="text" name="technologiesUsed" id="technologiesUsed" placeholder="Technologies Used" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-primary" onclick="handleAddProposalClick()">Add</button>
+                    </div>
                 </div>
 
                 <div class="footer">
@@ -51,42 +71,12 @@
     <!-- Libs -->
     <script src="/static/resources/js/lib/underscore.js"></script>
     <script src="/static/resources/js/lib/jquery-1.8.2.min.js"></script>
-    <script src="/static/resources/js/lib/jquery-ui-1.10.0.min.js"></script>
     <script src="/static/resources/js/lib/jquery.validate.js"></script>
     <script src="/static/resources/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Application Logic -->
     <script src="/static/resources/js/frontend.js"></script>
     <script src="/static/resources/js/api-functions.js"></script>
-    <script type="text/javascript">
-        var addProposalValidator = $("form").validate({
-            errorPlacement: function(error, element) {
-                return true;
-            }
-        });
-
-        $('.addProposalForm').dialog({
-            autoOpen: false,
-            height: 265,
-            width: 300,
-            modal: true,
-            buttons: {
-                "Add Proposal": function() {
-                    var success = addProposal();
-
-                    if (success) {
-                        $(this).dialog('close')
-                    }
-                }
-            },
-            open: function() {
-                addProposalValidator.resetForm();
-            },
-            close: function() {
-                $(this).find('input').val('');
-            }
-        });
-    </script>
 
     <!-- Kick things off -->
     <script type="text/javascript">
