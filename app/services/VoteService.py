@@ -9,9 +9,10 @@ class VoteService:
 
     _backerService = BackerService()
 
-    def VoteForProposal(self, proposalId, voteTypeLabel):
+    def VoteForProposal(self, proposalId, voteTypeLabel, userEmail = ''):
         #get current user
-        userEmail = users.get_current_user().email()
+        if userEmail == '':
+            userEmail = users.get_current_user().email()
 
         #validate if backer still has enough remaining votes of _voteType
         if self._backerService.BackerHasVoteType(userEmail, voteTypeLabel):

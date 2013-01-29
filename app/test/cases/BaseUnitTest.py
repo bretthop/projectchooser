@@ -15,7 +15,7 @@ class BaseUnitTest(unittest2.TestCase):
         pass
 
     def reportResult(self, message = ''):
-        print '[PASS] ' + self._testMethodName + (message if message != '' else '')
+        print '[PASS] ' + self._testMethodName + (' ' + message if message != '' else '')
 
 #    if __name__ == '__main__':
 #        unittest2.main()

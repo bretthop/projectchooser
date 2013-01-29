@@ -1,5 +1,3 @@
-from google.appengine.api import users
-
 from app.data.models import *
 
 class ProposalService:
