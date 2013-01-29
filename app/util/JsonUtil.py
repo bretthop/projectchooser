@@ -66,5 +66,12 @@ class JsonUtil:
         return fields
 
     @staticmethod
-    def decodeToDict(jsonStr):
-        return json.loads(jsonStr)
+    def decodeToModel(jsonStr, Model):
+        jsonDict = json.loads(jsonStr)
+
+        model = Model()
+
+        for name, value in jsonDict.iteritems():
+            setattr(model, name, value)
+
+        return model

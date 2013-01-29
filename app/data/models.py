@@ -5,19 +5,7 @@ class Proposal(db.Model):
     name             = db.StringProperty()
     description      = db.StringProperty()
     technologiesUsed = db.StringProperty()
-    status           = db.StringProperty()
-
-    #TODO: Replace with a proper JSON library
-    @staticmethod
-    def fromJson(json):
-        proposal = Proposal()
-
-        proposal.name = json['name']
-        proposal.description = json['description']
-        proposal.technologiesUsed = json['technologiesUsed']
-        proposal.status = 'OPEN'
-
-        return proposal
+    status           = db.StringProperty(default = "OPEN")
 
 class Vote(db.Model):
     userId      = db.StringProperty()
