@@ -97,6 +97,21 @@ function applyCurrentBackerContext(proposals, currentBacker)
     }
 }
 
+/**
+ * Sort of gets the username from an email address (basically it just returns whats before the '@')
+ * @param email
+ * @return {*}
+ */
+function getUsernameFromEmail(email)
+{
+    return email.split('@')[0];
+}
+
+/**
+ * Converts to start case. E.g. "GOLD" => "Gold", "gold" => "Gold"
+ * @param str
+ * @return {String}
+ */
 function toStartCase(str)
 {
     return str.substr(0, 1) + str.toLowerCase().substring(1);
