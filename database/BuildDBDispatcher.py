@@ -1,12 +1,12 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from database.actions.AddVoteTypes import *
+from database.BuildDb import *
 
 def main():
     app = webapp.WSGIApplication(
         [
-            ('/database/addVoteTypes', AddVoteTypes)
+            ('/database', BuildDb)
         ],
         debug=True)
 
