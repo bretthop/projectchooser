@@ -3,7 +3,7 @@ from app.test.cases.BaseUnitTest import BaseUnitTest
 from google.appengine.ext import db
 
 from app.data.models import Proposal
-from app.test.fixtures.TestVoteTypeEnum import TestVoteTypeEnum
+from app.data.enums.VoteTypeEnum import VoteTypeEnum
 
 from app.services.ProposalService import ProposalService
 from app.services.VoteService import VoteService
@@ -13,6 +13,8 @@ class TestVoteService(BaseUnitTest):
     _voteService = None
     _testProposalName = 'TEST PROPOSAL #1'
     _backerEmail = 'test_backer_2013-01-29@project.chooser.com.au'
+
+#    addExpectedFailure = None
 
     #singleton pattern
     def getProposalService(self):
@@ -30,7 +32,7 @@ class TestVoteService(BaseUnitTest):
 
     def test_voteForProposal(self):
         _proposalId = db.GqlQuery("SELECT __key__ FROM Proposal WHERE name = '" + self._testProposalName + "'").get().id()
-        _voteTypeLabel = TestVoteTypeEnum.TEST_GOLD
+        _voteTypeLabel = VoteTypeEnum.GOLD
 
         self.getVoteService().VoteForProposal(_proposalId, _voteTypeLabel, self._backerEmail)
 
@@ -38,9 +40,10 @@ class TestVoteService(BaseUnitTest):
 
         _proposal = Proposal.get_by_id(_proposalId)
 
-        if _proposal is not None and _proposal.votes is not None:
-            self.reportResult(message='proposal has votes')
+        self.assertIsNotNone(_proposal, 'Proposal is None')
+        self.assertTrue(_proposal.votes.count() > 0, 'Proposal has no votes')
 
+        if _proposal is not None and _proposal.votes.count() > 0:
             for v in _proposal.votes:
-                if v.voteType.label == TestVoteTypeEnum.TEST_GOLD:
+                if v.voteType.label == VoteTypeEnum.GOLD:
                     self.reportResult(message='vote saved successfully')
