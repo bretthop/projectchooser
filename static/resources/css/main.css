@@ -3,6 +3,8 @@
 .visible { visibility: visible; }
 .error { background-color: #f8b9b7 !important; }
 .minHeight500 { min-height: 500px; }
+.colorGreen { color: green; }
+.pad10Top { padding-top: 10px; }
 
 table {font-size: 14px;}
 table tr {padding:3px;}
@@ -25,7 +27,9 @@ table.table-bordered tbody tr:last-child td {padding:3px; border-bottom:0 #ddd;}
 
 .ajax-loader { width: 32px; height: 32px; vertical-align: bottom; margin-bottom: 12px; margin-left: 5px; background: url('/static/resources/images/ajax-loader-wheel2.gif'); }
 
-.addProposalBtn { vertical-align: top; margin-top: 16px; margin-left: 174px; }
+.alignButtonTop { vertical-align: top; margin-top: 16px; }
+.addProposalBtn { margin-left: 154px; }
+.loginBtn { margin-left: 68px; }
 
 .footer { border-top: 1px solid grey; text-align: center; color: grey; }
 

@@ -33,3 +33,8 @@ function resetAddProposalForm()
     $('#description').val('');
     $('#technologiesUsed').val('');
 }
+
+function showLoginModal()
+{
+    $('#loginModal').modal();
+}

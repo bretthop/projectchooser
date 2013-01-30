@@ -98,6 +98,18 @@ function applyCurrentBackerContext(proposals, currentBacker)
 }
 
 /**
+ * Returns the number of votes that have a quantity greater than zero
+ * @param votes
+ * @return {Number}
+ */
+function countRemainingVotes(votes)
+{
+    return _.filter(votes, function(vote) {
+        return vote.quantity > 0;
+    }).length;
+}
+
+/**
  * Sort of gets the username from an email address (basically it just returns whats before the '@')
  * @param email
  * @return {*}

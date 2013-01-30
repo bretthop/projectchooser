@@ -14,20 +14,27 @@
                 <h1 class="inline-block">Project Chooser</h1>
                 <span class="ajax-loader inline-block hidden"></span>
 
-                <button class="btn addProposalBtn" onclick="showAddProposalModal()">
+                <button class="btn addProposalBtn alignButtonTop" onclick="showAddProposalModal()">
                     <i class="icon-plus"></i>
                     Add Proposal
                 </button>
+
+                <button class="btn btn-success alignButtonTop loginBtn" onclick="showLoginModal()">
+                    <i class="icon-user"></i>
+                    Login
+                </button>
+
                 <br>
+
                 <p>Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own</p>
 
                 <div class="proposalsTmpl-rendered inline-block"></div>
 
                 <!-- Add Proposal Modal -->
-                <div id="addProposalModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div id="addProposalModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addProposalLabel" aria-hidden="true">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3 id="myModalLabel">Add Proposal</h3>
+                        <h3 id="addProposalLabel">Add Proposal</h3>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
@@ -54,6 +61,34 @@
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button class="btn btn-primary" onclick="handleAddProposalClick()">Add</button>
+                    </div>
+                </div>
+
+                <!-- Login Modal -->
+                <div id="loginModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h3 id="loginLabel">Login</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="username">Username</label>
+                                <div class="controls">
+                                    <input type="text" name="username" id="username" placeholder="Username" class="required" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="password">Password</label>
+                                <div class="controls">
+                                    <input type="password" name="password" id="password" placeholder="Password" class="required" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-primary" onclick="handleLoginClick()">Add</button>
                     </div>
                 </div>
             </div>
