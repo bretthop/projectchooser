@@ -33,9 +33,11 @@ class VoteService:
             self._backerService.RemoveBackerVote(userEmail, voteTypeLabel)
 
 
-    def WithdrawVote(self, voteId):
-        #get current user
-        userEmail = users.get_current_user().email()
+    def WithdrawVote(self, voteId, userEmail=None):
+
+        if userEmail is None:
+            #get current user
+            userEmail = users.get_current_user().email()
 
         if voteId:
             vote = Vote.get_by_id(voteId)
@@ -51,6 +53,7 @@ class VoteService:
 
         return False
 
+    #TODO: remove this code or move it to some other location
     def PopulateVoteTypes(self):
         vt = VoteType()
         vt.label = VoteTypeEnum.GOLD
