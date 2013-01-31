@@ -25,7 +25,7 @@ class JsonUtil:
         jsonObject = {'id': None}
 
         # If the Model is saved then update the 'id' field to contain the models proper id
-        if m.is_saved():
+        if m and m.is_saved():
             key = getattr(m, 'key')()
 
             jsonObject['id'] = key.id()

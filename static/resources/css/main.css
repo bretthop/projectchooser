@@ -17,9 +17,14 @@ table.table-bordered thead tr td.col2 {width:300px;}
 table.table-bordered thead tr td.col3 {width:300px;}
 
 table.table-bordered tbody tr td {padding:3px; border-bottom:1px solid #ddd;}
-table.table-bordered tbody tr:last-child td {padding:3px; border-bottom:0 #ddd;}
+
+table.table-bordered tbody tr:last-child td,
+table.table-bordered thead tr td:first-child,
+table.table-bordered tbody tr td:first-child
+{ padding:3px; border-bottom:0 #ddd; }
 
 .highlightedCell {background-color:#c6deff;}
+.owner.highlightedCell { background-color: green; }
 .alightRight {text-align:right;}
 .largeFont {font-size: 16px;}
 
@@ -37,6 +42,7 @@ table.table-bordered tbody tr:last-child td {padding:3px; border-bottom:0 #ddd;}
 
 /* Twitter bootstrap class additions (this will add to already existent twitter bootstrap classes) */
 .container-fluid { padding-top: 20px; }
+.table-bordered thead:first-child tr:first-child td:first-child { border-top-left-radius: 4px; }
 form input { height: 30px !important; }
 
 ul.backers { list-style:none; margin:0; }

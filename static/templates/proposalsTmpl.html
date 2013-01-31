@@ -2,18 +2,21 @@
     <p class="text-warning">There are currently no proposals, use the above button to add one.</p>
 <% } else { %>
 
-    <% _.each(proposals, function(proposal) { %>
+    <% _.each(proposals, function(proposal) {
+        var owner = proposal.owner.userId && proposal.owner.userId == currentBacker.userId;
+        var ownerClass = owner ? 'owner' : '';
+    %>
         <table class="table-bordered"> <!--table-striped-->
             <thead>
                 <tr>
-                    <td class="col1 highlightedCell"></td>
+                    <td class="col1 highlightedCell <%= ownerClass %>"></td>
                     <td class="col2 highlightedCell largeFont"><%= proposal.name %></td>
                     <td class="col3 highlightedCell alightRight">Rating: <%= proposal.rating %></td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="highlightedCell"></td>
+                    <td class="highlightedCell <%= ownerClass %>"></td>
                     <td><%= proposal.description %></td>
                     <td rowspan="2">
                         <% if (proposal.votes.length > 0) { %>
@@ -31,11 +34,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="highlightedCell"></td>
+                    <td class="highlightedCell <%= ownerClass %>"></td>
                     <td><%= proposal.technologiesUsed %></td>
                 </tr>
                 <tr>
-                    <td class="highlightedCell"></td>
+                    <td class="highlightedCell <%= ownerClass %>"></td>
                     <td colspan="2" class="alightRight">
                         <% if (proposal.hasUserVoted) { %>
                             <span class="text-success">Thank you for your vote!</span>
