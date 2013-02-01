@@ -34,6 +34,23 @@ function vote(proposalId, weight)
     ajax.req('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadPage(); });
 }
 
+function login(user, pass)
+{
+    ajax.showAjaxLoader();
+
+    var successFunc = function() {
+        alert('Login Successful!');
+    };
+
+    var errorFunc = function() {
+        alert('Login Failed');
+    };
+
+    ajax.req('post', '/api/login?username=' + user + '&password=' + pass, '', DataType.DEFAULT, successFunc, errorFunc);
+
+    ajax.hideAjaxLoader();
+}
+
 function loadPage()
 {
     ajax.showAjaxLoader();

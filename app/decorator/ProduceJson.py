@@ -1,5 +1,4 @@
 from app.util.JsonUtil import *
-import inspect
 
 # The following two methods generate JSON encoded responses.
 # These work by decorating a resource method with either decoration,
@@ -13,6 +12,7 @@ import inspect
 #
 # Look in the resource package for examples
 
+# TODO: Combine these into a single decorator called '@ProduceJson' that takes a string argument of either 'SINGLE' or 'LIST'
 def JsonSingleResult(func):
     def jsonSingleResult(self):
         resource = func(self)

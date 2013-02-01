@@ -8,7 +8,7 @@ ajax = (function() {
 
     var _ajaxLoader = null;
 
-    ajax.req = function(meth, url, data, dataType, doneCallback)
+    ajax.req = function(meth, url, data, dataType, doneCallback, failCallback)
     {
         var contentType = 'application/x-www-form-urlencoded; charset=UTF-8'; // jQuery default
 
@@ -23,11 +23,16 @@ ajax = (function() {
             contentType: contentType,
             data: data
         })
-            .done(function(data) {
-                if (doneCallback) {
-                    doneCallback(data);
-                }
-            });
+        .done(function(data) {
+            if (doneCallback) {
+                doneCallback(data);
+            }
+        })
+        .fail(function(data) {
+            if (failCallback) {
+                failCallback(data);
+            }
+        });
     };
 
     ajax.setAjaxLoader = function(loader)

@@ -27,6 +27,14 @@ function handleAddProposalClick()
     }
 }
 
+function handleLoginClick()
+{
+    var user = $('#username').val();
+    var pass = $('#password').val();
+
+    login(user, pass)
+}
+
 function resetAddProposalForm()
 {
     $('#name').val('');
