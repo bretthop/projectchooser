@@ -9,7 +9,7 @@ class LoginResource(webapp.RequestHandler):
 
         # Example user and pass:
         # username = 'test@example.com'
-        # password = 'password'
+        # password = 'Passwod1'
 
         loginResult = storm.login(username, password)
 
