@@ -6,13 +6,20 @@
 </head>
 <body>
     <div class="container-fluid">
+        <h1 class="inline-block">Project Chooser</h1>
         <div class="row-fluid">
             <div class="span2">
                 <div class="backerTmpl-rendered alert alert-info minHeight500"></div>
             </div>
             <div class="span10">
-                <h1 class="inline-block">Project Chooser</h1>
+                <h3>[CURRENT DOMAIN]</h3>
+
                 <span class="ajax-loader inline-block hidden"></span>
+
+                <button class="btn addProposalBtn alignButtonTop" onclick="location='/'">
+                    <i class="icon-arrow-left"></i>
+                    Back to Domains
+                </button>
 
                 <button class="btn addProposalBtn alignButtonTop" onclick="showAddProposalModal()">
                     <i class="icon-plus"></i>
@@ -38,6 +45,12 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="domainId">Domain</label>
+                                <div class="controls">
+                                    <input type="text" name="domainId" id="domainId" placeholder="Domain ID" class="required" readonly="readonly" />
+                                </div>
+                            </div>
                             <div class="control-group">
                                 <label class="control-label" for="name">Name</label>
                                 <div class="controls">

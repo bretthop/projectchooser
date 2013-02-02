@@ -1,25 +1,3 @@
-function addProposal()
-{
-    var valid = addProposalValidator.form();
-
-    if (valid) {
-        ajax.showAjaxLoader();
-
-        var data = {
-            name: $('#name').val(),
-            description: $('#description').val(),
-            technologiesUsed: $('#technologiesUsed').val()
-        };
-
-        ajax.req('post', '/api/proposals', data, DataType.JSON, function() { loadProposals(); });
-
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 function addDomain()
 {
     var valid = addDomainValidator.form();
@@ -33,6 +11,29 @@ function addDomain()
         };
 
         ajax.req('post', '/api/domains', data, DataType.JSON, function() { loadDomains(); });
+
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function addProposal()
+{
+    var valid = addProposalValidator.form();
+
+    if (valid) {
+        ajax.showAjaxLoader();
+
+        var data = {
+            name: $('#name').val(),
+            description: $('#description').val(),
+            technologiesUsed: $('#technologiesUsed').val(),
+            domainId: $('#domainId').val()
+        };
+
+        ajax.req('post', '/api/proposals', data, DataType.JSON, function() { loadProposals(); });
 
         return true;
     }
@@ -98,18 +99,10 @@ function loadDomains()
 
 function loadProposals()
 {
-    var domainId = 0;
-    var searchParams = location.search.split('?')[1].split('&');
-
-    for (var i=0; i<searchParams.length; i++)
-    {
-        if (searchParams[i].split('=')[0] == 'domainId')
-        {
-            domainId = searchParams[i].split('=')[1];
-        }
-    }
-
     ajax.showAjaxLoader();
+
+    var searchParams = location.search.split('?')[1];
+    globalVars.domainId = extractSearchParamValue(searchParams, 'domainId');
 
     resetAddProposalForm();
 
@@ -118,7 +111,7 @@ function loadProposals()
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
-            ajax.req('get', '/api/proposals', 'domainId='+domainId, DataType.DEFAULT, function(proposals) {
+            ajax.req('get', '/api/proposals', searchParams, DataType.DEFAULT, function(proposals) {
                 //Apply current backer information to the returned list of proposals
                 applyCurrentBackerContext(proposals, backer);
 
@@ -200,4 +193,26 @@ function getUsernameFromEmail(email)
 function toStartCase(str)
 {
     return str.substr(0, 1) + str.toLowerCase().substring(1);
+}
+
+/**
+ * Extracts URL search parameter value
+ * @param searchParams all search key-value params (everything after '?')
+ * @param paramKey parameter key
+ * @return {String}
+ */
+function extractSearchParamValue(searchParams, paramKey)
+{
+    var result = '';
+    searchParams = searchParams.split('&');
+
+    for (var i=0; i<searchParams.length; i++)
+    {
+        if (searchParams[i].split('=')[0] == paramKey)
+        {
+            result = searchParams[i].split('=')[1];
+        }
+    }
+
+    return result;
 }
