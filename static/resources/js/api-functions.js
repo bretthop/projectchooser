@@ -11,7 +11,28 @@ function addProposal()
             technologiesUsed: $('#technologiesUsed').val()
         };
 
-        ajax.req('post', '/api/proposals', data, DataType.JSON, function() { loadPage(); });
+        ajax.req('post', '/api/proposals', data, DataType.JSON, function() { loadProposals(); });
+
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function addDomain()
+{
+    var valid = addDomainValidator.form();
+
+    if (valid) {
+        ajax.showAjaxLoader();
+
+        var data = {
+            title: $('#title').val(),
+            description: $('#description').val()
+        };
+
+        ajax.req('post', '/api/domains', data, DataType.JSON, function() { loadDomains(); });
 
         return true;
     }
@@ -24,14 +45,14 @@ function withdraw(voteId)
 {
     ajax.showAjaxLoader();
 
-    ajax.req('delete', '/api/votes?voteId=' + voteId, '', DataType.DEFAULT, function() { loadPage(); });
+    ajax.req('delete', '/api/votes?voteId=' + voteId, '', DataType.DEFAULT, function() { loadProposals(); });
 }
 
 function vote(proposalId, weight)
 {
     ajax.showAjaxLoader();
 
-    ajax.req('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadPage(); });
+    ajax.req('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadProposals(); });
 }
 
 function login(user, pass)
@@ -51,8 +72,43 @@ function login(user, pass)
     ajax.hideAjaxLoader();
 }
 
-function loadPage()
+function loadDomains()
 {
+    ajax.showAjaxLoader();
+
+    resetAddDomainForm();
+
+    ajax.req('get', '/api/domains', '', DataType.DEFAULT, function(domains)
+    {
+        //TODO: Apply current backer information to the returned list of domains
+        //applyCurrentBackerContext(domains, backer);
+
+        //TODO: Sort the domains by total rating descending
+        //domains.sort(function(a, b) { return a.rating < b.rating; });
+
+        fetchTmpl(DOMAINS_TMPL_URL, function(tmpl) {
+            var renderedHtml = _.template(tmpl, { domains: domains, currentBacker: null });
+            $('.domainsTmpl-rendered').html(renderedHtml);
+
+            ajax.hideAjaxLoader();
+        });
+    });
+
+}
+
+function loadProposals()
+{
+    var domainId = 0;
+    var searchParams = location.search.split('?')[1].split('&');
+
+    for (var i=0; i<searchParams.length; i++)
+    {
+        if (searchParams[i].split('=')[0] == 'domainId')
+        {
+            domainId = searchParams[i].split('=')[1];
+        }
+    }
+
     ajax.showAjaxLoader();
 
     resetAddProposalForm();
@@ -62,7 +118,7 @@ function loadPage()
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
-            ajax.req('get', '/api/proposals', '', DataType.DEFAULT, function(proposals) {
+            ajax.req('get', '/api/proposals', 'domainId='+domainId, DataType.DEFAULT, function(proposals) {
                 //Apply current backer information to the returned list of proposals
                 applyCurrentBackerContext(proposals, backer);
 

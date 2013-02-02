@@ -1,0 +1,22 @@
+<% if (domains == undefined || domains.length <=  0) { %>
+    <p class="text-warning">There are currently no domains, use the above button to create one.</p>
+<% } else { %>
+
+    <% _.each(domains, function(domain) { %>
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <td class="col2 highlightedCell largeFont"><%= domain.title %></td>
+                    <td class="col2 highlightedCell"><a href="/proposals?domainId=<%= domain.id %>">view proposals</a></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2"><%= domain.description %></td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-bottom:15px;"></div>
+    <% }); %>
+
+<% } %>

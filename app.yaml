@@ -28,8 +28,16 @@ handlers:
   upload: static/buildDb.html
   login: required
 
+- url: /proposals
+  static_files: static/proposals.html
+  upload: static/proposals.html
+  login: required
+
 # Front end index mapping (main starting point of the application)
 - url: /|/index.html
-  static_files: static/index.html
-  upload: static/index.html
+#  static_files: static/index.html
+#  upload: static/index.html
+  static_files: static/dashboard.html
+  upload: static/dashboard.html
   login: required
+

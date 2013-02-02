@@ -13,7 +13,9 @@ class ProposalResource(webapp.RequestHandler):
 
     @JsonListResult
     def get(self):
-        return self._proposalService.GetProposalsByStatus('OPEN')
+        domainId = self.request.get('domainId')
+        result = self._proposalService.GetProposalsByDomainAndStatus(domainId, 'OPEN')
+        return result
 
     def post(self):
         proposal = JsonUtil.decodeToModel(self.request.body, Proposal)
