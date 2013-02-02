@@ -1,6 +1,5 @@
 .inline-block { display: inline-block; }
 .hidden { visibility: hidden; }
-.visible { visibility: visible; }
 .error { background-color: #f8b9b7 !important; }
 .minHeight500 { min-height: 500px; }
 .colorGreen { color: green; }
@@ -30,7 +29,8 @@ table.table-bordered tbody tr td:first-child
 
 .remaining-title { width: 50px; }
 
-.ajax-loader { width: 32px; height: 32px; vertical-align: bottom; margin-bottom: 12px; margin-left: 5px; background: url('/static/resources/images/ajax-loader-wheel2.gif'); }
+.ajax-loader { width: 32px; height: 32px; vertical-align: bottom; background: url('/static/resources/images/ajax-loader-wheel2-transparent.gif'); }
+.ajax-loader.mainOffset { margin-bottom: 12px; margin-left: 5px; }
 
 .alignButtonTop { vertical-align: top; margin-top: 16px; }
 .addProposalBtn { margin-left: 154px; }

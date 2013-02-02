@@ -59,18 +59,26 @@ function vote(proposalId, weight)
 function login(user, pass)
 {
     ajax.showAjaxLoader();
+    $('.loginResult').addClass('hidden');
 
     var successFunc = function() {
-        alert('Login Successful!');
+        ajax.hideAjaxLoader();
+        $('.loginResult').html('Success!')
+            .addClass('text-success')
+            .removeClass('hidden');
+
     };
 
     var errorFunc = function() {
-        alert('Login Failed');
+        ajax.hideAjaxLoader();
+
+        $('.loginResult')
+            .html('Failed!')
+            .addClass('text-error')
+            .removeClass('hidden');
     };
 
     ajax.req('post', '/api/login?username=' + user + '&password=' + pass, '', DataType.DEFAULT, successFunc, errorFunc);
-
-    ajax.hideAjaxLoader();
 }
 
 function loadDomains()

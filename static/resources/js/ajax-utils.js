@@ -55,8 +55,7 @@ ajax = (function() {
         }
 
         $(_ajaxLoader)
-            .removeClass('hidden')
-            .addClass('visible');
+            .removeClass('hidden');
     };
 
     ajax.hideAjaxLoader = function()
@@ -66,7 +65,6 @@ ajax = (function() {
         }
 
         $(_ajaxLoader)
-            .removeClass('visible')
             .addClass('hidden');
     };
 
