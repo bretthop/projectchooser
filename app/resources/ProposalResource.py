@@ -1,6 +1,7 @@
 from google.appengine.ext import webapp
 
 from app.data.models import *
+from app.data.model.Domain import Domain
 from app.decorator.ProduceJson import *
 from app.services.BackerService import BackerService
 from app.services.ProposalService import *
@@ -21,9 +22,11 @@ class ProposalResource(webapp.RequestHandler):
         proposal = JsonUtil.decodeToModel(self.request.body, Proposal)
 
         # TODO Get the backer from the JSON request. The client should send up the backer with the request.
-        owner = self._backerService.GetCurrentBacker()
+        _owner = self._backerService.GetCurrentBacker()
+        proposal.owner = _owner
 
-        proposal.owner = owner
+        _domain = Domain.get_by_id(int(proposal.domainId))
+        proposal.domain = _domain
 
         if proposal.name != '' and proposal.description != '':
             self._proposalService.saveProposal(proposal)

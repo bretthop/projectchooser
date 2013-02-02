@@ -39,6 +39,7 @@ function handleAddDomainClick()
 
 function showAddProposalModal()
 {
+    $('#addProposalModal').find('#domainId').val(globalVars.domainId);
     $('#addProposalModal').modal();
 }
 

@@ -3,6 +3,14 @@ DataType = {
     JSON: 1
 };
 
+globalVars = (function() {
+    var me = {};
+
+    me.domainId = 0;
+
+    return me;
+})();
+
 ajax = (function() {
     var ajax = {};
 
