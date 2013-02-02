@@ -1,4 +1,5 @@
 from app.data.models import *
+from app.data.model.Domain import Domain
 
 class ProposalService:
 
@@ -6,5 +7,12 @@ class ProposalService:
         proposal.put()
         return proposal
 
-    def GetProposalsByStatus(self, status):
-        return Proposal.gql("WHERE status = '" + status +"'")
+    def GetProposalsByDomainAndStatus(self, domainId, status):
+        result = db.Model()
+        try:
+            domain = Domain.get_by_id(int(domainId))
+            result = Proposal.gql("WHERE status = '" + status +"' AND domain=:pDomain", pDomain=domain)
+        except Exception as e:
+            exception = e
+
+        return result

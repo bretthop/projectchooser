@@ -11,7 +11,31 @@ $('#addProposalModal').on('hide', function () {
     $('#addProposalModal').find('input').val('');
 });
 
+var addDomainValidator = $("form").validate({
+    errorPlacement: function(error, element) {
+        //Override errorPlacement function (this stops the automatic 'This field is required' message from showing)
+        return true;
+    }
+});
+$('#addDomainModal').on('hide', function () {
+    addDomainValidator.resetForm();
+    $('#addDomainModal').find('input').val('');
+});
+
 ajax.setAjaxLoader($('.ajax-loader'));
+
+function showAddDomainModal()
+{
+    $('#addDomainModal').modal();
+}
+function handleAddDomainClick()
+{
+    var success = addDomain();
+
+    if (success) {
+        $('#addDomainModal').modal('hide');
+    }
+}
 
 function showAddProposalModal()
 {
@@ -33,6 +57,12 @@ function handleLoginClick()
     var pass = $('#password').val();
 
     login(user, pass)
+}
+
+function resetAddDomainForm()
+{
+    $('#addDomainModal #title').val('');
+    $('#addDomainModal #description').val('');
 }
 
 function resetAddProposalForm()
