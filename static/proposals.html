@@ -6,35 +6,30 @@
 </head>
 <body>
     <div class="container-fluid">
-        <h1 class="inline-block">Project Chooser</h1>
+        <span>
+            <h1 class="inline-block" style="float:left;">Project Chooser</h1>
+            <h3 style="float:left; padding:0 20px;">::</h3>
+            <h3 style="float:left;">[CURRENT DOMAIN]</h3>
+            <h3 style="float:left; padding:0 20px;">&nbsp;</h3>
+            <button class="btn addProposalBtn alignButtonTop" style="float:left;" onclick="location='/'">
+                <i class="icon-arrow-left"></i>
+                Back to Domains
+            </button>
+        </span>
+        <div style="clear:both;"></div>
+
+        <div>
+            <p>
+                Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own
+                <span class="ajax-loader mainOffset inline-block hidden"></span>
+            </p>
+        </div>
+
         <div class="row-fluid">
             <div class="span2">
                 <div class="backerTmpl-rendered alert alert-info minHeight500"></div>
             </div>
             <div class="span10">
-                <h3>[CURRENT DOMAIN]</h3>
-
-                <span class="ajax-loader mainOffset inline-block hidden"></span>
-
-                <button class="btn addProposalBtn alignButtonTop" onclick="location='/'">
-                    <i class="icon-arrow-left"></i>
-                    Back to Domains
-                </button>
-
-                <button class="btn addProposalBtn alignButtonTop" onclick="showAddProposalModal()">
-                    <i class="icon-plus"></i>
-                    Add Proposal
-                </button>
-
-                <button class="btn btn-success alignButtonTop loginBtn" onclick="showLoginModal()">
-                    <i class="icon-user"></i>
-                    Login
-                </button>
-
-                <br>
-
-                <p>Below you can see a list of existing proposals for the current domain. You can support on any one you like, or add your own</p>
-
                 <div class="proposalsTmpl-rendered inline-block"></div>
 
                 <!-- Add Proposal Modal -->
@@ -46,9 +41,10 @@
                     <div class="modal-body">
                         <form class="form-horizontal">
                             <div class="control-group">
-                                <label class="control-label" for="domainId">Domain</label>
+                                <label class="control-label" for="domainTitle">Domain</label>
                                 <div class="controls">
-                                    <input type="text" name="domainId" id="domainId" placeholder="Domain ID" class="required" readonly="readonly" />
+                                    <input type="hidden" name="domainId" id="domainId" placeholder="Domain ID" readonly="readonly" />
+                                    <input type="text" name="domainTitle" id="domainTitle" placeholder="Domain" readonly="readonly" />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -74,37 +70,6 @@
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button class="btn btn-primary" onclick="handleAddProposalClick()">Add</button>
-                    </div>
-                </div>
-
-                <!-- Login Modal -->
-                <!-- TODO: Move this to a separate template file -->
-                <div id="loginModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        <h3 id="loginLabel">Please Login to Continue</h3>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label" for="username">Username</label>
-                                <div class="controls">
-                                    <input type="text" name="username" id="username" placeholder="Username" class="required" />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="password">Password</label>
-                                <div class="controls">
-                                    <input type="password" name="password" id="password" placeholder="Password" class="required" />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <span class="ajax-loader inline-block hidden"></span>
-                        <span class="loginResult hidden"></span>
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-primary" onclick="handleLoginClick()">Add</button>
                     </div>
                 </div>
             </div>

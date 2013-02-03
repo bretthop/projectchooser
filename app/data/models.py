@@ -12,11 +12,14 @@ class Proposal(db.Model):
     status           = db.StringProperty(default = 'OPEN')
     owner            = db.ReferenceProperty(Backer)
     domain           = db.ReferenceProperty(Domain, required=False)
+#    created     = db.DateTimeProperty(auto_now_add=True)
+#    updated     = db.DateTimeProperty(auto_now_add=True, auto_now=True)
 
 class Vote(db.Model):
     userId      = db.StringProperty()
     proposal    = db.ReferenceProperty(Proposal, required=True, collection_name='votes')
     voteType    = db.ReferenceProperty(VoteType, required=True)
+#    created     = db.DateTimeProperty(auto_now_add=True)
 
 class BackerVote(db.Model):
     backer          = db.ReferenceProperty(Backer, required=True, collection_name='remainingVotes')

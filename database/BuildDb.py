@@ -31,7 +31,7 @@ class BuildDb(webapp.RequestHandler):
         https://groups.google.com/forum/?fromgroups=#!topic/google-appengine/7AgAo8qS_mk
         http://stackoverflow.com/questions/108822/delete-all-data-for-a-kind-in-google-app-engine
         '''
-        kinds = ['Proposal', 'Vote', 'VoteType', 'Backer', 'BackerVote']
+        kinds = ['Domain', 'Proposal', 'Vote', 'VoteType', 'Backer', 'BackerVote']
 
         for kind in kinds:
             while True:

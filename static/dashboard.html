@@ -8,28 +8,34 @@
 
 <body>
     <div class="container-fluid">
-        <h1 class="inline-block">Project Chooser</h1>
+        <span>
+            <h1 class="inline-block" style="float:left;">Project Chooser</h1>
+            <h3 style="float:left; padding:0 20px;">&nbsp;</h3>
+            <button class="btn addProposalBtn alignButtonTop" style="float:left;" onclick="showAddDomainModal()">
+                <i class="icon-plus"></i>
+                Add Domain
+            </button>
+        </span>
+
+        <div style="clear:both;"></div>
+
+        <div>
+            <p>
+                Below you can see a list of existing domains. You can support on any one you like, or add your own
+                <span class="ajax-loader mainOffset inline-block hidden"></span>
+            </p>
+        </div>
 
         <div class="row-fluid">
             <div class="span2">
                 <div class="backerTmpl-rendered alert alert-info minHeight500"></div>
             </div>
             <div class="span10">
-                <span class="ajax-loader inline-block hidden"></span>
 
-                <button class="btn addProposalBtn alignButtonTop" onclick="showAddDomainModal()">
-                    <i class="icon-plus"></i>
-                    Add Domain
-                </button>
-
-                <button class="btn btn-success alignButtonTop loginBtn" onclick="showLoginModal()">
-                    <i class="icon-user"></i>
-                    Login
-                </button>
-
-                <br>
-
-                <p>Available domains:</p>
+                <!--<button class="btn btn-success alignButtonTop loginBtn" onclick="showLoginModal()">-->
+                    <!--<i class="icon-user"></i>-->
+                    <!--Login-->
+                <!--</button>-->
 
                 <div class="domainsTmpl-rendered inline-block"></div>
 
@@ -88,7 +94,7 @@
                         <span class="ajax-loader inline-block hidden"></span>
                         <span class="loginResult hidden"></span>
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button class="btn btn-primary" onclick="handleLoginClick()">Add</button>
+                        <button class="btn btn-primary" onclick="handleLoginClick()">Log In</button>
                     </div>
                 </div>
             </div>

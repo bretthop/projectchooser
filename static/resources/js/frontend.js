@@ -78,7 +78,8 @@ function showLoginModal()
     $('#loginModal').modal();
 }
 
-function hideLoginModal()
+function showLogoutModal()
 {
-    $('#loginModal').modal('hide');
+    //TODO: implement
+    return false;
 }
