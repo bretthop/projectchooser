@@ -38,6 +38,7 @@ ajax = (function() {
             url: url,
             contentType: contentType,
             beforeSend: function (xhr) { // TODO: See if you can set this by the 'headers' prop
+                // TODO: Generate auth token from session's username and password, this is a hardcoded token for (user = 'test@example.com', pass = 'Password1')
                 xhr.setRequestHeader ('Authorization', 'Basic dGVzdEBleGFtcGxlLmNvbTpQYXNzd29yZDE=');
             },
             data: data
