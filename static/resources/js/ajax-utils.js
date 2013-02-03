@@ -18,6 +18,14 @@ ajax = (function() {
 
     ajax.req = function(meth, url, data, dataType, doneCallback, failCallback)
     {
+        if (!session.hasUserCredentials()) {
+            ajax.hideAjaxLoader();
+
+            showLoginModal();
+
+            return;
+        }
+
         var contentType = 'application/x-www-form-urlencoded; charset=UTF-8'; // jQuery default
 
         if (dataType == DataType.JSON) {
@@ -29,6 +37,9 @@ ajax = (function() {
             type: meth,
             url: url,
             contentType: contentType,
+            beforeSend: function (xhr) { // TODO: See if you can set this by the 'headers' prop
+                xhr.setRequestHeader ('Authorization', 'Basic dGVzdEBleGFtcGxlLmNvbTpQYXNzd29yZDE=');
+            },
             data: data
         })
         .done(function(data) {

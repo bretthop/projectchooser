@@ -1,4 +1,4 @@
-from google.appengine.api import users
+#from google.appengine.api import users
 
 from app.data.models import *
 from app.services.BackerService import BackerService
@@ -9,11 +9,7 @@ class VoteService:
 
     _backerService = BackerService()
 
-    def VoteForProposal(self, proposalId, voteTypeLabel, userEmail = ''):
-        #get current user
-        if userEmail == '':
-            userEmail = users.get_current_user().email()
-
+    def VoteForProposal(self, proposalId, voteTypeLabel, userEmail):
         #validate if backer still has enough remaining votes of _voteType
         if self._backerService.BackerHasVoteType(userEmail, voteTypeLabel):
             # get the vote type by label
@@ -33,12 +29,7 @@ class VoteService:
             self._backerService.RemoveBackerVote(userEmail, voteTypeLabel)
 
 
-    def WithdrawVote(self, voteId, userEmail=None):
-
-        if userEmail is None:
-            #get current user
-            userEmail = users.get_current_user().email()
-
+    def WithdrawVote(self, voteId, userEmail):
         if voteId:
             vote = Vote.get_by_id(voteId)
 

@@ -58,6 +58,8 @@ function vote(proposalId, weight)
 
 function login(user, pass)
 {
+    session.setUserCredentials(user, pass);
+
     ajax.showAjaxLoader();
     $('.loginResult').addClass('hidden');
 
@@ -67,9 +69,14 @@ function login(user, pass)
             .addClass('text-success')
             .removeClass('hidden');
 
+        // TODO: Remove this! When this login method gets called from ajax-utils, it should be passed the
+        // TODO: request data which should be used again here to send the request again
+        location.reload();
     };
 
     var errorFunc = function() {
+        session.clearUserCredentials();
+
         ajax.hideAjaxLoader();
 
         $('.loginResult')

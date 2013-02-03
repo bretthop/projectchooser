@@ -1,6 +1,7 @@
 from google.appengine.ext import webapp
 
 from app.decorator.ProduceJson import *
+from app.decorator.Secure import Secured
 from app.services.BackerService import BackerService
 from app.services.DomainService import DomainService
 from app.util.JsonUtil import JsonUtil
@@ -12,10 +13,12 @@ class DomainResource(webapp.RequestHandler):
     _domainService = DomainService()
     _backerService = BackerService()
 
+    @Secured
     @JsonListResult
     def get(self):
         return self._domainService.GetDomainsByStatus('OPEN')
 
+    @Secured
     def post(self):
         domain = JsonUtil.decodeToModel(self.request.body, Domain)
 

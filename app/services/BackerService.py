@@ -1,15 +1,10 @@
-from google.appengine.api import users
+#from google.appengine.api import users
 
 from app.data.models import *
 from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
 
 class BackerService:
-
-    def GetCurrentBacker(self):
-        result = self.GetBackerByEmail(users.get_current_user().email())
-        return result
-
     def GetBackerByEmail(self, email):
         result = self.BackerFactory(email)
         return result
