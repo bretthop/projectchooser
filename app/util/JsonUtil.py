@@ -1,5 +1,7 @@
 import json, inspect
 import collections
+import datetime
+from google.appengine.ext import db
 
 class JsonUtil:
 
@@ -34,6 +36,10 @@ class JsonUtil:
         for f, attr in JsonUtil._getJsonFields(m, done).iteritems():
             if isinstance(attr, (int, long, float, bool, dict, basestring)):
                 jsonObject[f] = attr
+            elif isinstance(attr, datetime.date):
+                jsonObject[f] = str(attr) # TODO: Maybe add some date formatting here if needed
+            elif isinstance(attr, db.GeoPt): # Added for no real reason
+                jsonObject[f] = {'lat': attr.lat, 'lon': attr.lon}
             elif isinstance(attr, collections.Iterable):
                 jsonObject[f] = JsonUtil._createJsonList(attr, done)
             else:
