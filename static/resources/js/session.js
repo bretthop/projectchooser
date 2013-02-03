@@ -9,6 +9,17 @@ session = (function() {
         }
     };
 
+    sesh.getUserCredentialsAsAuthToken = function ()
+    {
+        if (!sesh.hasUserCredentials()) {
+            return undefined;
+        }
+
+        var credentials = sesh.getUserCredentials();
+
+        return base64.encode(credentials.username + ':' + credentials.password);
+    };
+
     sesh.setUserCredentials = function(username, password)
     {
         sessionStorage.setItem('username', username);

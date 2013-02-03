@@ -26,6 +26,8 @@ ajax = (function() {
             return;
         }
 
+        var authToken = session.getUserCredentialsAsAuthToken();
+
         var contentType = 'application/x-www-form-urlencoded; charset=UTF-8'; // jQuery default
 
         if (dataType == DataType.JSON) {
@@ -38,7 +40,7 @@ ajax = (function() {
             url: url,
             contentType: contentType,
             beforeSend: function (xhr) { // TODO: See if you can set this by the 'headers' prop
-                xhr.setRequestHeader ('Authorization', 'Basic dGVzdEBleGFtcGxlLmNvbTpQYXNzd29yZDE=');
+                xhr.setRequestHeader ('Authorization', 'Basic ' + authToken);
             },
             data: data
         })
