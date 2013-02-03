@@ -2,14 +2,31 @@ from google.appengine.ext import webapp
 
 from app.services.VoteService import *
 
-class BuildDb(webapp.RequestHandler):
+class AdminController(webapp.RequestHandler):
 
-    _voteService = VoteService()
+    _voteService   = VoteService()
+    _backerService = BackerService()
 
+    def post(self):
+        try :
+            action = self.request.get('action')
+
+            if action == 'ADD_USER':
+                email       = self.request.get('email')
+                username    = self.request.get('username')
+                password    = self.request.get('password')
+
+                self._backerService.CreateBacker(email, username, password)
+
+                self.response.out.write('Done!')
+            else:
+                self.response.out.write('No Action!')
+        except BaseException as e:
+            self.response.write(str(e))
     def get(self):
-        action = self.request.get('action')
-
         try:
+            action = self.request.get('action')
+
             if action == 'addVoteTypes':
                 self._voteService.PopulateVoteTypes()
 
@@ -21,8 +38,8 @@ class BuildDb(webapp.RequestHandler):
                 self._voteService.PopulateVoteTypes()
 
             self.response.out.write('Done!')
-        except BaseException:
-            self.response.out.write('Failed!')
+        except BaseException as e:
+            self.response.write(str(e))
 
     def clearDatabase(self):
         '''

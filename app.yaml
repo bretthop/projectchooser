@@ -10,18 +10,18 @@ handlers:
 - url: /static
   static_dir: static
 
-# Backend Database mapping (handles all calls to the database scripts)
-- url: /database
-  script: database/BuildDBDispatcher.py
+# Backend Database mapping (handles all calls to the admin scripts)
+- url: /doAdminAction
+  script: admin/AdminDispatcher.py
 
 # Backend API mapping (handles all calls to the API)
 - url: /api/.*
   script: app/APIDispatcher.py
 
-# Front end Database mappings (gives an entry point to the database backend)
-- url: /db
-  static_files: static/buildDb.html
-  upload: static/buildDb.html
+# Front end Database mappings (gives an entry point to the admin backend)
+- url: /admin
+  static_files: static/admin.html
+  upload: static/admin.html
 
 - url: /proposals
   static_files: static/proposals.html
@@ -29,7 +29,5 @@ handlers:
 
 # Front end index mapping (main starting point of the application)
 - url: /|/index.html
-#  static_files: static/index.html
-#  upload: static/index.html
   static_files: static/dashboard.html
   upload: static/dashboard.html

@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>Admin</title>
+</head>
+<body>
+<h1>Admin</h1>
+
+<a href="/doAdminAction?action=resetToStable" style="font-size: 18px;">Reset To Stable</a>
+
+<br>
+<br>
+
+<a href="/doAdminAction?action=clear">Clear Database</a>
+
+<br>
+
+<a href="/doAdminAction?action=addVoteTypes">Add Vote Types</a>
+
+<br>
+<br>
+
+<h2>Add Backer</h2>
+
+<form action="/doAdminAction" method="post">
+    <input type="hidden" name="action" value="ADD_USER" />
+
+    <label for="email">Email:</label>
+    <input type="text" name="email" id="email" />
+
+    <br>
+
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" />
+
+    <br>
+
+    <label for="password">Password:</label>
+    <input type="text" name="password" id="password" />
+
+    <br>
+
+    <input type="submit" />
+</form>
+</body>
+</html>

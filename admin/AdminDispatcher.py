@@ -1,12 +1,11 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-
-from database.BuildDb import *
+from admin.AdminController import AdminController
 
 def main():
     app = webapp.WSGIApplication(
         [
-            ('/database', BuildDb)
+            ('/doAdminAction', AdminController)
         ],
         debug=True)
 

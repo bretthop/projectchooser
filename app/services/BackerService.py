@@ -1,5 +1,3 @@
-#from google.appengine.api import users
-
 from app.data.models import *
 from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
@@ -26,28 +24,35 @@ class BackerService:
         if backerKey:
             entity = Backer.get_by_id(backerKey.id())
         else:
-            entity.email    = email
-            entity.username = email.split('@')[0]
-            entity.password = 'password'
-            entity.put()
+            entity = self.CreateBacker(email, email.split('@')[0], 'password')
 
-            BackerVote(
-                backer = entity,
-                voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.GOLD),
-                quantity = 1
-            ).put()
+        return entity
 
-            BackerVote(
-                backer = entity,
-                voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.SILVER),
-                quantity = 1
-            ).put()
+    def CreateBacker(self, email, username, password):
+        entity = Backer()
 
-            BackerVote(
-                backer = entity,
-                voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.BRONZE),
-                quantity = 1
-            ).put()
+        entity.email    = email
+        entity.username = username
+        entity.password = password
+        entity.put()
+
+        BackerVote(
+            backer = entity,
+            voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.GOLD),
+            quantity = 1
+        ).put()
+
+        BackerVote(
+            backer = entity,
+            voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.SILVER),
+            quantity = 1
+        ).put()
+
+        BackerVote(
+            backer = entity,
+            voteType = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.BRONZE),
+            quantity = 1
+        ).put()
 
         return entity
 
