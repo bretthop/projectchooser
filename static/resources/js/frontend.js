@@ -77,3 +77,8 @@ function showLoginModal()
 {
     $('#loginModal').modal();
 }
+
+function hideLoginModal()
+{
+    $('#loginModal').modal('hide');
+}
