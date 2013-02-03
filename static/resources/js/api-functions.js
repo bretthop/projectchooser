@@ -10,7 +10,7 @@ function addDomain()
             description: $('#description').val()
         };
 
-        ajax.req('post', '/api/domains', data, DataType.JSON, function() { loadDomains(); });
+        ajax.req({method: 'post', url: '/api/domains', data: data, dataType: DataType.JSON, doneCallback: function() { loadDomains(); }});
 
         return true;
     }
@@ -33,7 +33,7 @@ function addProposal()
             domainId: $('#domainId').val()
         };
 
-        ajax.req('post', '/api/proposals', data, DataType.JSON, function() { loadProposals(); });
+        ajax.req({method: 'post', url: '/api/proposals', data: data, dataType: DataType.JSON, doneCallback: function() { loadProposals(); }});
 
         return true;
     }
@@ -46,14 +46,14 @@ function withdraw(voteId)
 {
     ajax.showAjaxLoader();
 
-    ajax.req('delete', '/api/votes?voteId=' + voteId, '', DataType.DEFAULT, function() { loadProposals(); });
+    ajax.req({method: 'delete', url: '/api/votes?voteId=' + voteId, doneCallback: function() { loadProposals(); }});
 }
 
 function vote(proposalId, weight)
 {
     ajax.showAjaxLoader();
 
-    ajax.req('post', '/api/votes?proposalId=' + proposalId + '&weight=' + weight, '', DataType.DEFAULT, function() { loadProposals(); });
+    ajax.req({method: 'post', url: '/api/votes?proposalId=' + proposalId + '&weight=' + weight, doneCallback: function() { loadProposals(); }});
 }
 
 function login(user, pass)
@@ -69,9 +69,14 @@ function login(user, pass)
             .addClass('text-success')
             .removeClass('hidden');
 
-        // TODO: Remove this! When this login method gets called from ajax-utils, it should be passed the
-        // TODO: request data which should be used again here to send the request again
-        location.reload();
+        var requestToRetry = globalVars.requestToRetry;
+
+        if (requestToRetry) {
+            ajax.showAjaxLoader();
+            ajax.req(requestToRetry);
+        }
+
+        hideLoginModal();
     };
 
     var errorFunc = function() {
@@ -85,7 +90,7 @@ function login(user, pass)
             .removeClass('hidden');
     };
 
-    ajax.req('post', '/api/login?username=' + user + '&password=' + pass, '', DataType.DEFAULT, successFunc, errorFunc);
+    ajax.req({method: 'post', url: '/api/login?username=' + user + '&password=' + pass, doneCallback: successFunc, failCallback: errorFunc});
 }
 
 function loadDomains()
@@ -94,7 +99,7 @@ function loadDomains()
 
     resetAddDomainForm();
 
-    ajax.req('get', '/api/domains', '', DataType.DEFAULT, function(domains)
+    ajax.req({method: 'get', url: '/api/domains', doneCallback: function(domains)
     {
         //TODO: Apply current backer information to the returned list of domains
         //applyCurrentBackerContext(domains, backer);
@@ -108,7 +113,7 @@ function loadDomains()
 
             ajax.hideAjaxLoader();
         });
-    });
+    }});
 
 }
 
@@ -121,12 +126,12 @@ function loadProposals()
 
     resetAddProposalForm();
 
-    ajax.req('get', '/api/backers', '', DataType.DEFAULT, function(backer) {
+    ajax.req({method: 'get', url: '/api/backers', doneCallback: function(backer) {
         fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
-            ajax.req('get', '/api/proposals', searchParams, DataType.DEFAULT, function(proposals) {
+            ajax.req({method: 'get', url: '/api/proposals', data: searchParams, doneCallback: function(proposals) {
                 //Apply current backer information to the returned list of proposals
                 applyCurrentBackerContext(proposals, backer);
 
@@ -139,9 +144,9 @@ function loadProposals()
 
                     ajax.hideAjaxLoader();
                 });
-            });
+            }});
         });
-    });
+    }});
 }
 
 /**

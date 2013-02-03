@@ -8,6 +8,13 @@ globalVars = (function() {
 
     me.domainId = 0;
 
+    /**
+     * This describes the last request that was attempted to be made.
+     * This request has failed due to the client not having any authentication information, and should be attempted
+     * again once the user has entered there login details.
+     */
+    me.requestToRetry = undefined;
+
     return me;
 })();
 
@@ -16,44 +23,55 @@ ajax = (function() {
 
     var _ajaxLoader = null;
 
-    ajax.req = function(meth, url, data, dataType, doneCallback, failCallback)
+    ajax.req = function(params)
     {
-        if (!session.hasUserCredentials()) {
-            ajax.hideAjaxLoader();
+        var url = params.url,
+            authenticate = params.authenticate || true,
+            method = params.method,
+            data = params.data || '',
+            dataType = params.dataType,
+            doneCallback = params.doneCallback,
+            failCallback = params.failCallback;
 
-            showLoginModal();
-
-            return;
-        }
-
-        var authToken = session.getUserCredentialsAsAuthToken();
-
-        var contentType = 'application/x-www-form-urlencoded; charset=UTF-8'; // jQuery default
-
-        if (dataType == DataType.JSON) {
-            contentType = 'application/json';
-            data = JSON.stringify(data);
-        }
-
-        $.ajax({
-            type: meth,
+        var ajaxDescriptor = {
             url: url,
-            contentType: contentType,
-            beforeSend: function (xhr) { // TODO: See if you can set this by the 'headers' prop
-                xhr.setRequestHeader ('Authorization', 'Basic ' + authToken);
-            },
+            type: method,
             data: data
-        })
-        .done(function(data) {
-            if (doneCallback) {
-                doneCallback(data);
+        };
+
+        if (authenticate) {
+            if (session.hasUserCredentials()) {
+                var authToken = session.getUserCredentialsAsAuthToken();
+
+                ajaxDescriptor.beforeSend = function (xhr) { // TODO: See if you can set this by the 'headers' prop
+                    xhr.setRequestHeader ('Authorization', 'Basic ' + authToken);
+                };
             }
-        })
-        .fail(function(data) {
-            if (failCallback) {
-                failCallback(data);
+            else {
+                ajax.hideAjaxLoader();
+                globalVars.requestToRetry = params;
+                showLoginModal();
+
+                return;
             }
-        });
+        }
+
+        if (dataType && dataType == DataType.JSON) {
+            ajaxDescriptor.contentType = 'application/json';
+            ajaxDescriptor.data = JSON.stringify(data);
+        }
+
+        $.ajax(ajaxDescriptor)
+            .done(function(data) {
+                if (doneCallback) {
+                    doneCallback(data);
+                }
+            })
+            .fail(function(data) {
+                if (failCallback) {
+                    failCallback(data);
+                }
+            });
     };
 
     ajax.setAjaxLoader = function(loader)
