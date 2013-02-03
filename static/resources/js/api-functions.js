@@ -56,9 +56,9 @@ function vote(proposalId, weight)
     ajax.req({method: 'post', url: '/api/votes?proposalId=' + proposalId + '&weight=' + weight, doneCallback: function() { loadProposals(); }});
 }
 
-function login(user, pass)
+function login(email, pass)
 {
-    session.setUserCredentials(user, pass);
+    session.setUserCredentials(email, pass);
 
     ajax.showAjaxLoader();
     $('.loginResult').addClass('hidden');
@@ -90,7 +90,7 @@ function login(user, pass)
             .removeClass('hidden');
     };
 
-    ajax.req({method: 'post', url: '/api/login?username=' + user + '&password=' + pass, doneCallback: successFunc, failCallback: errorFunc});
+    ajax.req({method: 'post', url: '/api/login?email=' + email + '&password=' + pass, doneCallback: successFunc, failCallback: errorFunc});
 }
 
 function loadDomains()
@@ -171,7 +171,7 @@ function applyCurrentBackerContext(proposals, currentBacker)
 
             rating += vote.voteType.weight;
 
-            if (vote.userId == currentBacker.userId) {
+            if (vote.userId == currentBacker.email) {
                 hasUserVoted = true;
                 userVote = vote;
             }
@@ -193,16 +193,6 @@ function countRemainingVotes(votes)
     return _.filter(votes, function(vote) {
         return vote.quantity > 0;
     }).length;
-}
-
-/**
- * Sort of gets the username from an email address (basically it just returns whats before the '@')
- * @param email
- * @return {*}
- */
-function getUsernameFromEmail(email)
-{
-    return email.split('@')[0];
 }
 
 /**

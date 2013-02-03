@@ -3,7 +3,7 @@
 <% } else { %>
 
     <% _.each(proposals, function(proposal) {
-        var owner = proposal.owner.userId && proposal.owner.userId == currentBacker.userId;
+        var owner = proposal.owner.email && proposal.owner.email == currentBacker.email;
         var ownerClass = owner ? 'owner' : '';
     %>
         <table class="table-bordered"> <!--table-striped-->

@@ -5,6 +5,14 @@ from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
 
 class BackerService:
+    def VerifyBacker(self, email, password):
+        backer = self.GetBackerByEmail(email)
+
+        if backer and backer.password == password:
+            return backer
+        else:
+            return None
+
     def GetBackerByEmail(self, email):
         result = self.BackerFactory(email)
         return result
@@ -12,13 +20,15 @@ class BackerService:
     def BackerFactory(self, email):
         entity = Backer()
 
-        backerKeyQuery = db.GqlQuery("SELECT __key__ FROM Backer WHERE userId = '" + email + "'")
+        backerKeyQuery = db.GqlQuery("SELECT __key__ FROM Backer WHERE email = '" + email + "'")
         backerKey = backerKeyQuery.get()
 
         if backerKey:
             entity = Backer.get_by_id(backerKey.id())
         else:
-            entity.userId = email
+            entity.email    = email
+            entity.username = email.split('@')[0]
+            entity.password = 'password'
             entity.put()
 
             BackerVote(

@@ -25,7 +25,7 @@ class ProposalResource(webapp.RequestHandler):
         proposal = JsonUtil.decodeToModel(self.request.body, Proposal)
 
         # TODO Get the backer from the JSON request. The client should send up the backer with the request.
-        _owner = self._backerService.GetBackerByEmail(self.currentUser['email'])
+        _owner = self._backerService.GetBackerByEmail(self.currentUser.email)
         proposal.owner = _owner
 
         _domain = Domain.get_by_id(int(proposal.domainId))

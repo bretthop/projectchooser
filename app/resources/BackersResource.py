@@ -10,6 +10,6 @@ class BackersResource(webapp.RequestHandler):
     @Secured
     @JsonSingleResult
     def get(self):
-        email = self.currentUser['email']
+        email = self.currentUser.email
 
         return self._backerService.GetBackerByEmail(email)

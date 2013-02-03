@@ -1,23 +1,20 @@
-from app.stormpath.httpUtils import *
-import app.stormpath.Stormpath as storm
+from app.services.BackerService import BackerService
+from app.util.HttpUtil import decodeAuth
 
 def Secured(func):
     def secure(self):
+        _backerService = BackerService()
+
         authorisation = self.request.headers["Authorization"]
 
         authInfo = decodeAuth(authorisation.split('Basic ')[1])
-        username = authInfo['username']
+        email = authInfo['username']
         password = authInfo['password']
 
-        # ATM, 'login' will only return an object that contains a HREF to the actual user account
-        # TODO: Get login to return the full user object from Stormpath and remove manual addition of username
-        currentUser = storm.login(username, password)
+        user = _backerService.VerifyBacker(email, password)
 
-        if currentUser:
-            # Complete above TO-DO and remove this
-            currentUser['email'] = username
-
-            self.currentUser = currentUser
+        if user:
+            self.currentUser = user
             func(self)
         else:
             self.response.set_status(401)

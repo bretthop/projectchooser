@@ -3,7 +3,9 @@ from app.data.model.VoteType import VoteType
 from app.data.model.Domain import Domain
 
 class Backer(db.Model):
-    userId           = db.StringProperty()
+    email            = db.StringProperty()
+    username         = db.StringProperty()
+    password         = db.StringProperty()
 
 class Proposal(db.Model):
     name             = db.StringProperty()

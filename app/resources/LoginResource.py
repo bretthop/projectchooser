@@ -1,17 +1,14 @@
 from google.appengine.ext import webapp
-
-import app.stormpath.Stormpath as storm
+from app.services.BackerService import BackerService
 
 class LoginResource(webapp.RequestHandler):
+    _backerService = BackerService()
+
     def post(self):
-        username = self.request.get('username')
+        email    = self.request.get('email')
         password = self.request.get('password')
 
-        # Example user and pass:
-        # username = 'test@example.com'
-        # password = 'Passwod1'
+        user = self._backerService.VerifyBacker(email, password)
 
-        loginResult = storm.login(username, password)
-
-        if not loginResult:
+        if not user:
             self.response.set_status(400)

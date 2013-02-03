@@ -54,10 +54,10 @@ function handleAddProposalClick()
 
 function handleLoginClick()
 {
-    var user = $('#username').val();
-    var pass = $('#password').val();
+    var email    = $('#email').val();
+    var password = $('#password').val();
 
-    login(user, pass)
+    login(email, password)
 }
 
 function resetAddDomainForm()

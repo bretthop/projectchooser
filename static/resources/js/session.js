@@ -4,7 +4,7 @@ session = (function() {
     sesh.getUserCredentials = function()
     {
         return {
-            username: sessionStorage.getItem('username'),
+            email: sessionStorage.getItem('email'),
             password: sessionStorage.getItem('password')
         }
     };
@@ -17,12 +17,12 @@ session = (function() {
 
         var credentials = sesh.getUserCredentials();
 
-        return base64.encode(credentials.username + ':' + credentials.password);
+        return base64.encode(credentials.email + ':' + credentials.password);
     };
 
-    sesh.setUserCredentials = function(username, password)
+    sesh.setUserCredentials = function(email, password)
     {
-        sessionStorage.setItem('username', username);
+        sessionStorage.setItem('email', email);
         sessionStorage.setItem('password', password);
     };
 
@@ -30,12 +30,12 @@ session = (function() {
     {
         var userCredentials = sesh.getUserCredentials();
 
-        return userCredentials && userCredentials.username != undefined && userCredentials.password != undefined;
+        return userCredentials && userCredentials.email != undefined && userCredentials.password != undefined;
     };
 
     sesh.clearUserCredentials = function()
     {
-        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('email');
         sessionStorage.removeItem('password');
     };
 
