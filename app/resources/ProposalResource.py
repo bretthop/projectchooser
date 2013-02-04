@@ -1,4 +1,5 @@
 from google.appengine.ext import webapp
+from app.data.enums.PermissionNameEnum import PermissionNameEnum
 
 from app.data.models import *
 from app.data.model.Domain import Domain
@@ -13,14 +14,14 @@ class ProposalResource(webapp.RequestHandler):
     _proposalService = ProposalService()
     _backerService = BackerService()
 
-    @Secured
+    @Secured([PermissionNameEnum.CAN_VIEW_PROPOSAL])
     @JsonListResult
     def get(self):
         domainId = self.request.get('domainId')
         result = self._proposalService.GetProposalsByDomainAndStatus(domainId, 'OPEN')
         return result
 
-    @Secured
+    @Secured([PermissionNameEnum.CAN_CREATE_PROPOSAL])
     def post(self):
         proposal = JsonUtil.decodeToModel(self.request.body, Proposal)
 

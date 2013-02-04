@@ -1,4 +1,5 @@
 from google.appengine.ext import webapp
+from app.data.enums.PermissionNameEnum import PermissionNameEnum
 
 from app.decorator.ProduceJson import *
 from app.decorator.Secure import Secured
@@ -13,12 +14,12 @@ class DomainResource(webapp.RequestHandler):
     _domainService = DomainService()
     _backerService = BackerService()
 
-    @Secured
+    @Secured([PermissionNameEnum.CAN_VIEW_DOMAIN])
     @JsonListResult
     def get(self):
         return self._domainService.GetDomainsByStatus('OPEN')
 
-    @Secured
+    @Secured([PermissionNameEnum.CAN_CREATE_DOMAIN])
     def post(self):
         domain = JsonUtil.decodeToModel(self.request.body, Domain)
 

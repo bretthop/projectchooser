@@ -1,4 +1,5 @@
 from google.appengine.ext import webapp
+from app.data.enums.PermissionNameEnum import PermissionNameEnum
 from app.decorator.Secure import Secured
 
 from app.services.VoteService import *
@@ -7,7 +8,7 @@ class VoteResource(webapp.RequestHandler):
 
     _voteService = VoteService()
 
-    @Secured
+    @Secured([PermissionNameEnum.CAN_VOTE])
     def post(self):
         # TODO: Refactor this to be fully REST (the client should POST a vote object in the request body that we simply save
         proposalId   = int(self.request.get('proposalId'))
@@ -16,7 +17,7 @@ class VoteResource(webapp.RequestHandler):
 
         self._voteService.VoteForProposal(proposalId, votingWeight, userEmail)
 
-    @Secured
+    @Secured([PermissionNameEnum.CAN_WITHDRAW])
     def delete(self):
         # TODO: Refactor this into having the 'voteId' as part of the URL (not as a param)
         voteId       = int(self.request.get('voteId'))

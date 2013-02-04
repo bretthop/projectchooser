@@ -76,6 +76,21 @@ class AdminController(webapp.RequestHandler):
 
     def addPermissions(self):
         ## Create Permissions
+        canViewDomainPermission = Permission (
+            name = 'CAN_VIEW_DOMAIN'
+        )
+        canViewDomainPermission.put()
+
+        canCreateDomainPermission = Permission (
+            name = 'CAN_CREATE_DOMAIN'
+        )
+        canCreateDomainPermission.put()
+
+        canViewProposalPermission = Permission (
+            name = 'CAN_VIEW_PROPOSAL'
+        )
+        canViewProposalPermission.put()
+
         canCreateProposalPermission = Permission (
             name = 'CAN_CREATE_PROPOSAL'
         )
@@ -125,6 +140,9 @@ class AdminController(webapp.RequestHandler):
         backerRole = Role (
             name = 'BACKER',
             _permissionKeys = [
+                canViewDomainPermission.key(),
+                canCreateDomainPermission.key(),
+                canViewProposalPermission.key(),
                 canCreateProposalPermission.key(),
                 canVotePermission.key(),
                 canWithdrawPermission.key(),
@@ -138,6 +156,9 @@ class AdminController(webapp.RequestHandler):
         adminRole = Role (
             name = 'ADMIN',
             _permissionKeys = [
+                canViewDomainPermission.key(),
+                canCreateDomainPermission.key(),
+                canViewProposalPermission.key(),
                 canLockProposalPermission.key(),
                 canUnlockProposalPermission.key(),
                 canCloseProposalPermission.key(),
