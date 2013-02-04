@@ -2,6 +2,7 @@ import json, inspect
 import collections
 import datetime
 from google.appengine.ext import db
+from app.resources.RestApiResponse import RestApiResponse
 
 class JsonUtil:
 
@@ -24,26 +25,34 @@ class JsonUtil:
 
     @staticmethod
     def _createJsonObject(m, done):
-        jsonObject = {'id': None}
+        jsonObject = {}
 
         # If the Model is saved then update the 'id' field to contain the models proper id
-        if m and m.is_saved():
-            key = getattr(m, 'key')()
+        if hasattr(m, 'is_saved'):
+            jsonObject = {'id': None}
+            if m and m.is_saved():
+                key = getattr(m, 'key')()
 
-            jsonObject['id'] = key.id()
-            done.append(key)
+                jsonObject['id'] = key.id()
+                done.append(key)
 
-        for f, attr in JsonUtil._getJsonFields(m, done).iteritems():
-            if isinstance(attr, (int, long, float, bool, dict, basestring)):
-                jsonObject[f] = attr
-            elif isinstance(attr, datetime.date):
-                jsonObject[f] = str(attr) # TODO: Maybe add some date formatting here if needed
-            elif isinstance(attr, db.GeoPt): # Added for no real reason
-                jsonObject[f] = {'lat': attr.lat, 'lon': attr.lon}
-            elif isinstance(attr, collections.Iterable):
-                jsonObject[f] = JsonUtil._createJsonList(attr, done)
-            else:
-                jsonObject[f] = JsonUtil._createJsonObject(attr, done)
+            for f, attr in JsonUtil._getJsonFields(m, done).iteritems():
+                if isinstance(attr, (int, long, float, bool, dict, basestring)):
+                    jsonObject[f] = attr
+                elif isinstance(attr, datetime.date):
+                    jsonObject[f] = str(attr) # TODO: Maybe add some date formatting here if needed
+                elif isinstance(attr, db.GeoPt): # Added for no real reason
+                    jsonObject[f] = {'lat': attr.lat, 'lon': attr.lon}
+                elif isinstance(attr, collections.Iterable):
+                    jsonObject[f] = JsonUtil._createJsonList(attr, done)
+                else:
+                    jsonObject[f] = JsonUtil._createJsonObject(attr, done)
+        else:
+            if isinstance(m, RestApiResponse):
+                jsonObject['httpStatus'] = m._httpStatus
+                jsonObject['urn']        = m._urn
+                jsonObject['count']      = m._count
+                jsonObject['items']      = JsonUtil._createJsonList(m._items, done)
 
         return jsonObject
 

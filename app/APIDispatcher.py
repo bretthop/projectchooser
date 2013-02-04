@@ -6,6 +6,7 @@ from app.resources.ProposalResource import *
 from app.resources.BackersResource import *
 from app.resources.VoteResource import *
 from app.resources.LoginResource import *
+from app.resources.DemoResource import *
 
 def main():
     app = webapp.WSGIApplication(
@@ -14,7 +15,8 @@ def main():
             ('/api/proposals', ProposalResource),
             ('/api/backers', BackersResource),
             ('/api/votes', VoteResource),
-            ('/api/login', LoginResource)
+            ('/api/login', LoginResource),
+            ('/api/demo', DemoResource)
         ],
         debug=True)
 

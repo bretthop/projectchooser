@@ -27,6 +27,10 @@ handlers:
   static_files: static/proposals.html
   upload: static/proposals.html
 
+- url: /apidemo
+  static_files: static/RestApiTest.html
+  upload: static/RestApiTest.html
+
 # Front end index mapping (main starting point of the application)
 - url: /|/index.html
   static_files: static/dashboard.html

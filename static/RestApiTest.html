@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Chooser - REST API demo</title>
+    <link href="/static/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="all">
+    <link href="/static/resources/css/main.css" rel="stylesheet" media="all">
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="row-fluid">
+            <div class="span2">
+                <input id="domainId" type="text" />
+            </div>
+            <div class="span4">
+                <button class="btn addProposalBtn" style="float:left;" onclick="getDemoProposals()">
+                    <i class="icon-tag"></i>
+                    Get Proposals for Domain
+                </button>
+            </div>
+            <div class="span6">
+
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <pre id="ajaxResponse" class="prettyprint linenums">
+                </pre>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Utils -->
+    <script src="/static/resources/js/ajax-utils.js"></script>
+    <script src="/static/resources/js/tmpl-fetcher.js"></script>
+
+    <!-- Libs -->
+    <script src="/static/resources/js/lib/underscore.js"></script>
+    <script src="/static/resources/js/lib/base64.js"></script>
+    <script src="/static/resources/js/lib/jquery-1.8.2.min.js"></script>
+    <script src="/static/resources/js/lib/jquery.validate.js"></script>
+    <script src="/static/resources/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Application Logic -->
+    <script src="/static/resources/js/session.js"></script>
+    <script src="/static/resources/js/frontend.js"></script>
+    <script src="/static/resources/js/api-functions.js"></script>
+
+    <script type="text/javascript">
+        session.setUserCredentials('test@example.com', 'password');
+        function getDemoProposals()
+        {
+            var _data = 'domainId=' + $('#domainId').val();
+            ajax.req(
+            {
+                method: 'get',
+                url: '/api/demo',
+                data: _data,
+                doneCallback: function(response)
+                {
+//                    debugger;
+                    //TODO; use prettify
+                    $('#ajaxResponse').html(JSON.stringify(response));
+                }
+            });
+        }
+    </script>
+</body>
+</html>
