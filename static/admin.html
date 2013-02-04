@@ -17,6 +17,14 @@
 <a href="/doAdminAction?action=addVoteTypes">Add Vote Types</a>
 
 <br>
+
+<a href="/doAdminAction?action=addPermissions">Add Permissions</a>
+
+<br>
+
+<a href="/doAdminAction?action=viewPermissions">View Permissions</a>
+
+<br>
 <br>
 
 <h2>Add Backer</h2>
@@ -38,7 +46,11 @@
     <input type="text" name="password" id="password" />
 
     <br>
-
+    <label for="role">Role:</label>
+    <select name="role" id="role">
+        <option value="ADMIN">Admin</option>
+        <option value="BACKER" selected="selected">Backer</option>
+    </select>
     <input type="submit" />
 </form>
 </body>

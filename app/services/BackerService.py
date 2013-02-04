@@ -12,28 +12,18 @@ class BackerService:
             return None
 
     def GetBackerByEmail(self, email):
-        result = self.BackerFactory(email)
-        return result
-
-    def BackerFactory(self, email):
-        entity = Backer()
-
-        backerKeyQuery = db.GqlQuery("SELECT __key__ FROM Backer WHERE email = '" + email + "'")
-        backerKey = backerKeyQuery.get()
-
-        if backerKey:
-            entity = Backer.get_by_id(backerKey.id())
-        else:
-            entity = self.CreateBacker(email, email.split('@')[0], 'password')
+        entity = Backer.gql("WHERE email = '%s'" % email).get()
 
         return entity
 
-    def CreateBacker(self, email, username, password):
-        entity = Backer()
+    def CreateBacker(self, email, username, password, role):
+        entity = Backer (
+            email = email,
+            username = username,
+            password = password,
+            role = role
+        )
 
-        entity.email    = email
-        entity.username = username
-        entity.password = password
         entity.put()
 
         BackerVote(

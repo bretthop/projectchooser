@@ -1,4 +1,5 @@
 from google.appengine.ext import webapp
+from app.decorator.ProduceJson import JsonListResult
 
 from app.services.VoteService import *
 
@@ -15,8 +16,11 @@ class AdminController(webapp.RequestHandler):
                 email       = self.request.get('email')
                 username    = self.request.get('username')
                 password    = self.request.get('password')
+                roleName    = self.request.get('role')
 
-                self._backerService.CreateBacker(email, username, password)
+                role = Role.gql("WHERE name = '%s'" % roleName).get()
+
+                self._backerService.CreateBacker(email, username, password, role)
 
                 self.response.out.write('Done!')
             else:
@@ -36,6 +40,10 @@ class AdminController(webapp.RequestHandler):
             elif action == 'resetToStable':
                 self.clearDatabase()
                 self._voteService.PopulateVoteTypes()
+            elif action == 'addPermissions':
+                self.addPermissions()
+            elif action == 'viewPermissions':
+                self.viewPermissions()
 
             self.response.out.write('Done!')
         except BaseException as e:
@@ -48,7 +56,7 @@ class AdminController(webapp.RequestHandler):
         https://groups.google.com/forum/?fromgroups=#!topic/google-appengine/7AgAo8qS_mk
         http://stackoverflow.com/questions/108822/delete-all-data-for-a-kind-in-google-app-engine
         '''
-        kinds = ['Domain', 'Proposal', 'Vote', 'VoteType', 'Backer', 'BackerVote']
+        kinds = ['Permission', 'Role', 'Domain', 'Proposal', 'Vote', 'VoteType', 'Backer', 'BackerVote']
 
         for kind in kinds:
             while True:
@@ -58,3 +66,84 @@ class AdminController(webapp.RequestHandler):
                     break
 
                 db.delete(q.fetch(200))
+
+    @JsonListResult
+    def viewPermissions(self):
+        roles = db.GqlQuery('SELECT * FROM Role').fetch(100)
+
+        return roles
+
+
+    def addPermissions(self):
+        ## Create Permissions
+        canCreateProposalPermission = Permission (
+            name = 'CAN_CREATE_PROPOSAL'
+        )
+        canCreateProposalPermission.put()
+
+        canVotePermission = Permission (
+            name = 'CAN_VOTE'
+        )
+        canVotePermission.put()
+
+        canWithdrawPermission = Permission (
+            name = 'CAN_WITHDRAW'
+        )
+        canWithdrawPermission.put()
+
+        canLockProposalPermission = Permission (
+            name = 'CAN_LOCK_PROPOSAL'
+        )
+        canLockProposalPermission.put()
+
+        canUnlockProposalPermission = Permission (
+            name = 'CAN_UNLOCK_PROPOSAL'
+        )
+        canUnlockProposalPermission.put()
+
+        canCloseProposalPermission = Permission (
+            name = 'CAN_CLOSE_PROPOSAL'
+        )
+        canCloseProposalPermission.put()
+
+        canReopenProposalPermission = Permission (
+            name = 'CAN_REOPEN_PROPOSAL'
+        )
+        canReopenProposalPermission.put()
+
+        canDeleteProposalPermission = Permission (
+            name = 'CAN_DELETE_PROPOSAL'
+        )
+        canDeleteProposalPermission.put()
+
+        canChangeOwnerPermission = Permission (
+            name = 'CAN_CHANGE_OWNER'
+        )
+        canChangeOwnerPermission.put()
+
+        ## Create Roles (ad assign permissions to roles)
+        backerRole = Role (
+            name = 'BACKER',
+            _permissionKeys = [
+                canCreateProposalPermission.key(),
+                canVotePermission.key(),
+                canWithdrawPermission.key(),
+                canLockProposalPermission.key(),
+                canUnlockProposalPermission.key(),
+                canCloseProposalPermission.key()
+            ]
+        )
+        backerRole.put()
+
+        adminRole = Role (
+            name = 'ADMIN',
+            _permissionKeys = [
+                canLockProposalPermission.key(),
+                canUnlockProposalPermission.key(),
+                canCloseProposalPermission.key(),
+                canReopenProposalPermission.key(),
+                canDeleteProposalPermission.key(),
+                canChangeOwnerPermission.key()
+            ]
+        )
+        adminRole.put()
