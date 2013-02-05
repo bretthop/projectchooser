@@ -127,6 +127,19 @@ function loadProposals()
     resetAddProposalForm();
 
     ajax.req({method: 'get', url: '/api/backers', doneCallback: function(backer) {
+        backer.hasPermission = function(permissionName)
+        {
+            var hasPermission = false;
+
+            _.each(backer.role.permissions, function(permission) {
+                if (permission.name == permissionName) {
+                    hasPermission = true;
+                }
+            });
+
+            return hasPermission;
+        };
+
         fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);

@@ -1,35 +1,60 @@
 <h4><%= username %></h4>
 
-<% if (countRemainingVotes(remainingVotes) <= 0) { %>
-    <p class="colorGreen pad10Top">You have used up all your votes for this project! Thank you for your participation.</p>
+<% if (hasPermission('CAN_VOTE')) { %>
+    <% if (countRemainingVotes(remainingVotes) <= 0) { %>
+        <p class="colorGreen pad10Top">You have used up all your votes for this project! Thank you for your participation.</p>
+    <% } else { %>
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <td colspan="2">Remaining Votes:</td>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(remainingVotes, function(remainingVote) { %>
+            <tr>
+                <td class="remaining-title">
+                    <%= toStartCase(remainingVote.voteType.label) %>
+                </td>
+                <td>
+                    <%= remainingVote.quantity %>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <% } %>
 <% } else { %>
-<table class="table table-hover table-condensed">
-    <thead>
-        <tr>
-            <td colspan="2">Remaining Votes:</td>
-        </tr>
-    </thead>
-    <tbody>
-        <% _.each(remainingVotes, function(remainingVote) { %>
-        <tr>
-            <td class="remaining-title">
-                <%= toStartCase(remainingVote.voteType.label) %>
-            </td>
-            <td>
-                <%= remainingVote.quantity %>
-            </td>
-        </tr>
-        <% }); %>
-    </tbody>
-</table>
-
-<button class="btn addProposalBtn alignButtonTop" onclick="showAddProposalModal()">
-    <i class="icon-plus"></i>
-    Add Proposal
-</button>
+    <p class="text-success">You can perform the following action on proposals:</p>
+    <ul class="text-success">
+        <% if (hasPermission('CAN_LOCK_PROPOSAL')) { %>
+            <li>Lock</li>
+        <% } %>
+        <% if (hasPermission('CAN_UNLOCK_PROPOSAL')) { %>
+            <li>Unlock</li>
+        <% } %>
+        <% if (hasPermission('CAN_CLOSE_PROPOSAL')) { %>
+            <li>Close</li>
+        <% } %>
+        <% if (hasPermission('CAN_REOPEN_PROPOSAL')) { %>
+            <li>Open</li>
+        <% } %>
+        <% if (hasPermission('CAN_DELETE_PROPOSAL')) { %>
+            <li>Delete</li>
+        <% } %>
+        <% if (hasPermission('CAN_CHANGE_OWNER')) { %>
+            <li>Change Owner</li>
+        <% } %>
+    </ul>
+<% } %>
+<% if (hasPermission('CAN_CREATE_PROPOSAL')) { %>
+    <button class="btn addProposalBtn alignButtonTop" onclick="showAddProposalModal()">
+        <i class="icon-plus"></i>
+        Add Proposal
+    </button>
+<% } %>
 
 <button class="btn btn-success alignButtonTop loginBtn" onclick="showLogoutModal()">
     <i class="icon-user"></i>
     Log out
 </button>
-<% } %>

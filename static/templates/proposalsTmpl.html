@@ -1,7 +1,7 @@
+<% if (currentBacker.hasPermission('CAN_VIEW_PROPOSAL')) { %>
 <% if (proposals == undefined || proposals.length <=  0) { %>
     <p class="text-warning">There are currently no proposals, use the above button to add one.</p>
 <% } else { %>
-
     <% _.each(proposals, function(proposal) {
         var owner = proposal.owner.email && proposal.owner.email == currentBacker.email;
         var ownerClass = owner ? 'owner' : '';
@@ -29,7 +29,11 @@
                                 <% }); %>
                             </ul>
                         <% } else { %>
-                            <p class="text-error">Be the first backer!</p>
+                            <% if (currentBacker.hasPermission('CAN_VOTE')) { %>
+                                <p class="text-error">Be the first backer!</p>
+                            <% } else { %>
+                                <p class="text-error">No one is backing this proposal!</p>
+                            <% } %>
                         <% } %>
                     </td>
                 </tr>
@@ -40,21 +44,25 @@
                 <tr>
                     <td class="highlightedCell <%= ownerClass %>"></td>
                     <td colspan="2" class="alightRight">
-                        <% if (proposal.hasUserVoted) { %>
-                            <span class="text-success">Thank you for your vote!</span>
-                            <span class="text-success">(click to <a href="javascript:withdraw(<%= proposal.userVote.id %>)">withdraw</a>)</span>
-                        <% } else if (countRemainingVotes(currentBacker.remainingVotes) <= 0) { %>
-                            <span class="text-info">You have reached the maximum allowed votes for this Project. Thank you for your vote(s)!</span>
+                        <% if (currentBacker.hasPermission('CAN_VOTE')) { %>
+                            <% if (proposal.hasUserVoted) { %>
+                                <span class="text-success">Thank you for your vote!</span>
+                                <span class="text-success">(click to <a href="javascript:withdraw(<%= proposal.userVote.id %>)">withdraw</a>)</span>
+                            <% } else if (countRemainingVotes(currentBacker.remainingVotes) <= 0) { %>
+                                <span class="text-info">You have reached the maximum allowed votes for this Project. Thank you for your vote(s)!</span>
+                            <% } else { %>
+                                <span class="text-success">Add a </span>
+                                <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>
+                                    <% if (remainingVote.quantity > 0) { %>
+                                        <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" style="text-decoration:none;">
+                                            <img src="/static/resources/images/vote_<%= remainingVote.voteType.label.toLowerCase() %>.png" height="32" width="32" title="<%= remainingVote.voteType.label.toLowerCase() %>" />
+                                        </a>
+                                    <% } %>
+                                <% }); %>
+                                <span class="text-success">level of support to this proposal.</span>
+                            <% } %>
                         <% } else { %>
-                            <span class="text-success">Add a </span>
-                            <% _.each(currentBacker.remainingVotes, function(remainingVote) { %>
-                                <% if (remainingVote.quantity > 0) { %>
-                                    <a href="javascript:vote(<%= proposal.id %>, '<%= remainingVote.voteType.label %>')" style="text-decoration:none;">
-                                        <img src="/static/resources/images/vote_<%= remainingVote.voteType.label.toLowerCase() %>.png" height="32" width="32" title="<%= remainingVote.voteType.label.toLowerCase() %>" />
-                                    </a>
-                                <% } %>
-                            <% }); %>
-                            <span class="text-success">level of support to this proposal.</span>
+                            <span class="text-info">There are <%= proposal.votes.length %> votes for this proposal.</span>
                         <% } %>
                     </td>
                 </tr>
@@ -62,5 +70,5 @@
         </table>
         <div style="margin-bottom:15px;"></div>
     <% }); %>
-
+<% } %>
 <% } %>
