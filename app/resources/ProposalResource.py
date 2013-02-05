@@ -1,5 +1,6 @@
 from google.appengine.ext import webapp
 from app.data.enums.PermissionNameEnum import PermissionNameEnum
+from app.data.factory.JsonFactory import toProposal
 
 from app.data.models import *
 from app.data.model.Domain import Domain
@@ -23,14 +24,11 @@ class ProposalResource(webapp.RequestHandler):
 
     @Secured([PermissionNameEnum.CAN_CREATE_PROPOSAL])
     def post(self):
-        proposal = JsonUtil.decodeToModel(self.request.body, Proposal)
+        proposal = toProposal(self.request.body)
 
         # TODO Get the backer from the JSON request. The client should send up the backer with the request.
         _owner = self._backerService.GetBackerByEmail(self.currentUser.email)
         proposal.owner = _owner
-
-        _domain = Domain.get_by_id(int(proposal.domainId))
-        proposal.domain = _domain
 
         if proposal.name != '' and proposal.description != '':
             self._proposalService.saveProposal(proposal)

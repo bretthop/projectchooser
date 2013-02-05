@@ -30,7 +30,9 @@ function addProposal()
             name: $('#name').val(),
             description: $('#description').val(),
             technologiesUsed: $('#technologiesUsed').val(),
-            domainId: $('#domainId').val()
+            domain: {
+                id: $('#domainId').val()
+            }
         };
 
         ajax.req({method: 'post', url: '/api/proposals', data: data, dataType: DataType.JSON, doneCallback: function() { loadProposals(); }});

@@ -82,12 +82,9 @@ class JsonUtil:
         return fields
 
     @staticmethod
-    def decodeToModel(jsonStr, Model):
+    def basicDecodeToModel(jsonStr, Model):
         jsonDict = json.loads(jsonStr)
 
-        model = Model()
-
-        for name, value in jsonDict.iteritems():
-            setattr(model, name, value)
+        model = Model(**jsonDict)
 
         return model

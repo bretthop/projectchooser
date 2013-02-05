@@ -21,7 +21,7 @@ class DomainResource(webapp.RequestHandler):
 
     @Secured([PermissionNameEnum.CAN_CREATE_DOMAIN])
     def post(self):
-        domain = JsonUtil.decodeToModel(self.request.body, Domain)
+        domain = JsonUtil.basicDecodeToModel(self.request.body, Domain)
 
         # TODO Get the backer from the JSON request. The client should send up the backer with the request.
         #owner = self._backerService.GetCurrentBacker()
