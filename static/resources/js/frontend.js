@@ -75,7 +75,17 @@ function resetAddProposalForm()
 
 function showLoginModal()
 {
-    $('#loginModal').modal();
+    fetchTmpl(LOGIN_MODAL_TMPL_URL, function(tmpl)
+    {
+        if ($('#loginModalHolder').length == 0) {
+            $('body').append($('<div id="loginModalHolder"></div>'));
+        }
+
+        // Set the login template into the dom
+        $('#loginModalHolder').html(tmpl);
+
+        $('#loginModal').modal();
+    });
 }
 
 function hideLoginModal()

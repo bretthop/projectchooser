@@ -2,6 +2,7 @@
 var DOMAINS_TMPL_URL = '/static/templates/domainsTmpl.html';
 var PROPOSALS_TMPL_URL = '/static/templates/proposalsTmpl.html';
 var BACKER_TMPL_URL = '/static/templates/backerTmpl.html';
+var LOGIN_MODAL_TMPL_URL = '/static/templates/loginTmpl.html';
 
 tmplCache = {};
 
