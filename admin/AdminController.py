@@ -41,7 +41,8 @@ class AdminController(webapp.RequestHandler):
                 self.clearDatabase()
                 self._voteService.PopulateVoteTypes()
             elif action == 'addPermissions':
-                self.addPermissions()
+                self.createRolesAndPermissions()
+                self.associatePermissionsWithRoles()
             elif action == 'viewPermissions':
                 self.viewPermissions()
 
@@ -70,101 +71,88 @@ class AdminController(webapp.RequestHandler):
     @JsonListResult
     def viewPermissions(self):
         roles = db.GqlQuery('SELECT * FROM Role').fetch(100)
-
         return roles
 
+    def createRolesAndPermissions(self):
+        ## Create Roles
+        Role (name = 'BACKER').put()
+        Role (name = 'ADMIN').put()
 
-    def addPermissions(self):
         ## Create Permissions
-        canViewDomainPermission = Permission (
-            name = 'CAN_VIEW_DOMAIN'
-        )
-        canViewDomainPermission.put()
+        Permission (name = 'CAN_VIEW_DOMAIN').put()
+        Permission (name = 'CAN_CREATE_DOMAIN').put()
+        Permission (name = 'CAN_VIEW_PROPOSAL').put()
+        Permission (name = 'CAN_CREATE_PROPOSAL').put()
+        Permission (name = 'CAN_VOTE').put()
+        Permission (name = 'CAN_WITHDRAW').put()
+        Permission (name = 'CAN_LOCK_PROPOSAL').put()
+        Permission (name = 'CAN_UNLOCK_PROPOSAL').put()
+        Permission (name = 'CAN_CLOSE_PROPOSAL').put()
+        Permission (name = 'CAN_REOPEN_PROPOSAL').put()
+        Permission (name = 'CAN_DELETE_PROPOSAL').put()
+        Permission (name = 'CAN_CHANGE_OWNER').put()
 
-        canCreateDomainPermission = Permission (
-            name = 'CAN_CREATE_DOMAIN'
-        )
-        canCreateDomainPermission.put()
+    def associatePermissionsWithRoles(self):
+        backerRole = Role.gql("WHERE name = 'BACKER'").get()
+        adminRole  = Role.gql("WHERE name = 'ADMIN'").get()
 
-        canViewProposalPermission = Permission (
-            name = 'CAN_VIEW_PROPOSAL'
-        )
-        canViewProposalPermission.put()
+        ## Assign Roles with Permissions
+        permission = Permission.gql("WHERE name = 'CAN_VIEW_DOMAIN'").get()
+        permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        canCreateProposalPermission = Permission (
-            name = 'CAN_CREATE_PROPOSAL'
-        )
-        canCreateProposalPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_CREATE_DOMAIN'").get()
+        permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        canVotePermission = Permission (
-            name = 'CAN_VOTE'
-        )
-        canVotePermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_VIEW_PROPOSAL'").get()
+        permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        canWithdrawPermission = Permission (
-            name = 'CAN_WITHDRAW'
-        )
-        canWithdrawPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_CREATE_PROPOSAL'").get()
+        permission._roles.append(backerRole.key())
+        #permission._roles.append(adminRole.key())
+        permission.put()
 
-        canLockProposalPermission = Permission (
-            name = 'CAN_LOCK_PROPOSAL'
-        )
-        canLockProposalPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_VOTE'").get()
+        permission._roles.append(backerRole.key())
+        #permission._roles.append(adminRole.key())
+        permission.put()
 
-        canUnlockProposalPermission = Permission (
-            name = 'CAN_UNLOCK_PROPOSAL'
-        )
-        canUnlockProposalPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_WITHDRAW'").get()
+        permission._roles.append(backerRole.key())
+        #permission._roles.append(adminRole.key())
+        permission.put()
 
-        canCloseProposalPermission = Permission (
-            name = 'CAN_CLOSE_PROPOSAL'
-        )
-        canCloseProposalPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_LOCK_PROPOSAL'").get()
+        permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        canReopenProposalPermission = Permission (
-            name = 'CAN_REOPEN_PROPOSAL'
-        )
-        canReopenProposalPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_UNLOCK_PROPOSAL'").get()
+        permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        canDeleteProposalPermission = Permission (
-            name = 'CAN_DELETE_PROPOSAL'
-        )
-        canDeleteProposalPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_CLOSE_PROPOSAL'").get()
+        permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        canChangeOwnerPermission = Permission (
-            name = 'CAN_CHANGE_OWNER'
-        )
-        canChangeOwnerPermission.put()
+        permission = Permission.gql("WHERE name = 'CAN_REOPEN_PROPOSAL'").get()
+        #permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        ## Create Roles (ad assign permissions to roles)
-        backerRole = Role (
-            name = 'BACKER',
-            _permissionKeys = [
-                canViewDomainPermission.key(),
-                canCreateDomainPermission.key(),
-                canViewProposalPermission.key(),
-                canCreateProposalPermission.key(),
-                canVotePermission.key(),
-                canWithdrawPermission.key(),
-                canLockProposalPermission.key(),
-                canUnlockProposalPermission.key(),
-                canCloseProposalPermission.key()
-            ]
-        )
-        backerRole.put()
+        permission = Permission.gql("WHERE name = 'CAN_DELETE_PROPOSAL'").get()
+        #permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()
 
-        adminRole = Role (
-            name = 'ADMIN',
-            _permissionKeys = [
-                canViewDomainPermission.key(),
-                canCreateDomainPermission.key(),
-                canViewProposalPermission.key(),
-                canLockProposalPermission.key(),
-                canUnlockProposalPermission.key(),
-                canCloseProposalPermission.key(),
-                canReopenProposalPermission.key(),
-                canDeleteProposalPermission.key(),
-                canChangeOwnerPermission.key()
-            ]
-        )
-        adminRole.put()
+        permission = Permission.gql("WHERE name = 'CAN_CHANGE_OWNER'").get()
+        #permission._roles.append(backerRole.key())
+        permission._roles.append(adminRole.key())
+        permission.put()

@@ -4,6 +4,7 @@ from app.data.model.Domain import Domain
 
 class Permission(db.Model):
     name = db.StringProperty()
+    _roles = db.ListProperty(db.Key)
 
 #    TODO: Adding this property causes an infinite recursion when trying to serialise a role object (FIX!)
 #    @property
@@ -12,16 +13,10 @@ class Permission(db.Model):
 
 class Role(db.Model):
     name            = db.StringProperty()
-    _permissionKeys = db.ListProperty(db.Key)
 
     @property
     def permissions(self):
-        permissions = []
-
-        for key in self._permissionKeys:
-            permission = Permission.get(key)
-            permissions.append(permission)
-
+        permissions = Permission.gql('WHERE _roles = :1', self.key())
         return permissions
 
 class Backer(db.Model):
