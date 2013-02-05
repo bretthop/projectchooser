@@ -26,7 +26,7 @@ ajax = (function() {
     ajax.req = function(params)
     {
         var url = params.url,
-            authenticate = params.authenticate || true,
+            authenticate = params.authenticate != undefined ? params.authenticate : true,
             method = params.method,
             data = params.data || '',
             dataType = params.dataType,

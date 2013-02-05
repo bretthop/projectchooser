@@ -52,6 +52,7 @@ class JsonUtil:
                 jsonObject['httpStatus'] = m._httpStatus
                 jsonObject['urn']        = m._urn
                 jsonObject['count']      = m._count
+                jsonObject['user']       = JsonUtil._createJsonObject(m._user, done)
                 jsonObject['items']      = JsonUtil._createJsonList(m._items, done)
 
         return jsonObject

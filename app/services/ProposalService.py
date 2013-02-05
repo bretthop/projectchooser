@@ -16,3 +16,6 @@ class ProposalService:
             exception = e
 
         return result
+
+    def GetProposalById(self, proposalId):
+        return Proposal.get_by_id(int(proposalId))
