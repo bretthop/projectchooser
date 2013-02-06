@@ -1,5 +1,3 @@
-from app.util.JsonUtil import *
-
 # The following two methods generate JSON encoded responses.
 # These work by decorating a resource method with either decoration,
 # and then simply returning the entities to encode from the method.

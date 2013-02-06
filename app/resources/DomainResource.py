@@ -5,9 +5,7 @@ from app.decorator.ProduceJson import *
 from app.decorator.Secure import Secured
 from app.services.BackerService import BackerService
 from app.services.DomainService import DomainService
-from app.util.JsonUtil import JsonUtil
 from app.data.model.Domain import Domain
-from app.data.models import *
 
 class DomainResource(webapp.RequestHandler):
 
@@ -21,7 +19,7 @@ class DomainResource(webapp.RequestHandler):
 
     @Secured([PermissionNameEnum.CAN_CREATE_DOMAIN])
     def post(self):
-        domain = JsonUtil.basicDecodeToModel(self.request.body, Domain)
+        domain = Pson.basicDecodeToModel(self.request.body, Domain)
 
         # TODO Get the backer from the JSON request. The client should send up the backer with the request.
         #owner = self._backerService.GetCurrentBacker()

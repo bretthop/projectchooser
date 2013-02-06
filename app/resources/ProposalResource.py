@@ -2,13 +2,10 @@ from google.appengine.ext import webapp
 from app.data.enums.PermissionNameEnum import PermissionNameEnum
 from app.data.factory.JsonFactory import toProposal
 
-from app.data.models import *
-from app.data.model.Domain import Domain
 from app.decorator.ProduceJson import *
 from app.decorator.Secure import Secured
 from app.services.BackerService import BackerService
 from app.services.ProposalService import *
-from app.util.JsonUtil import JsonUtil
 
 class ProposalResource(webapp.RequestHandler):
 

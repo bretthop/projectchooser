@@ -102,3 +102,11 @@ class Pson:
                             fields[name] = value
 
         return fields
+
+    @staticmethod
+    def basicDecodeToModel(jsonStr, Model):
+        jsonDict = json.loads(jsonStr)
+
+        model = Model(**jsonDict)
+
+        return model
