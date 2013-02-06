@@ -101,6 +101,13 @@ function loadDomains()
 
     resetAddDomainForm();
 
+    ajax.req({method: 'get', url: '/api/backers', doneCallback: function(backer) {
+        fetchTmpl(DASHBOARD_BACKER_TMPL_URL, function(tmpl) {
+            var renderedHtml = _.template(tmpl, backer);
+            $('.backerTmpl-rendered').html(renderedHtml);
+        });
+    }});
+
     ajax.req({method: 'get', url: '/api/domains', doneCallback: function(domains)
     {
         //TODO: Apply current backer information to the returned list of domains

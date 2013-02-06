@@ -24,4 +24,5 @@ class DomainService:
         Domain.save(_domain)
 
     def GetDomainsByStatus(self, domainStatus):
-        return Domain.gql("WHERE status = '" + domainStatus +"'")
+        result = Domain.gql("WHERE status = '" + domainStatus +"'")
+        return result

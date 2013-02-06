@@ -19,7 +19,8 @@ class Role(db.Model):
         permissions = Permission.gql('WHERE _roles = :1', self.key())
         return permissions
 
-class Backer(db.Model):
+#class Backer(db.Model):
+class Backer(db.Expando):
     email            = db.StringProperty()
     username         = db.StringProperty()
     password         = db.StringProperty()
