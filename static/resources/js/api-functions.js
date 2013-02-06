@@ -153,7 +153,11 @@ function loadProposals()
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
-            ajax.req({method: 'get', url: '/api/proposals', data: searchParams, doneCallback: function(proposals) {
+            //Expand the requested data on only the fields we need
+            var proposalsExpandQuery = 'expand=Proposal.*,Vote.*,VoteType.*,Backer.email';
+            var proposalsData = searchParams + '&' + proposalsExpandQuery;
+
+            ajax.req({method: 'get', url: '/api/proposals', data: proposalsData, doneCallback: function(proposals) {
                 //Apply current backer information to the returned list of proposals
                 applyCurrentBackerContext(proposals, backer);
 

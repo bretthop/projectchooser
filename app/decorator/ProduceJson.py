@@ -13,18 +13,20 @@ from app.util.JsonUtil import *
 # Look in the resource package for examples
 
 # TODO: Combine these into a single decorator called '@ProduceJson' that takes a string argument of either 'SINGLE' or 'LIST'
+from app.util.Pson import Pson
+
 def JsonSingleResult(func):
     def jsonSingleResult(self):
         resource = func(self)
 
+        pson = Pson()
         expandStr = self.request.get('expand')
-        allowedFields = None
 
         if expandStr and not expandStr == '':
-            allowedFields = expandStr.split(',')
+            pson.setAllowedFields(expandStr.split(','))
 
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(JsonUtil.encodeModel(resource, allowedFields))
+        self.response.out.write(pson.encodeModel(resource))
 
     return jsonSingleResult
 
@@ -32,7 +34,13 @@ def JsonListResult(func):
     def jsonListResult(self):
         resources = func(self)
 
+        pson = Pson()
+        expandStr = self.request.get('expand')
+
+        if expandStr and not expandStr == '':
+            pson.setAllowedFields(expandStr.split(','))
+
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(JsonUtil.encodeModelList(resources))
+        self.response.out.write(pson.encodeModelList(resources))
 
     return jsonListResult
