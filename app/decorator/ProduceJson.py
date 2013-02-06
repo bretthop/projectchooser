@@ -17,8 +17,14 @@ def JsonSingleResult(func):
     def jsonSingleResult(self):
         resource = func(self)
 
+        expandStr = self.request.get('expand')
+        allowedFields = None
+
+        if expandStr and not expandStr == '':
+            allowedFields = expandStr.split(',')
+
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(JsonUtil.encodeModel(resource))
+        self.response.out.write(JsonUtil.encodeModel(resource, allowedFields))
 
     return jsonSingleResult
 
