@@ -41,7 +41,7 @@ response, and the structure of each response.
 
 ###Response Structure
 
-- TODO
+* TODO
 
 ###Filter Parameter
 
@@ -54,7 +54,7 @@ will serialise EVERYTHING)).
 The syntax is simple to pick up so i'll just write down the definition of it then list out
 some examples.
 
-Syntax: *objectName*(*field*\[,*field*\])\[~*objectName*(*field*\[,*field*\])\]
+**Syntax:** objectName(field\[,field\])\[~objectName(field\[,field\])\]
 
 * **\*(\*)** - serialises everything (the default behaviour)
 * **\*(status)** - serialises all 'status' fields on all objects
