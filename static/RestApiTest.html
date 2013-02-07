@@ -21,19 +21,19 @@
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span2">
-                <input id="domainExpand" type="text" placeholder="Expand" value="Proposal.*,*.status"/>
+            <div class="span3">
+                <input id="domainExpand" class="input-xlarge" type="text" placeholder="Expand" value="Proposal(*)~*(status)"/>
             </div>
-            <div class="span4">
+            <div class="span3">
                 <button class="btn addProposalBtn" style="float:left;" onclick="getDemoProposals()">
                     <i class="icon-tag"></i>
                     Get Proposals for Domain (No security)
                 </button>
             </div>
-            <div class="span2">
-                <input id="proposalExpand" type="text" placeholder="Expand" value="Proposal.*,*.status"/>
+            <div class="span3">
+                <input id="proposalExpand" class="input-xlarge" type="text" placeholder="Expand" value="Backer(role)~Role(*)~Permission(name)"/>
             </div>
-            <div class="span4">
+            <div class="span3">
                 <button class="btn addProposalBtn" style="float:left;" onclick="getProposal()">
                     <i class="icon-tag"></i>
                     Get Proposal By ID (Requires security)

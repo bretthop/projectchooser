@@ -15,13 +15,11 @@ from app.util.Pson import Pson
 
 def JsonSingleResult(func):
     def jsonSingleResult(self):
+        pson = Pson()
+
         resource = func(self)
 
-        pson = Pson()
-        expandStr = self.request.get('expand')
-
-        if expandStr and not expandStr == '':
-            pson.setAllowedFields(expandStr.split(','))
+        pson.setAllowedFieldsString(self.request.get('expand'))
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(pson.encodeModel(resource))

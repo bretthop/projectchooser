@@ -17,6 +17,21 @@ class Pson:
     # TODO: Implement
     _disallowedFields = ['*.password']
 
+    def setAllowedFieldsString(self, str):
+        if not str or str == '':
+            return
+
+        self._allowedFields = []
+
+        for chunk in str.split('~'):
+            rightBracketRemoved = chunk.split(')')[0]
+
+            className = rightBracketRemoved.split('(')[0]
+            fields = rightBracketRemoved.split('(')[1]
+
+            for field in fields.split(','):
+                self._allowedFields.append('%s.%s' % (className, field))
+
     def setAllowedFields(self, allowedFields):
         self._allowedFields = allowedFields
 
