@@ -28,13 +28,11 @@ def JsonSingleResult(func):
 
 def JsonListResult(func):
     def jsonListResult(self):
+        pson = Pson()
+
         resources = func(self)
 
-        pson = Pson()
-        expandStr = self.request.get('expand')
-
-        if expandStr and not expandStr == '':
-            pson.setAllowedFields(expandStr.split(','))
+        pson.setAllowedFieldsString(self.request.get('expand'))
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(pson.encodeModelList(resources))

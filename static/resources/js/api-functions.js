@@ -154,7 +154,7 @@ function loadProposals()
             $('.backerTmpl-rendered').html(renderedHtml);
 
             //Expand the requested data on only the fields we need
-            var proposalsExpandQuery = 'expand=Proposal.*,Vote.*,VoteType.*,Backer.email';
+            var proposalsExpandQuery = 'expand=Proposal(*)~Vote(*)~VoteType(*)~Backer(email)';
             var proposalsData = searchParams + '&' + proposalsExpandQuery;
 
             ajax.req({method: 'get', url: '/api/proposals', data: proposalsData, doneCallback: function(proposals) {
