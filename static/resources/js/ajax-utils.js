@@ -27,6 +27,8 @@ ajax = (function() {
     {
         var url = params.url,
             authenticate = params.authenticate != undefined ? params.authenticate : true,
+            email = params.email || session.getUserCredentials().email,
+            password = params.password || session.getUserCredentials().password,
             method = params.method,
             data = params.data || '',
             dataType = params.dataType,
@@ -40,8 +42,8 @@ ajax = (function() {
         };
 
         if (authenticate) {
-            if (session.hasUserCredentials()) {
-                var authToken = session.getUserCredentialsAsAuthToken();
+            if (email && password) {
+                var authToken = base64.encode(email + ':' + password);
 
                 ajaxDescriptor.beforeSend = function (xhr) { // TODO: See if you can set this by the 'headers' prop
                     xhr.setRequestHeader ('Authorization', 'Basic ' + authToken);

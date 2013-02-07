@@ -9,7 +9,7 @@ class RestApiResponse():
     _items      = []
 
     @staticmethod
-    def init(statusCode, items, user = None):
+    def init(statusCode, items = None, user = None):
         result = RestApiResponse()
         result._httpStatus = statusCode
         result._user       = user

@@ -60,13 +60,14 @@ function vote(proposalId, weight)
 
 function login(email, pass)
 {
-    session.setUserCredentials(email, pass);
-
     ajax.showAjaxLoader();
     $('.loginResult').addClass('hidden');
 
     var successFunc = function() {
+        session.setUserCredentials(email, pass);
+
         ajax.hideAjaxLoader();
+
         $('.loginResult').html('Success!')
             .addClass('text-success')
             .removeClass('hidden');
@@ -92,7 +93,7 @@ function login(email, pass)
             .removeClass('hidden');
     };
 
-    ajax.req({method: 'post', url: '/api/login?email=' + email + '&password=' + pass, doneCallback: successFunc, failCallback: errorFunc});
+    ajax.req({method: 'post', url: '/api/login', email: email, password: pass, doneCallback: successFunc, failCallback: errorFunc});
 }
 
 function loadDomains()

@@ -1,14 +1,20 @@
 from google.appengine.ext import webapp
+from app.decorator.ProduceJson import JsonSingleResult
+from app.resources.RestApiResponse import RestApiResponse
 from app.services.BackerService import BackerService
+from app.util.HttpUtil import getAuthInfoFromHeader
 
 class LoginResource(webapp.RequestHandler):
     _backerService = BackerService()
 
+    @JsonSingleResult
     def post(self):
-        email    = self.request.get('email')
-        password = self.request.get('password')
+        authInfo = getAuthInfoFromHeader(self.request)
 
-        user = self._backerService.VerifyBacker(email, password)
+        user = self._backerService.VerifyBacker(authInfo['username'], authInfo['password'])
 
-        if not user:
+        if user:
+            return RestApiResponse.init('200', user)
+        else:
             self.response.set_status(400)
+            return RestApiResponse.init('400')

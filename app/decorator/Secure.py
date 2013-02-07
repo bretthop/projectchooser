@@ -1,7 +1,7 @@
 import functools
 from app.data.enums.PermissionNameEnum import PermissionNameEnum
 from app.services.BackerService import BackerService
-from app.util.HttpUtil import decodeAuth
+from app.util.HttpUtil import *
 
 class Secured(object):
     _backerService = BackerService()
@@ -12,13 +12,9 @@ class Secured(object):
     def __call__(self, fn):
         @functools.wraps(fn)
         def secure(handler):
-            authorisation = handler.request.headers["Authorization"]
+            authInfo = getAuthInfoFromHeader(handler.request)
 
-            authInfo = decodeAuth(authorisation.split('Basic ')[1])
-            email = authInfo['username']
-            password = authInfo['password']
-
-            user = self._backerService.VerifyBacker(email, password)
+            user = self._backerService.VerifyBacker(authInfo['username'], authInfo['password'])
 
             if user:
                 userPermissionNames = []
