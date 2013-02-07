@@ -19,7 +19,7 @@ def JsonSingleResult(func):
 
         resource = func(self)
 
-        pson.setAllowedFieldsString(self.request.get('expand'))
+        pson.setAllowedFieldsString(self.request.get('filter'))
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(pson.encodeModel(resource))
@@ -32,7 +32,7 @@ def JsonListResult(func):
 
         resources = func(self)
 
-        pson.setAllowedFieldsString(self.request.get('expand'))
+        pson.setAllowedFieldsString(self.request.get('filter'))
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(pson.encodeModelList(resources))
