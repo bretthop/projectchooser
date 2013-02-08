@@ -21,7 +21,7 @@ def JsonSingleResult(func):
 
         pson.setAllowedFieldsString(self.request.get('filter'))
 
-        self.response.headers['Content-Type'] = 'application/json'
+        self.response.headers = setResponseHeaders()
         self.response.out.write(pson.encodeModel(resource))
 
     return jsonSingleResult
@@ -34,7 +34,11 @@ def JsonListResult(func):
 
         pson.setAllowedFieldsString(self.request.get('filter'))
 
-        self.response.headers['Content-Type'] = 'application/json'
+        self.response.headers = setResponseHeaders()
         self.response.out.write(pson.encodeModelList(resources))
 
     return jsonListResult
+
+def setResponseHeaders():
+    h = {'Content-Type': 'application/json', 'Pragma':'no-cache'}
+    return h

@@ -17,7 +17,7 @@ class BackerService:
         #TODO: fetch a list of open proposals with vote from backer
         #TOFIX: openProposals is added to a collection _dynamic_properties of db.Expando object
         #TOFIX: all fields starting with "_" are skipped by JSON serializer
-        #setattr(entity, 'openProposals', '1')
+        #backer.openProposals = ['test1', 'test2']
 
         return backer
 
