@@ -92,9 +92,3 @@ function hideLoginModal()
 {
     $('#loginModal').modal('hide');
 }
-
-function showLogoutModal()
-{
-    //TODO: implement
-    return false;
-}

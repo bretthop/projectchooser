@@ -97,6 +97,12 @@ function login(email, pass)
     ajax.req({method: 'post', url: '/api/login', email: email, password: pass, doneCallback: successFunc, failCallback: errorFunc});
 }
 
+function logout()
+{
+    session.clearUser();
+    window.location = '/';
+}
+
 function loadDomains()
 {
     if (!session.isUserLoggedIn()) {
