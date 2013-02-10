@@ -137,6 +137,15 @@ function loadDomains()
 
 function loadProposals()
 {
+    // Make sure the user is logged in
+    if (!session.isUserLoggedIn()) {
+        globalVars.loginCallback = loadProposals;
+
+        showLoginModal();
+
+        return;
+    }
+
     ajax.showAjaxLoader();
 
     var searchParams = location.search.split('?')[1];
@@ -144,25 +153,16 @@ function loadProposals()
 
     resetAddProposalForm();
 
-    ajax.req({method: 'get', url: '/api/backers', doneCallback: function(backer) {
-        backer.hasPermission = function(permissionName)
-        {
-            var hasPermission = false;
+    var backer = session.currentUser();
 
-            _.each(backer.role.permissions, function(permission) {
-                if (permission.name == permissionName) {
-                    hasPermission = true;
-                }
-            });
-
-            return hasPermission;
-        };
+    ajax.req({method: 'get', url: '/api/backerVotes', data: {backerId: backer.id}, doneCallback: function(remainingVotesResponse) {
+        backer.remainingVotes = remainingVotesResponse.items;
 
         fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
             var renderedHtml = _.template(tmpl, backer);
             $('.backerTmpl-rendered').html(renderedHtml);
 
-            //Expand the requested data on only the fields we need
+            //Filter the requested data on only the fields we need
             var proposalsFilterQuery = 'filter=Proposal(*)~Vote(*)~VoteType(*)~Backer(email)';
             var proposalsData = searchParams + '&' + proposalsFilterQuery;
 
