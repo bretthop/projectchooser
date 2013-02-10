@@ -9,11 +9,10 @@ globalVars = (function() {
     me.domainId = 0;
 
     /**
-     * This describes the last request that was attempted to be made.
-     * This request has failed due to the client not having any authentication information, and should be attempted
-     * again once the user has entered there login details.
+     * Holds a callback function that the login modal should call when the user
+     * successfully logs in
      */
-    me.requestToRetry = undefined;
+    me.loginCallback = undefined;
 
     return me;
 })();
@@ -27,8 +26,8 @@ ajax = (function() {
     {
         var url = params.url,
             authenticate = params.authenticate != undefined ? params.authenticate : true,
-            email = params.email || session.getUserCredentials().email,
-            password = params.password || session.getUserCredentials().password,
+            email = params.email || (session.currentUser() && session.currentUser().email),
+            password = params.password || (session.currentUser() && session.currentUser().password),
             method = params.method,
             data = params.data || '',
             dataType = params.dataType,
@@ -51,7 +50,12 @@ ajax = (function() {
             }
             else {
                 ajax.hideAjaxLoader();
-                globalVars.requestToRetry = params;
+
+                globalVars.loginCallback = function() {
+                    ajax.showAjaxLoader();
+                    ajax.req(params);
+                };
+
                 showLoginModal();
 
                 return;

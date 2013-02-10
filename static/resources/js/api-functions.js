@@ -63,8 +63,10 @@ function login(email, pass)
     ajax.showAjaxLoader();
     $('.loginResult').addClass('hidden');
 
-    var successFunc = function() {
-        session.setUserCredentials(email, pass);
+    var successFunc = function(data) {
+        var user = data.items[0];
+
+        session.setUser(user, pass);
 
         ajax.hideAjaxLoader();
 
@@ -72,18 +74,17 @@ function login(email, pass)
             .addClass('text-success')
             .removeClass('hidden');
 
-        var requestToRetry = globalVars.requestToRetry;
+        var loginCallback = globalVars.loginCallback;
 
-        if (requestToRetry) {
-            ajax.showAjaxLoader();
-            ajax.req(requestToRetry);
+        if (loginCallback) {
+            loginCallback();
         }
 
         hideLoginModal();
     };
 
     var errorFunc = function() {
-        session.clearUserCredentials();
+        session.clearUser();
 
         ajax.hideAjaxLoader();
 
@@ -98,16 +99,23 @@ function login(email, pass)
 
 function loadDomains()
 {
+    if (!session.isUserLoggedIn()) {
+        globalVars.loginCallback = loadDomains;
+
+        showLoginModal();
+
+        return;
+    }
+
     ajax.showAjaxLoader();
 
     resetAddDomainForm();
 
-    ajax.req({method: 'get', url: '/api/backers', doneCallback: function(backer) {
-        fetchTmpl(DASHBOARD_BACKER_TMPL_URL, function(tmpl) {
-            var renderedHtml = _.template(tmpl, backer);
-            $('.backerTmpl-rendered').html(renderedHtml);
-        });
-    }});
+    fetchTmpl(DASHBOARD_BACKER_TMPL_URL, function(tmpl) {
+        var renderedHtml = _.template(tmpl, session.currentUser());
+        $('.backerTmpl-rendered').html(renderedHtml);
+    });
+
 
     ajax.req({method: 'get', url: '/api/domains', doneCallback: function(domains)
     {
