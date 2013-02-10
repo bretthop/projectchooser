@@ -68,9 +68,13 @@ ajax = (function() {
         }
 
         $.ajax(ajaxDescriptor)
-            .done(function(data) {
+            .done(function(response) {
                 if (doneCallback) {
-                    doneCallback(data);
+                    if (globalVars.debug) {
+                        console.log('Retrieved ' + response.count + ' items with a ' + response.httpStatus + ' response code');
+                    }
+
+                    doneCallback(response.items);
                 }
             })
             .fail(function(data) {

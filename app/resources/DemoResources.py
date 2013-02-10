@@ -5,13 +5,13 @@ from app.decorator.Secure import Secured
 from app.services.ProposalService import *
 from app.resources.RestApiResponse import RestApiResponse
 
-from app.decorator.ProduceJson import *
+from app.decorator.ProduceJson import ProduceJson
 
 class DomainDemoResource(webapp.RequestHandler):
 
     _proposalService = ProposalService()
 
-    @JsonSingleResult
+    @ProduceJson
     def get(self):
         domainId = self.request.get('domainId')
         results = self._proposalService.GetProposalsByDomainAndStatus(domainId, 'OPEN')
@@ -25,11 +25,11 @@ class ProposalDemoResource(webapp.RequestHandler):
     _proposalService = ProposalService()
 
     @Secured([PermissionNameEnum.AVAILABLE_ALL])
-    @JsonSingleResult
+    @ProduceJson
     def get(self):
         proposalId = self.request.get('proposalId')
         results = self._proposalService.GetProposalById(proposalId)
 
-        result = RestApiResponse.init('200', results, self.currentUser)
+        result = RestApiResponse.init('200', results)
 
         return result

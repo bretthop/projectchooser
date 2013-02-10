@@ -77,7 +77,6 @@ class Pson:
                 jsonObject['httpStatus'] = m._httpStatus
                 jsonObject['urn']        = m._urn
                 jsonObject['count']      = m._count
-                jsonObject['user']       = self._createJsonObject(m._user, done[:])
                 jsonObject['items']      = self._createJsonList(m._items, done[:])
 
         return jsonObject

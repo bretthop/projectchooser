@@ -4,6 +4,7 @@ from app.data.factory.JsonFactory import toProposal
 
 from app.decorator.ProduceJson import *
 from app.decorator.Secure import Secured
+from app.resources.RestApiResponse import RestApiResponse
 from app.services.BackerService import BackerService
 from app.services.ProposalService import *
 
@@ -13,11 +14,12 @@ class ProposalResource(webapp.RequestHandler):
     _backerService = BackerService()
 
     @Secured([PermissionNameEnum.CAN_VIEW_PROPOSAL])
-    @JsonListResult
+    @ProduceJson
     def get(self):
         domainId = self.request.get('domainId')
         result = self._proposalService.GetProposalsByDomainAndStatus(domainId, 'OPEN')
-        return result
+
+        return RestApiResponse.init('200', result)
 
     @Secured([PermissionNameEnum.CAN_CREATE_PROPOSAL])
     def post(self):

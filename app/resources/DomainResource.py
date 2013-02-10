@@ -3,6 +3,7 @@ from app.data.enums.PermissionNameEnum import PermissionNameEnum
 
 from app.decorator.ProduceJson import *
 from app.decorator.Secure import Secured
+from app.resources.RestApiResponse import RestApiResponse
 from app.services.BackerService import BackerService
 from app.services.DomainService import DomainService
 from app.data.model.Domain import Domain
@@ -13,9 +14,11 @@ class DomainResource(webapp.RequestHandler):
     _backerService = BackerService()
 
     @Secured([PermissionNameEnum.CAN_VIEW_DOMAIN])
-    @JsonListResult
+    @ProduceJson
     def get(self):
-        return self._domainService.GetDomainsByStatus('OPEN')
+        result = self._domainService.GetDomainsByStatus('OPEN')
+
+        return RestApiResponse.init('200', result)
 
     @Secured([PermissionNameEnum.CAN_CREATE_DOMAIN])
     def post(self):

@@ -63,8 +63,8 @@ function login(email, pass)
     ajax.showAjaxLoader();
     $('.loginResult').addClass('hidden');
 
-    var successFunc = function(data) {
-        var user = data.items[0];
+    var successFunc = function(users) {
+        var user = users[0];
 
         session.setUser(user, pass);
 
@@ -155,8 +155,8 @@ function loadProposals()
 
     var backer = session.currentUser();
 
-    ajax.req({method: 'get', url: '/api/backerVotes', data: {backerId: backer.id}, doneCallback: function(remainingVotesResponse) {
-        backer.remainingVotes = remainingVotesResponse.items;
+    ajax.req({method: 'get', url: '/api/backerVotes', data: {backerId: backer.id}, doneCallback: function(remainingVotes) {
+        backer.remainingVotes = remainingVotes;
 
         fetchTmpl(BACKER_TMPL_URL, function(tmpl) {
             var renderedHtml = _.template(tmpl, backer);

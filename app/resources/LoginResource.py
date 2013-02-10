@@ -1,5 +1,5 @@
 from google.appengine.ext import webapp
-from app.decorator.ProduceJson import JsonSingleResult
+from app.decorator.ProduceJson import ProduceJson
 from app.resources.RestApiResponse import RestApiResponse
 from app.services.BackerService import BackerService
 from app.util.HttpUtil import getAuthInfoFromHeader
@@ -7,7 +7,7 @@ from app.util.HttpUtil import getAuthInfoFromHeader
 class LoginResource(webapp.RequestHandler):
     _backerService = BackerService()
 
-    @JsonSingleResult
+    @ProduceJson
     def post(self):
         authInfo = getAuthInfoFromHeader(self.request)
 

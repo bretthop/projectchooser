@@ -1,5 +1,6 @@
 from google.appengine.ext import webapp
-from app.decorator.ProduceJson import JsonListResult
+from app.decorator.ProduceJson import ProduceJson
+from app.resources.RestApiResponse import RestApiResponse
 
 from app.services.VoteService import *
 
@@ -68,10 +69,11 @@ class AdminController(webapp.RequestHandler):
 
                 db.delete(q.fetch(200))
 
-    @JsonListResult
+    @ProduceJson
     def viewPermissions(self):
-        roles = db.GqlQuery('SELECT * FROM Role').fetch(100)
-        return roles
+        roles = db.GqlQuery('SELECT * FROM Role')
+
+        return RestApiResponse.init('200', roles)
 
     def createRolesAndPermissions(self):
         ## Create Roles
