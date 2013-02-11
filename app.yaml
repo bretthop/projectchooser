@@ -2,8 +2,7 @@ application: projectchooser
 version: 1
 runtime: python27
 api_version: 1
-# TODO: Change threadsafe to 'true' by replacing the current CGI handlers with WSGI ones (see https://developers.google.com/appengine/docs/python/python25/migrate27)
-threadsafe: false
+threadsafe: true
 
 handlers:
 # Base static mapping (handles all static file requests)
@@ -12,11 +11,11 @@ handlers:
 
 # Backend Database mapping (handles all calls to the admin scripts)
 - url: /doAdminAction
-  script: admin/AdminDispatcher.py
+  script: admin.AdminDispatcher.adminDispatcher
 
 # Backend API mapping (handles all calls to the API)
 - url: /api/.*
-  script: app/APIDispatcher.py
+  script: app.APIDispatcher.apiDispatcher
 
 # Front end Database mappings (gives an entry point to the admin backend)
 - url: /admin
