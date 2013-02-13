@@ -21,4 +21,4 @@ class DBFixtures(BaseUnitTest):
         vt.weight = 3
         vt.put()
 
-        self.reportResult()
+        self.reportResult(message='PASS')

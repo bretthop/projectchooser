@@ -3,6 +3,7 @@ from app.test.cases.BaseUnitTest import BaseUnitTest
 from google.appengine.ext import db
 
 from app.data.models import Proposal
+from app.data.model.Domain import Domain
 from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
 
@@ -12,10 +13,12 @@ from app.services.VoteService import VoteService
 class TestVoteService(BaseUnitTest):
 
     _voteService = None
+    _proposalService = None
+    _testDomainName = 'TEST DOMAIN #1'
     _testProposalName = 'TEST PROPOSAL #1'
     _backerEmail = 'test_backer_2013-01-29@project.chooser.com.au'
-
-#    addExpectedFailure = None
+    _voteTypeLabelG = VoteTypeEnum.GOLD
+    _voteTypeLabelS = VoteTypeEnum.SILVER
 
     #singleton pattern
     def getProposalService(self):
@@ -32,42 +35,78 @@ class TestVoteService(BaseUnitTest):
         return self._voteService
 
     def test_voteForProposal(self):
-        _proposalId = db.GqlQuery("SELECT __key__ FROM Proposal WHERE name = '" + self._testProposalName + "'").get().id()
-        _voteTypeLabel = VoteTypeEnum.GOLD
+        _domain = Domain(
+            title = self._testDomainName,
+            description = self._testDomainName,
+        ).put()
 
-        self.getVoteService().VoteForProposal(_proposalId, _voteTypeLabel, self._backerEmail)
+        domain = Domain.get_by_id(_domain.id())
 
-        _proposal = Proposal.get_by_id(_proposalId)
+        self.assertTrue(domain.key().id() is not None, 'Domain ID is None')
+
+        _proposal = Proposal(
+            name = self._testProposalName,
+            description = 'DESCRIPTION OF ' + self._testProposalName,
+            technologiesUsed = 'TECHNOLOGIES USER IN ' + self._testProposalName,
+            status = 'OPEN',
+            domain = _domain
+        )
+
+        self.getProposalService().saveProposal(_proposal)
 
         self.assertIsNotNone(_proposal, 'Proposal is None')
+
+        self.getVoteService().VoteForProposal(_proposal.key().id(), self._voteTypeLabelG, self._backerEmail)
+
         self.assertTrue(_proposal.votes.count() > 0, 'Proposal has no votes')
 
-        if _proposal.votes.count() > 0:
-            for v in _proposal.votes:
-                if v.voteType.label == VoteTypeEnum.GOLD:
-                    self.reportResult(message='vote saved successfully')
+        _voteFound = False
+        for v in _proposal.votes:
+            if v.voteType.label == VoteTypeEnum.GOLD:
+                _voteFound = True
+
+        self.assertTrue(_voteFound, 'Failed to vote for proposal')
+
+        self.reportResult(message='PASS')
 
     def test_withdrawVote(self):
-        _proposalId = db.GqlQuery("SELECT __key__ FROM Proposal WHERE name = '" + self._testProposalName + "'").get().id()
-        _proposal = Proposal.get_by_id(_proposalId)
+        self.reportResult(message='Starting test_withdrawVote')
+
+        _domain = Domain(
+            title = self._testDomainName,
+            description = self._testDomainName,
+        ).put()
+
+        domain = Domain.get_by_id(_domain.id())
+
+        self.assertTrue(domain.key().id() is not None, 'Domain ID is None')
+
+        _proposal = Proposal(
+            name = self._testProposalName,
+            description = 'DESCRIPTION OF ' + self._testProposalName,
+            technologiesUsed = 'TECHNOLOGIES USER IN ' + self._testProposalName,
+            status = 'OPEN',
+            domain = _domain
+        )
+
+        self.getProposalService().saveProposal(_proposal)
 
         self.assertIsNotNone(_proposal, 'Proposal is None')
+
+        self.getVoteService().VoteForProposal(_proposal.key().id(), self._voteTypeLabelS, self._backerEmail)
+
         self.assertTrue(_proposal.votes.count() > 0, 'Proposal has no votes')
 
         _voteId = db.GqlQuery("SELECT __key__ FROM Vote WHERE proposal = :pProposal AND userId = :pUserEmail AND voteType = :pVoteType",
-            pProposal  =_proposal,
+            pProposal  = _proposal,
             pUserEmail = self._backerEmail,
-            pVoteType  = VoteTypeUtil.GetVoteTypeByLabel(VoteTypeEnum.GOLD)
+            pVoteType  = VoteTypeUtil.GetVoteTypeByLabel(self._voteTypeLabelS)
         ).get().id()
 
         self.assertIsNotNone(_voteId, 'Vote is None')
 
         self.getVoteService().WithdrawVote(_voteId, self._backerEmail)
 
-        #refetch proposal from DB
-        _proposal = Proposal.get_by_id(_proposalId)
+        self.assertTrue(_proposal.votes.count() == 0, 'Failed to withdraw vote')
 
-        self.assertTrue(_proposal.votes.count() == 0, 'Withdraw vote failed')
-
-        if _proposal.votes.count() == 0:
-            self.reportResult(message='vote removed successfully')
+        self.reportResult(message='PASS')

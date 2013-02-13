@@ -10,5 +10,8 @@ class TestVoteTypeUtil(BaseUnitTest):
 
         _readVoteType = VoteTypeUtil.GetVoteTypeByLabel(testVoteTypeLabel)
 
-        if _readVoteType.label == testVoteTypeLabel:
-            self.reportResult()
+        self.assertIsNotNone(_readVoteType, 'VoteType is None')
+
+        self.assertTrue(_readVoteType.label == testVoteTypeLabel, 'Fetched Vote type not matching the expected value')
+
+        self.reportResult(message='PASS')

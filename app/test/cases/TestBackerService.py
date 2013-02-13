@@ -14,7 +14,7 @@ class TestBackerService(BaseUnitTest):
 
         return self._backerService
 
-    def test_getBackerByEmail(self):
+    def test_createBacker(self):
         _backerEmail = 'test_backer_2013-01-29@project.chooser.com.au'
         _backerUsername = 'test_backer_2013-01-29'
         _backerPassword = 'password'
@@ -22,7 +22,6 @@ class TestBackerService(BaseUnitTest):
 
         _backer = self.getBackerService().CreateBacker(_backerEmail, _backerUsername, _backerPassword, _backerRole)
 
-        #_backer = self.getBackerService().GetBackerByEmail(_backerEmail)
+        self.assertIsNotNone(_backer, 'Backer is None')
 
-        if _backer is not None:
-            self.reportResult()
+        self.reportResult(message='PASS')
