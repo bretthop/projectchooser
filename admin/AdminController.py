@@ -32,19 +32,20 @@ class AdminController(webapp.RequestHandler):
         try:
             action = self.request.get('action')
 
-            if action == 'addVoteTypes':
-                self._voteService.PopulateVoteTypes()
-
-            elif action == 'clear':
+            if action == 'clear' or action == 'resetToStable':
                 self.clearDatabase()
 
-            elif action == 'resetToStable':
-                self.clearDatabase()
+            if action == 'addVoteTypes' or action == 'resetToStable':
                 self._voteService.PopulateVoteTypes()
-            elif action == 'addPermissions':
+
+            if action == 'addPermissions' or action == 'resetToStable':
                 self.createRolesAndPermissions()
                 self.associatePermissionsWithRoles()
-            elif action == 'viewPermissions':
+
+            if action == 'resetToStable':
+                self.addBasicUsers()
+
+            if action == 'viewPermissions':
                 self.viewPermissions()
 
             self.response.out.write('Done!')
@@ -158,3 +159,12 @@ class AdminController(webapp.RequestHandler):
         #permission._roles.append(backerRole.key())
         permission._roles.append(adminRole.key())
         permission.put()
+
+    def addBasicUsers(self):
+        # Create ADMIN account
+        role = Role.gql("WHERE name = 'ADMIN'").get()
+        self._backerService.CreateBacker('admin', 'Admin', 'password', role)
+
+        # Create BACKER account
+        role = Role.gql("WHERE name = 'BACKER'").get()
+        self._backerService.CreateBacker('backer', 'Backer', 'password', role)
