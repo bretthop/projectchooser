@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="/static/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="all">
+    <link href="/static/resources/css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <span>
+            <h1 class="inline-block" style="float:left;">Sign Up!</h1>
+        </span>
+
+        <div style="clear:both;"></div>
+
+        <div>
+            <p>
+                Please use the form below to sign up with Project Chooser! After signing up you will be able to
+                add Domains and Proposals as well as contribute by voting for others (or your) proposals.
+            </p>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span2">
+                <div class="alert alert-info minHeight500">
+                    <p>
+                        Your email address is what you use to sign in with. It must be unique.
+                    </p>
+                    <p>
+                        Your username is the name you would like to be displayed throughout the application (this would
+                        generally be your first and last name). It must be unique.
+                    </p>
+                    <p>
+                        Your password is a secret.
+                    </p>
+                </div>
+            </div>
+            <div class="span10">
+                <h3>Please Enter Your Details:</h3>
+                <form id="signUp" class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for="email">Email</label>
+                        <div class="controls">
+                            <input type="text" name="email" id="email" placeholder="Email" class="required" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="username">Username</label>
+                        <div class="controls">
+                            <input type="text" name="username" id="username" placeholder="Username" class="required" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password">Password</label>
+                        <div class="controls">
+                            <input type="password" name="password" id="password" placeholder="Password" class="required" />
+                        </div>
+                    </div>
+                </form>
+                <span class="span2"></span>
+                <button class="btn btn-primary" onclick="handleSignUpClick()">Sign Up!</button>
+                <span class="ajax-loader mainOffset inline-block hidden"></span>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="footer">
+                <small>Project Chooser - Choose your projects!! A simple app using Google's App Engine framework.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Utils -->
+    <script src="/static/resources/js/ajax-utils.js"></script>
+    <script src="/static/resources/js/tmpl-fetcher.js"></script>
+
+    <!-- Libs -->
+    <script src="/static/resources/js/lib/underscore.js"></script>
+    <script src="/static/resources/js/lib/base64.js"></script>
+    <script src="/static/resources/js/lib/jquery-1.8.2.min.js"></script>
+    <script src="/static/resources/js/lib/jquery.validate.js"></script>
+    <script src="/static/resources/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Application Logic -->
+    <script src="/static/resources/js/session.js"></script>
+    <script src="/static/resources/js/frontend.js"></script>
+    <script src="/static/resources/js/api-functions.js"></script>
+</body>
+</html>

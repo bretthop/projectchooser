@@ -1,6 +1,6 @@
 import json
 from app.data.model.Domain import Domain
-from app.data.models import Proposal
+from app.data.models import Proposal, Role, Backer
 
 ###
 # Factory method for creating a proposal object from JSON
@@ -26,3 +26,17 @@ def toProposal(jsonStr):
                 setattr(proposal, name, value)
 
     return proposal
+
+def toBacker(jsonStr):
+    jsonDict = json.loads(jsonStr)
+
+    role = Role.gql('WHERE name = \'BACKER\'').get()
+
+    backer = Backer(
+        email = jsonDict['email'],
+        username = jsonDict['username'],
+        password = jsonDict['password'],
+        role = role
+    )
+
+    return backer

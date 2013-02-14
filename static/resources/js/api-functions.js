@@ -58,6 +58,26 @@ function vote(proposalId, weight)
     ajax.req({method: 'post', url: '/api/votes?proposalId=' + proposalId + '&weight=' + weight, doneCallback: function() { loadProposals(); }});
 }
 
+function signUp()
+{
+    ajax.showAjaxLoader();
+
+    var user = {
+        email: $('form#signUp #email').val(),
+        username: $('form#signUp #username').val(),
+        password: $('form#signUp #password').val()
+    };
+
+    var doneCallback = function(data)
+    {
+        session.setUser(data[0], data[0].password);
+
+        window.location = '/';
+    };
+
+    ajax.req({method: 'post', url: '/api/backers', authenticate: false, data: user, dataType: DataType.JSON, doneCallback: doneCallback});
+}
+
 function login(email, pass)
 {
     ajax.showAjaxLoader();

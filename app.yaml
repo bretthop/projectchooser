@@ -30,6 +30,10 @@ handlers:
   static_files: static/RestApiTest.html
   upload: static/RestApiTest.html
 
+- url: /signup
+  static_files: static/signup.html
+  upload: static/signup.html
+
 # Front end index mapping (main starting point of the application)
 - url: /|/index.html
   static_files: static/dashboard.html

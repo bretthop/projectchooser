@@ -6,6 +6,13 @@ var addProposalValidator = $("form").validate({
     }
 });
 
+var signUpValidator = $("form#signUp").validate({
+    errorPlacement: function(error, element) {
+        //Override errorPlacement function (this stops the automatic 'This field is required' message from showing)
+        return true;
+    }
+});
+
 $('#addProposalModal').on('hide', function () {
     addProposalValidator.resetForm();
     $('#addProposalModal').find('input').val('');
@@ -49,6 +56,15 @@ function handleAddProposalClick()
 
     if (success) {
         $('#addProposalModal').modal('hide');
+    }
+}
+
+function handleSignUpClick()
+{
+    var formValid = signUpValidator.form();
+
+    if (formValid) {
+        signUp();
     }
 }
 

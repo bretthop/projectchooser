@@ -1,4 +1,5 @@
 from google.appengine.ext import webapp
+from app.resources.BackerResource import BackerResource
 from app.resources.BackerVoteResource import BackerVoteResource
 from app.resources.DemoResources import DomainDemoResource, ProposalDemoResource
 
@@ -12,6 +13,7 @@ apiDispatcher = webapp.WSGIApplication(
         ('/api/domains', DomainResource),
         ('/api/proposals', ProposalResource),
         ('/api/votes', VoteResource),
+        ('/api/backers', BackerResource),
         ('/api/backerVotes', BackerVoteResource),
         ('/api/login', LoginResource),
         ('/api/demo/domain', DomainDemoResource),
