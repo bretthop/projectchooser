@@ -7,13 +7,25 @@
             <thead>
                 <tr>
                     <td class="col2 highlightedCell largeFont"><%= domain.title %></td>
-                    <td class="col2 highlightedCell"><a href="/proposals?domainId=<%= domain.id %>">view proposals</a></td>
+                    <td class="col2 highlightedCell">
+                        <a href="/proposals?domainId=<%= domain.id %>">view proposals (<%= domain.proposals.length %>)</a>
+                    </td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td colspan="2"><%= domain.description %></td>
                 </tr>
+            <tr>
+                <td colspan="2">
+                    Proposals:
+                    <ul>
+                        <% _.each(domain.proposals, function(proposal) { %>
+                            <li><%= proposal.name %></li>
+                        <% }); %>
+                    </ul>
+                </td>
+            </tr>
             </tbody>
         </table>
         <div style="margin-bottom:15px;"></div>

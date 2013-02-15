@@ -32,7 +32,7 @@ class Proposal(db.Model):
     technologiesUsed = db.StringProperty()
     status           = db.StringProperty(default = 'OPEN')
     owner            = db.ReferenceProperty(Backer)
-    domain           = db.ReferenceProperty(Domain, required=True)
+    domain           = db.ReferenceProperty(Domain, required=True, collection_name='proposals')
     created          = db.DateTimeProperty(auto_now_add=True)
     updated          = db.DateTimeProperty(auto_now_add=True, auto_now=True)
 

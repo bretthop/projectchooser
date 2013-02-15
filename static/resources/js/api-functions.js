@@ -152,7 +152,7 @@ function loadDomains()
     });
 
 
-    ajax.req({method: 'get', url: '/api/domains', doneCallback: function(domains)
+    ajax.req({method: 'get', url: '/api/domains?filter=Domain(*)~Proposal(name)', doneCallback: function(domains)
     {
         //TODO: Apply current backer information to the returned list of domains
         //applyCurrentBackerContext(domains, backer);
