@@ -22,6 +22,14 @@ class BackerService:
         return backer
 
     def CreateBacker(self, email, username, password, role):
+        # Note: There seems like a better way to do this, but i couldn't see an OR in GQL right away
+        emailBackerExists = Backer.gql("WHERE email = '%s'" % email).get()
+        usernameBackerExists = Backer.gql("WHERE username = '%s'" % username).get()
+
+        if emailBackerExists or usernameBackerExists:
+            raise ValueError("The backer you tried to create already exists")
+
+
         entity = Backer (
             email = email,
             username = username,

@@ -161,10 +161,16 @@ class AdminController(webapp.RequestHandler):
         permission.put()
 
     def addBasicUsers(self):
-        # Create ADMIN account
-        role = Role.gql("WHERE name = 'ADMIN'").get()
-        self._backerService.CreateBacker('admin', 'Admin', 'password', role)
+        try:
+            # Create ADMIN account
+            role = Role.gql("WHERE name = 'ADMIN'").get()
+            self._backerService.CreateBacker('admin', 'Admin', 'password', role)
+        except ValueError:
+            pass
 
-        # Create BACKER account
-        role = Role.gql("WHERE name = 'BACKER'").get()
-        self._backerService.CreateBacker('backer', 'Backer', 'password', role)
+        try:
+            # Create BACKER account
+            role = Role.gql("WHERE name = 'BACKER'").get()
+            self._backerService.CreateBacker('backer', 'Backer', 'password', role)
+        except ValueError:
+            pass

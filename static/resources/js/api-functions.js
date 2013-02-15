@@ -61,6 +61,7 @@ function vote(proposalId, weight)
 function signUp()
 {
     ajax.showAjaxLoader();
+    $('#signUpFailText').hide();
 
     var user = {
         email: $('form#signUp #email').val(),
@@ -75,7 +76,15 @@ function signUp()
         window.location = '/';
     };
 
-    ajax.req({method: 'post', url: '/api/backers', authenticate: false, data: user, dataType: DataType.JSON, doneCallback: doneCallback});
+    var failCallback = function()
+    {
+        // TODO: Check for response code to make sure that this is the proper error (ATM this is the only error that can occur)
+        ajax.hideAjaxLoader();
+
+        $('#signUpFailText').show();
+    };
+
+    ajax.req({method: 'post', url: '/api/backers', authenticate: false, data: user, dataType: DataType.JSON, doneCallback: doneCallback, failCallback: failCallback});
 }
 
 function login(email, pass)

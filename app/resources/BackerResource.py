@@ -13,6 +13,10 @@ class BackerResource(webapp.RequestHandler):
     def post(self):
         backer = toBacker(self.request.body)
 
-        backer = self._backerService.CreateBacker(backer.email, backer.username, backer.password, backer.role)
+        try :
+            backer = self._backerService.CreateBacker(backer.email, backer.username, backer.password, backer.role)
+        except ValueError:
+            self.response.set_status(409) # TODO: Add a Process Request decorator that can handle RestApiResponses and return proper HTTP status from them
+            return RestApiResponse.init('409')
 
         return RestApiResponse.init('200', backer)
