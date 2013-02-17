@@ -19,8 +19,9 @@ class VoteService:
             _proposal = Proposal.get_by_id(proposalId)
 
             # save the vote for the proposal (with user)
+            _backer = self._backerService.GetBackerByEmail(userEmail)
             Vote(
-                userId = userEmail,
+                backer = _backer,
                 proposal = _proposal,
                 voteType = _voteType
             ).put()

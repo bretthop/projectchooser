@@ -19,7 +19,6 @@ class Role(db.Model):
         permissions = Permission.gql('WHERE _roles = :1', self.key())
         return permissions
 
-#class Backer(db.Model):
 class Backer(db.Expando):
     email            = db.StringProperty()
     username         = db.StringProperty()
@@ -36,8 +35,8 @@ class Proposal(db.Model):
     created          = db.DateTimeProperty(auto_now_add=True)
     updated          = db.DateTimeProperty(auto_now_add=True, auto_now=True)
 
-class Vote(db.Model):
-    userId      = db.StringProperty()
+class Vote(db.Expando):
+    backer      = db.ReferenceProperty(Backer, required=False)
     proposal    = db.ReferenceProperty(Proposal, required=True, collection_name='votes')
     voteType    = db.ReferenceProperty(VoteType, required=True)
     created     = db.DateTimeProperty(auto_now_add=True)

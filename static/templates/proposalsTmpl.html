@@ -24,7 +24,7 @@
                                 <% _.each(proposal.votes, function(vote) { %>
                                 <li class="text-success">
                                     <img src="/static/resources/images/vote_<%= vote.voteType.label.toLowerCase() %>.png" height="32" width="32" title="<%= vote.voteType.label.toLowerCase() %>" />
-                                    <%= vote.userId %>
+                                    <%= vote.backer.username %>
                                 </li>
                                 <% }); %>
                             </ul>

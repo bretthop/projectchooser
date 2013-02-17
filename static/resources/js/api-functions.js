@@ -198,7 +198,7 @@ function loadProposals()
             $('.backerTmpl-rendered').html(renderedHtml);
 
             //Filter the requested data on only the fields we need
-            var proposalsFilterQuery = 'filter=Proposal(*)~Vote(*)~VoteType(*)~Backer(email)';
+            var proposalsFilterQuery = 'filter=Proposal(*)~Vote(*)~VoteType(*)~Backer(username)';
             var proposalsData = searchParams + '&' + proposalsFilterQuery;
 
             ajax.req({method: 'get', url: '/api/proposals', data: proposalsData, doneCallback: function(proposals) {

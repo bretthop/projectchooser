@@ -4,6 +4,9 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+builtins:
+- deferred: on
+
 handlers:
 # Base static mapping (handles all static file requests)
 - url: /static
@@ -12,6 +15,11 @@ handlers:
 # Backend Database mapping (handles all calls to the admin scripts)
 - url: /doAdminAction
   script: admin.AdminDispatcher.adminDispatcher
+
+- url: /fix_datastore
+  script: admin.datastore_updates.StabilizeDatastoreApp.dbHandler
+  login: admin
+  secure: always
 
 # Backend API mapping (handles all calls to the API)
 - url: /api/.*
