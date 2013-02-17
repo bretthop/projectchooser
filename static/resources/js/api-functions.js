@@ -198,7 +198,7 @@ function loadProposals()
             $('.backerTmpl-rendered').html(renderedHtml);
 
             //Filter the requested data on only the fields we need
-            var proposalsFilterQuery = 'filter=Proposal(*)~Vote(*)~VoteType(*)~Backer(username)';
+            var proposalsFilterQuery = 'filter=Proposal(*)~Vote(*)~VoteType(*)~Backer(username,email)';
             var proposalsData = searchParams + '&' + proposalsFilterQuery;
 
             ajax.req({method: 'get', url: '/api/proposals', data: proposalsData, doneCallback: function(proposals) {
@@ -241,7 +241,7 @@ function applyCurrentBackerContext(proposals, currentBacker)
 
             rating += vote.voteType.weight;
 
-            if (vote.userId == currentBacker.email) {
+            if (vote.backer && vote.backer.email == currentBacker.email) {
                 hasUserVoted = true;
                 userVote = vote;
             }
