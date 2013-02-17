@@ -15,6 +15,8 @@ handlers:
 # Backend Database mapping (handles all calls to the admin scripts)
 - url: /doAdminAction
   script: admin.AdminDispatcher.adminDispatcher
+  login: admin
+  secure: always
 
 - url: /fix_datastore
   script: admin.datastore_updates.StabilizeDatastoreApp.dbHandler
@@ -29,6 +31,8 @@ handlers:
 - url: /admin
   static_files: static/admin.html
   upload: static/admin.html
+  login: admin
+  secure: always
 
 - url: /proposals
   static_files: static/proposals.html
