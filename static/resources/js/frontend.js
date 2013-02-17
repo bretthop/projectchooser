@@ -29,7 +29,7 @@ $('#addDomainModal').on('hide', function () {
     $('#addDomainModal').find('input').val('');
 });
 
-ajax.setAjaxLoader($('.ajax-loader'));
+ajax.setAjaxLoaderSelector('.ajax-loader');
 
 function showAddDomainModal()
 {

@@ -20,7 +20,7 @@ globalVars = (function() {
 ajax = (function() {
     var ajax = {};
 
-    var _ajaxLoader = null;
+    var _ajaxLoaderSelector = null;
 
     ajax.req = function(params)
     {
@@ -84,28 +84,28 @@ ajax = (function() {
             });
     };
 
-    ajax.setAjaxLoader = function(loader)
+    ajax.setAjaxLoaderSelector = function(loaderSelector)
     {
-        _ajaxLoader = loader;
+        _ajaxLoaderSelector = loaderSelector;
     };
 
     ajax.showAjaxLoader = function()
     {
-        if (_ajaxLoader == null) {
+        if (_ajaxLoaderSelector == null) {
             return;
         }
 
-        $(_ajaxLoader)
+        $(_ajaxLoaderSelector)
             .removeClass('hidden');
     };
 
     ajax.hideAjaxLoader = function()
     {
-        if (_ajaxLoader == null) {
+        if (_ajaxLoaderSelector == null) {
             return;
         }
 
-        $(_ajaxLoader)
+        $(_ajaxLoaderSelector)
             .addClass('hidden');
     };
 
