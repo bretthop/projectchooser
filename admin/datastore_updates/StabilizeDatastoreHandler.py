@@ -8,7 +8,7 @@ class StabilizeDatastoreHandler(webapp2.RequestHandler):
         self.response.out.write('<div>Datastore fix "AddBackerToProposalVotes" successfully initiated.</div>')
 
         deferred.defer(proposal_votes.RemoveVoteUserId)
-        self.response.out.write('<div>Datastore fix "AddBackerToProposalVotes" successfully initiated.</div>')
+        self.response.out.write('<div>Datastore fix "RemoveVoteUserId" successfully initiated.</div>')
 
 app = webapp2.WSGIApplication([('/fix_datastore', StabilizeDatastoreHandler)])
 
