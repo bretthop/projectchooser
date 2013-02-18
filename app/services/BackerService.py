@@ -1,6 +1,7 @@
 from app.data.models import *
 from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
+from app.services.BackerVoteService import BackerVoteService
 
 class BackerService:
     def VerifyBacker(self, email, password):
@@ -14,10 +15,11 @@ class BackerService:
     def GetBackerByEmail(self, email):
         backer = Backer.gql("WHERE email = '%s'" % email).get()
 
-        #TODO: fetch a list of open proposals with vote from backer
-        #TOFIX: openProposals is added to a collection _dynamic_properties of db.Expando object
-        #TOFIX: all fields starting with "_" are skipped by JSON serializer
-        #backer.openProposals = ['test1', 'test2']
+        #fetch a list of open proposals with vote from backer
+        curProposals = BackerVoteService().GetBackerCurrentProposals(backer.key().id())
+
+        #TOFIX: each proposal is fully serialised, limit it to just name and id
+        #setattr(backer, 'currentProposals', curProposals)
 
         return backer
 
