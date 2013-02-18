@@ -1,6 +1,6 @@
 function addDomain()
 {
-    var valid = addDomainValidator.form();
+    var valid = $('form#addDomain').validate().form();
 
     if (valid) {
         ajax.showAjaxLoader();
@@ -21,7 +21,7 @@ function addDomain()
 
 function addProposal()
 {
-    var valid = addProposalValidator.form();
+    var valid = $('form#addProposal').validate().form();
 
     if (valid) {
         ajax.showAjaxLoader();

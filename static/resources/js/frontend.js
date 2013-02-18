@@ -1,12 +1,5 @@
 /* Setup front end event handlers */
-var addProposalValidator = $("form").validate({
-    errorPlacement: function(error, element) {
-        //Override errorPlacement function (this stops the automatic 'This field is required' message from showing)
-        return true;
-    }
-});
-
-var signUpValidator = $("form#signUp").validate({
+$.validator.setDefaults({
     errorPlacement: function(error, element) {
         //Override errorPlacement function (this stops the automatic 'This field is required' message from showing)
         return true;
@@ -14,18 +7,12 @@ var signUpValidator = $("form#signUp").validate({
 });
 
 $('#addProposalModal').on('hide', function () {
-    addProposalValidator.resetForm();
+    $('form#addProposal').validate().resetForm();
     $('#addProposalModal').find('input').val('');
 });
 
-var addDomainValidator = $("form").validate({
-    errorPlacement: function(error, element) {
-        //Override errorPlacement function (this stops the automatic 'This field is required' message from showing)
-        return true;
-    }
-});
 $('#addDomainModal').on('hide', function () {
-    addDomainValidator.resetForm();
+    $('form#addDomain').validate().resetForm();
     $('#addDomainModal').find('input').val('');
 });
 
@@ -61,7 +48,7 @@ function handleAddProposalClick()
 
 function handleSignUpClick()
 {
-    var formValid = signUpValidator.form();
+    var formValid = $('form#signUp').validate().form();
 
     if (formValid) {
         signUp();
@@ -70,10 +57,14 @@ function handleSignUpClick()
 
 function handleLoginClick()
 {
-    var email    = $('#email').val();
-    var password = $('#password').val();
+    var formValid = $('form#login').validate().form();
 
-    login(email, password)
+    if (formValid) {
+        var email    = $('#email').val();
+        var password = $('#password').val();
+
+        login(email, password)
+    }
 }
 
 function resetAddDomainForm()
