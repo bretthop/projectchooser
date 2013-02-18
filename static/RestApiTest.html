@@ -50,7 +50,7 @@
                 </pre>
             </div>
             <div class="span6">
-                <pre id="proposalByID" class="prettyprint linenums">
+                <pre id="securedApiDemoResults" class="prettyprint linenums">
                 </pre>
             </div>
         </div>
@@ -102,7 +102,7 @@
                 data: data,
                 doneCallback: function(response)
                 {
-                    $('#proposalByID').html(JSON.stringify(response, null, 4));
+                    $('#securedApiDemoResults').html(JSON.stringify(response, null, 4));
                 }
             });
         }
@@ -124,7 +124,7 @@
                 data: data,
                 doneCallback: function(response)
                 {
-                    $('#proposalByID').html(JSON.stringify(response, null, 4));
+                    $('#securedApiDemoResults').html(JSON.stringify(response, null, 4));
                 }
             });
         }

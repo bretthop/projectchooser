@@ -46,6 +46,14 @@ class CurrentUserDemoResource(webapp.RequestHandler):
 
         # Add some random properties to test db.Expando serialisation
         user.openProposals = ['test1', 'test2', 'test3']
-        user.randomProp47  = 34533
+        user.a_dyn_number  = 34533
+        user.a_dyn_bool = True
+        user.remaining_votes = [''] # Note: This should be ignored, and the original remaining_votes should be serialised
+        # Note: Apparently db.Expando does not allow dict values
+#        user.dynamicDict = {
+#            "a_number": 1,
+#            "a_string": "Hello, World!",
+#            "a_bool": True
+#        }
 
         return RestApiResponse.init('200', user)

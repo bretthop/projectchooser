@@ -119,18 +119,21 @@ class Pson:
             return False
 
         fields = {}
+        eligibleFields = dict(inspect.getmembers(model))
 
-        for name, value in inspect.getmembers(model):
+        # If the model has a dynamic properties attr, then add them to the existing eligible fields
+        # Note: Dynamic properties with conflicting keys will be ignored
+        if hasattr(model, '_dynamic_properties'):
+            dynamicProps = model._dynamic_properties
+            dynamicProps.update(eligibleFields)
+            eligibleFields = dynamicProps
+
+        for name, value in eligibleFields.iteritems():
             if isFieldAllowed(model, name):
                 if isPublicAttribute(name, value):
                     if not isReverseReference(name):
                         if not isProcessed(done, value):
                             fields[name] = value
-
-        # TODO: Combine the values here with the above 'inspect.getmembers(model)' (and thus pass the following props through validation)
-        if hasattr(model, '_dynamic_properties'):
-            for name, value in model._dynamic_properties.iteritems():
-                fields[name] = value
 
         return fields
 
