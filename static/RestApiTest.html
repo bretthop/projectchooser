@@ -14,10 +14,14 @@
             </div>
             <div class="span4">
             </div>
-            <div class="span2">
+            <div class="span3">
                 <input id="proposalId" type="text" placeholder="Proposal ID"/>
             </div>
-            <div class="span4">
+            <div class="span3">
+                <select id="securedApiDemo">
+                    <option value="PROPOSAL" selected="selected">Get Proposals</option>
+                    <option value="CURRENT_USER">Get Current User</option>
+                </select>
             </div>
         </div>
         <div class="row-fluid">
@@ -34,7 +38,7 @@
                 <input id="proposalFilter" class="input-xlarge" type="text" placeholder="Filter" value="Backer(role)~Role(*)~Permission(name)"/>
             </div>
             <div class="span3">
-                <button class="btn addProposalBtn" style="float:left;" onclick="getProposal()">
+                <button class="btn addProposalBtn" style="float:left;" onclick="runSecuredApiDemo()">
                     <i class="icon-tag"></i>
                     Get Proposal By ID (Requires security)
                 </button>
@@ -69,6 +73,18 @@
     <script src="/static/resources/js/api-functions.js"></script>
 
     <script type="text/javascript">
+        function runSecuredApiDemo()
+        {
+            var demo = $('#securedApiDemo').val();
+
+            if (demo == 'PROPOSAL') {
+                getProposal();
+            }
+            else if (demo == 'CURRENT_USER') {
+                getCurrentUser();
+            }
+        }
+
         function getProposal()
         {
             var data = 'proposalId=' + $('#proposalId').val();
@@ -83,6 +99,28 @@
             {
                 method: 'get',
                 url: '/api/demo/proposal',
+                data: data,
+                doneCallback: function(response)
+                {
+                    $('#proposalByID').html(JSON.stringify(response, null, 4));
+                }
+            });
+        }
+
+        function getCurrentUser()
+        {
+            var data = '';
+
+            var filter = $('#proposalFilter').val();
+
+            if (filter && filter != '') {
+                data += '&filter=' + filter;
+            }
+
+            ajax.req(
+            {
+                method: 'get',
+                url: '/api/demo/currentUser',
                 data: data,
                 doneCallback: function(response)
                 {

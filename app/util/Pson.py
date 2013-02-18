@@ -77,6 +77,10 @@ class Pson:
                 jsonObject['urn']        = m._urn
                 jsonObject['count']      = m._count
                 jsonObject['items']      = self._createJsonList(m._items, done[:])
+            else:
+                # This case will trigger if a list of primitive types are serialised
+                # in which case, 'm' will be one of the primitive values, so just return it
+                return m
 
         return jsonObject
 
@@ -122,6 +126,11 @@ class Pson:
                     if not isReverseReference(name):
                         if not isProcessed(done, value):
                             fields[name] = value
+
+        # TODO: Combine the values here with the above 'inspect.getmembers(model)' (and thus pass the following props through validation)
+        if hasattr(model, '_dynamic_properties'):
+            for name, value in model._dynamic_properties.iteritems():
+                fields[name] = value
 
         return fields
 
