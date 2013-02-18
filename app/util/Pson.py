@@ -14,7 +14,6 @@ class Pson:
 
     # Specifies the field names that are NOT allowed to be serialised.
     # Defaults to any password field
-    # TODO: Implement
     _disallowedFields = ['*.password']
 
     def setAllowedFieldsString(self, str):
@@ -97,6 +96,15 @@ class Pson:
         def isFieldAllowed(model, fieldName):
             className = type(model).__name__
 
+            # First check for disallowed fields
+            for disallowedField in self._disallowedFields:
+                disallowedClassName = disallowedField.split('.')[0]
+                disallowedFieldName = disallowedField.split('.')[1]
+
+                if (className == disallowedClassName or disallowedClassName == '*') and (fieldName == disallowedFieldName or disallowedFieldName == '*'):
+                    return False
+
+            # Then check for allowed ones
             for allowedField in self._allowedFields:
                 allowedClassName = allowedField.split('.')[0]
                 allowedFieldName = allowedField.split('.')[1]
