@@ -5,8 +5,10 @@ from google.appengine.ext import db
 from app.resources.RestApiResponse import RestApiResponse
 
 ###
-# JSON Serialiser for python (PSON)... name stolen from GSON
+# JSON Serialiser for python (PSON)... yep, name stolen from GSON
 #
+from app.util.DateUtil import formatFullDatetime
+
 class Pson:
     # Specifies the field names that are allowed to be serialised.
     # Defaults to all (i.e. '*.*')
@@ -64,7 +66,7 @@ class Pson:
                 if isinstance(attr, (int, long, float, bool, dict, basestring)):
                     jsonObject[f] = attr
                 elif isinstance(attr, datetime.date):
-                    jsonObject[f] = str(attr) # TODO: Maybe add some date formatting here if needed
+                    jsonObject[f] = formatFullDatetime(attr)
                 elif isinstance(attr, db.GeoPt): # Added for no real reason
                     jsonObject[f] = {'lat': attr.lat, 'lon': attr.lon}
                 elif isinstance(attr, collections.Iterable):
