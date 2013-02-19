@@ -1,4 +1,5 @@
 import collections
+from google.appengine.ext.db import GqlQuery
 
 class RestApiResponse():
 
@@ -22,6 +23,10 @@ class RestApiResponse():
             result._count = len(result._items)
         else:
             result._items = items
-            result._count = items.count()
+
+            if isinstance(items, GqlQuery):
+                result._count = items.count()
+            else:
+                result._count = len(items)
 
         return result

@@ -1,6 +1,7 @@
 from google.appengine.ext import webapp
 from app.decorator.ProduceJson import ProduceJson
 from app.resources.RestApiResponse import RestApiResponse
+from app.services.AuditService import AuditService
 
 from app.services.VoteService import *
 
@@ -8,6 +9,7 @@ class AdminController(webapp.RequestHandler):
 
     _voteService   = VoteService()
     _backerService = BackerService()
+    _auditService = AuditService()
 
     def post(self):
         try :
@@ -30,25 +32,40 @@ class AdminController(webapp.RequestHandler):
             self.response.write(str(e))
     def get(self):
         try:
+            performed = False
+
             action = self.request.get('action')
 
             if action == 'clear' or action == 'resetToStable':
                 self.clearDatabase()
+                performed = True
 
             if action == 'addVoteTypes' or action == 'resetToStable':
                 self._voteService.PopulateVoteTypes()
+                performed = True
 
             if action == 'addPermissions' or action == 'resetToStable':
                 self.createRolesAndPermissions()
                 self.associatePermissionsWithRoles()
+                performed = True
 
             if action == 'resetToStable':
                 self.addBasicUsers()
+                performed = True
 
             if action == 'viewPermissions':
                 self.viewPermissions()
+                performed = True
 
-            self.response.out.write('Done!')
+            if action == 'initAuditing':
+                self.initAuditing()
+                performed = True
+
+            if performed:
+                self.response.out.write('Done!')
+            else:
+                self.response.out.write('No Action Given!')
+
         except BaseException as e:
             self.response.write(str(e))
 
@@ -174,3 +191,6 @@ class AdminController(webapp.RequestHandler):
             self._backerService.CreateBacker('backer', 'Backer', 'password', role)
         except ValueError:
             pass
+
+    def initAuditing(self):
+        self._auditService.Audit("Auditing Started :)")

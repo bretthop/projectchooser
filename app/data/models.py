@@ -45,3 +45,14 @@ class BackerVote(db.Model):
     backer          = db.ReferenceProperty(Backer, required=True, collection_name='remainingVotes')
     voteType        = db.ReferenceProperty(VoteType, required=True)
     quantity        = db.IntegerProperty()
+
+class Audit(db.Model):
+    domain = db.ReferenceProperty(Domain, required=False)
+    proposal = db.ReferenceProperty(Proposal, required=False)
+    backer = db.ReferenceProperty(Backer, required=False)
+    message = db.StringProperty()
+    dateCreated = db.DateTimeProperty(auto_now_add=True)
+
+    @staticmethod
+    def dateDesc(a, b):
+        return cmp(b.dateCreated, a.dateCreated)

@@ -1,12 +1,18 @@
 from app.data.model.Domain import Domain
+from app.services.AuditService import AuditService
 
 class DomainService:
+
+    _auditService = AuditService()
 
     def createDomain(self, domain):
         """
         :type domain: Domain
         """
         domain.put()
+
+        self._auditService.Audit("%s domain created" % domain.title, domain_id=domain.key().id())
+
         return domain
 
     def updateDomain(self, domainId, domainTitle, domainDescription, domainStatus):

@@ -146,11 +146,12 @@ function loadDomains()
 
     resetAddDomainForm();
 
+    loadAudits();
+
     fetchTmpl(DASHBOARD_BACKER_TMPL_URL, function(tmpl) {
         var renderedHtml = _.template(tmpl, session.currentUser());
         $('.backerTmpl-rendered').html(renderedHtml);
     });
-
 
     ajax.req({method: 'get', url: '/api/domains?filter=Domain(*)~Proposal(name)', doneCallback: function(domains)
     {
@@ -170,6 +171,16 @@ function loadDomains()
 
 }
 
+function loadAudits()
+{
+    fetchTmpl(AUDIT_TMPL_URL, function(tmpl) {
+        ajax.req({method: 'get', url: 'api/audits?filter=Audit(message,dateCreated)', doneCallback: function(audits){
+            var renderedHtml = _.template(tmpl, {audits: audits});
+            $('.auditTmpl-rendered').html(renderedHtml);
+        }});
+    });
+}
+
 function loadProposals()
 {
     // Make sure the user is logged in
@@ -187,6 +198,8 @@ function loadProposals()
     globalVars.domainId = extractSearchParamValue(searchParams, 'domainId');
 
     resetAddProposalForm();
+
+    loadAudits();
 
     var backer = session.currentUser();
 
