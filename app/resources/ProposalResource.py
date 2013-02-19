@@ -5,13 +5,15 @@ from app.data.factory.JsonFactory import toProposal
 from app.decorator.ProduceJson import *
 from app.decorator.Secure import Secured
 from app.resources.RestApiResponse import RestApiResponse
+from app.services.AuditService import AuditService
 from app.services.BackerService import BackerService
 from app.services.ProposalService import *
 
 class ProposalResource(webapp.RequestHandler):
 
     _proposalService = ProposalService()
-    _backerService = BackerService()
+    _backerService   = BackerService()
+    _auditService    = AuditService()
 
     @Secured([PermissionNameEnum.CAN_VIEW_PROPOSAL])
     @ProduceJson
@@ -31,3 +33,9 @@ class ProposalResource(webapp.RequestHandler):
 
         if proposal.name != '' and proposal.description != '':
             self._proposalService.saveProposal(proposal)
+
+            self._auditService.Audit("%s proposal created (In %s domain)" % (proposal.name, proposal.domain.title),
+                domain=proposal.domain,
+                proposal=proposal,
+                backer=self.currentUser
+            )
