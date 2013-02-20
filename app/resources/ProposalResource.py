@@ -34,8 +34,4 @@ class ProposalResource(webapp.RequestHandler):
         if proposal.name != '' and proposal.description != '':
             self._proposalService.saveProposal(proposal)
 
-            self._auditService.Audit("%s proposal created (In %s domain)" % (proposal.name, proposal.domain.title),
-                domain=proposal.domain,
-                proposal=proposal,
-                backer=self.currentUser
-            )
+            self._auditService.AuditAddProposal(proposal)

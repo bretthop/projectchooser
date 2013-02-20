@@ -1,4 +1,6 @@
 from google.appengine.ext import webapp
+from google.appengine.ext.deferred import deferred
+from admin.datastore_updates import initAuditing
 from app.decorator.ProduceJson import ProduceJson
 from app.resources.RestApiResponse import RestApiResponse
 from app.services.AuditService import AuditService
@@ -58,8 +60,13 @@ class AdminController(webapp.RequestHandler):
                 performed = True
 
             if action == 'initAuditing':
-                self.initAuditing()
-                performed = True
+                deferred.defer(initAuditing.forDomains)
+                self.response.out.write('<div>Init Auditing for Domains successfully initiated.</div>')
+
+                deferred.defer(initAuditing.forProposals)
+                self.response.out.write('<div>Init Auditing for Proposals successfully initiated.</div>')
+
+                return
 
             if performed:
                 self.response.out.write('Done!')
@@ -191,6 +198,3 @@ class AdminController(webapp.RequestHandler):
             self._backerService.CreateBacker('backer', 'Backer', 'password', role)
         except ValueError:
             pass
-
-    def initAuditing(self):
-        self._auditService.Audit("Auditing Started :)")

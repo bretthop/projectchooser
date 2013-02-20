@@ -1,14 +1,16 @@
 <h4>Recent Activity</h4>
 
-<ul>
-    <% _.each(audits, function(audit) { %>
-        <li>
-            <div style="padding-top: 7px;">
-                <%=audit.message%>
-            </div>
-            <div style="font-size: 10px; text-align: right;">
-                <%=audit.dateCreated%>
-            </div>
-        </li>
-    <% }) %>
-</ul>
+<div class="auditList">
+    <ul>
+        <% _.each(audits, function(audit) { %>
+            <li>
+                <div style="padding-top: 7px;">
+                    <%=audit.message%>
+                </div>
+                <div style="font-size: 10px; text-align: right;">
+                    <%=audit.dateCreated%>
+                </div>
+            </li>
+        <% }) %>
+    </ul>
+</div>

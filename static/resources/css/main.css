@@ -38,7 +38,11 @@ table.table-bordered tbody tr td:first-child
 
 .footer { border-top: 1px solid grey; text-align: center; color: grey; }
 
-.proposalsTmpl-rendered { margin-bottom: 10px; overflow: auto; /*padding-right: 20px; padding-left: 20px;*/ height: 417px; }
+.mainList { margin-bottom: 10px; overflow: auto; height: 514px; }
+.auditList { max-height: 478px; overflow: auto; width: 280px; padding-right: 10px; }
+
+.auditTmpl-rendered { margin-bottom: 0; }
+.backerTmpl-rendered { margin-bottom: 0; }
 
 /* Twitter bootstrap class additions (this will add to already existent twitter bootstrap classes) */
 .container-fluid { padding-top: 20px; }

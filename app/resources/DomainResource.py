@@ -33,7 +33,4 @@ class DomainResource(webapp.RequestHandler):
         if domain.title != '' and domain.description != '':
             self._domainService.createDomain(domain)
 
-            self._auditService.Audit("%s domain created" % domain.title,
-                domain=domain,
-                backer=self.currentUser
-            )
+            self._auditService.AuditAddDomain(domain, self.currentUser)
