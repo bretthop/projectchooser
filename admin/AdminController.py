@@ -1,6 +1,6 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.deferred import deferred
-from admin.datastore_updates import initAuditing
+from admin.datastore_updates import initAuditing, delete_kinds
 from app.decorator.ProduceJson import ProduceJson
 from app.resources.RestApiResponse import RestApiResponse
 from app.services.AuditService import AuditService
@@ -60,11 +60,8 @@ class AdminController(webapp.RequestHandler):
                 performed = True
 
             if action == 'initAuditing':
-                deferred.defer(initAuditing.forDomains)
-                self.response.out.write('<div>Init Auditing for Domains successfully initiated.</div>')
-
-                deferred.defer(initAuditing.forProposals)
-                self.response.out.write('<div>Init Auditing for Proposals successfully initiated.</div>')
+                deferred.defer(delete_kinds.deleteAllForAuditKind, chained_func=initAuditing.start)
+                self.response.out.write('<div>InitAuditing successfully initiated.</div>')
 
                 return
 

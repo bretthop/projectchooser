@@ -5,6 +5,13 @@ from google.appengine.ext import deferred
 
 BATCH_SIZE = 5  # ideal batch size may vary based on entity size.
 
+def start():
+    deferred.defer(forDomains)
+    logging.info('Init Auditing for Domains has been started.')
+
+    deferred.defer(forProposals)
+    logging.info('Init Auditing for Domains has been started.')
+
 def forDomains(cursor=None, num_updated=0):
     """
     Finds all Domains and adds auditing information for them
@@ -27,11 +34,11 @@ def forDomains(cursor=None, num_updated=0):
 
     if num_processed > 0:
         num_updated += num_processed
-        logging.debug('Audited %d Domains for a total of %d', num_processed, num_updated)
+        logging.info('Audited %d Domains for a total of %d', num_processed, num_updated)
 
         deferred.defer(forDomains, cursor=query.cursor(), num_updated=num_updated)
     else:
-        logging.debug('initAuditingForDomains complete with %d updates!', num_updated)
+        logging.info('initAuditingForDomains complete with %d updates!', num_updated)
 
 def forProposals(cursor=None, num_updated=0):
     """
@@ -55,8 +62,8 @@ def forProposals(cursor=None, num_updated=0):
 
     if num_processed > 0:
         num_updated += num_processed
-        logging.debug('Audited %d Proposals for a total of %d', num_processed, num_updated)
+        logging.info('Audited %d Proposals for a total of %d', num_processed, num_updated)
 
         deferred.defer(forProposals, cursor=query.cursor(), num_updated=num_updated)
     else:
-        logging.debug('initAuditingForProposals complete with %d updates!', num_updated)
+        logging.info('initAuditingForProposals complete with %d updates!', num_updated)
