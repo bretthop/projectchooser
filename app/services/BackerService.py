@@ -15,11 +15,12 @@ class BackerService:
     def GetBackerByEmail(self, email):
         backer = Backer.gql("WHERE email = '%s'" % email).get()
 
-        #fetch a list of open proposals with vote from backer
-        curProposals = BackerVoteService().GetBackerCurrentProposals(backer.key().id())
+        if backer:
+            #fetch a list of open proposals with vote from backer
+            curProposals = BackerVoteService().GetBackerCurrentProposals(backer.key().id())
 
-        #TOFIX: each proposal is fully serialised, limit it to just name and id
-        #setattr(backer, 'currentProposals', curProposals)
+            #TOFIX: each proposal is fully serialised, limit it to just name and id
+            #setattr(backer, 'currentProposals', curProposals)
 
         return backer
 

@@ -60,7 +60,7 @@ class AdminController(webapp.RequestHandler):
                 performed = True
 
             if action == 'initAuditing':
-                deferred.defer(delete_kinds.deleteAllForAuditKind, chained_func=initAuditing.start)
+                deferred.defer(delete_kinds.deleteAllForKind, kind='Audit', chained_func=initAuditing.start)
                 self.response.out.write('<div>InitAuditing successfully initiated.</div>')
 
                 return
@@ -80,7 +80,7 @@ class AdminController(webapp.RequestHandler):
         https://groups.google.com/forum/?fromgroups=#!topic/google-appengine/7AgAo8qS_mk
         http://stackoverflow.com/questions/108822/delete-all-data-for-a-kind-in-google-app-engine
         '''
-        kinds = ['Permission', 'Role', 'Domain', 'Proposal', 'Vote', 'VoteType', 'Backer', 'BackerVote']
+        kinds = ['Permission', 'Role', 'Domain', 'Proposal', 'Vote', 'VoteType', 'Backer', 'BackerVote', 'Audit']
 
         for kind in kinds:
             while True:
