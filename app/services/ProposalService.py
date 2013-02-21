@@ -12,7 +12,7 @@ class ProposalService:
         result = db.Model()
         try:
             domain = Domain.get_by_id(int(domainId))
-            result = Proposal.gql("WHERE status = '" + status +"' AND domain=:pDomain", pDomain=domain)
+            result = Proposal.gql("WHERE status = :pStatus AND domain=:pDomain", pStatus=status, pDomain=domain)
         except Exception as e:
             exception = e
 
@@ -20,3 +20,13 @@ class ProposalService:
 
     def GetProposalById(self, proposalId):
         return Proposal.get_by_id(int(proposalId))
+
+    def GetProposalsByStatus(self, status):
+        result = db.Model()
+
+        try:
+            result = Proposal.gql("WHERE status = :pStatus", pStatus=status)
+        except Exception as e:
+            exception = e
+
+        return result

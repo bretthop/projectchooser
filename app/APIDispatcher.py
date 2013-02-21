@@ -6,6 +6,7 @@ from app.resources.DemoResources import *
 
 from app.resources.DomainResource import *
 from app.resources.ProposalResource import *
+from app.resources.ProposalWinningResource import *
 from app.resources.VoteResource import *
 from app.resources.LoginResource import *
 
@@ -13,6 +14,7 @@ apiDispatcher = webapp.WSGIApplication(
     [
         ('/api/domains', DomainResource),
         ('/api/proposals', ProposalResource),
+        ('/api/proposals/winning', ProposalWinningResource),
         ('/api/votes', VoteResource),
         ('/api/backers', BackerResource),
         ('/api/backerVotes', BackerVoteResource),

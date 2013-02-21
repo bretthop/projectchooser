@@ -7,13 +7,15 @@ from app.data.model.Domain import Domain
 from app.data.enums.VoteTypeEnum import VoteTypeEnum
 from app.util.VoteTypeUtil import VoteTypeUtil
 
+from app.services.BackerService import BackerService
 from app.services.ProposalService import ProposalService
 from app.services.VoteService import VoteService
 
 class TestVoteService(BaseUnitTest):
 
-    _voteService = None
+    _backerService   = None
     _proposalService = None
+    _voteService     = None
     _testDomainName = 'TEST DOMAIN #1'
     _testProposalName = 'TEST PROPOSAL #1'
     _backerEmail = 'test_backer_2013-01-29@project.chooser.com.au'
@@ -33,6 +35,13 @@ class TestVoteService(BaseUnitTest):
             self._voteService = VoteService()
 
         return self._voteService
+
+    #singleton pattern
+    def getVoteService(self):
+        if self._backerService is None:
+            self._backerService = BackerService()
+
+        return self._backerService
 
     def test_voteForProposal(self):
         _domain = Domain(
@@ -89,6 +98,8 @@ class TestVoteService(BaseUnitTest):
             domain = _domain
         )
 
+        _backer = self._backerService.GetBackerByEmail(self._backerEmail)
+
         self.getProposalService().saveProposal(_proposal)
 
         self.assertIsNotNone(_proposal, 'Proposal is None')
@@ -97,10 +108,10 @@ class TestVoteService(BaseUnitTest):
 
         self.assertTrue(_proposal.votes.count() > 0, 'Proposal has no votes')
 
-        _voteId = db.GqlQuery("SELECT __key__ FROM Vote WHERE proposal = :pProposal AND userId = :pUserEmail AND voteType = :pVoteType",
-            pProposal  = _proposal,
-            pUserEmail = self._backerEmail,
-            pVoteType  = VoteTypeUtil.GetVoteTypeByLabel(self._voteTypeLabelS)
+        _voteId = db.GqlQuery("SELECT __key__ FROM Vote WHERE proposal = :pProposal AND backer = :pBacker AND voteType = :pVoteType",
+            pProposal = _proposal,
+            pBacker   = _backer,
+            pVoteType = VoteTypeUtil.GetVoteTypeByLabel(self._voteTypeLabelS)
         ).get().id()
 
         self.assertIsNotNone(_voteId, 'Vote is None')

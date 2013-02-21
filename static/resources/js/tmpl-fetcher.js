@@ -5,6 +5,7 @@ var BACKER_TMPL_URL = '/static/templates/backerTmpl.html';
 var LOGIN_MODAL_TMPL_URL = '/static/templates/loginTmpl.html';
 var DASHBOARD_BACKER_TMPL_URL = '/static/templates/dash_backerTmpl.html';
 var AUDIT_TMPL_URL = '/static/templates/auditTmpl.html';
+var WINNING_PROPOSALS_TMPL_URL = '/static/templates/winningProposalTmpl.html';
 
 tmplCache = {};
 

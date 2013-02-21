@@ -35,6 +35,18 @@ class Proposal(db.Model):
     created          = db.DateTimeProperty(auto_now_add=True)
     updated          = db.DateTimeProperty(auto_now_add=True, auto_now=True)
 
+    @property
+    def totalRating(self):
+        """
+        Return proposal's total weight (sum of all weights of all votes)
+        """
+        result = 0
+        for v in self.votes:
+            result += v.voteType.weight
+
+        return result
+
+
 class Vote(db.Expando):
     backer      = db.ReferenceProperty(Backer, required=False)
     proposal    = db.ReferenceProperty(Proposal, required=True, collection_name='votes')

@@ -148,6 +148,8 @@ function loadDomains()
 
     loadAudits();
 
+    loadWinningProposals();
+
     fetchTmpl(DASHBOARD_BACKER_TMPL_URL, function(tmpl) {
         var renderedHtml = _.template(tmpl, session.currentUser());
         $('.backerTmpl-rendered').html(renderedHtml);
@@ -177,6 +179,16 @@ function loadAudits()
         ajax.req({method: 'get', url: 'api/audits?filter=Audit(message,dateCreated)', doneCallback: function(audits){
             var renderedHtml = _.template(tmpl, {audits: audits});
             $('.auditTmpl-rendered').html(renderedHtml);
+        }});
+    });
+}
+
+function loadWinningProposals()
+{
+    fetchTmpl(WINNING_PROPOSALS_TMPL_URL, function(tmpl) {
+        ajax.req({method: 'get', url: 'api/proposals/winning?filter=Proposal(name,totalRating)', doneCallback: function(responseItems){
+            var renderedHtml = _.template(tmpl, {proposals: responseItems});
+            $('.winningProposalsTmpl-rendered').html(renderedHtml);
         }});
     });
 }
