@@ -71,7 +71,7 @@ function signUp()
 
     var doneCallback = function(data)
     {
-        session.setUser(data[0], data[0].password);
+        session.setUser(data[0], user.password);
 
         window.location = '/';
     };

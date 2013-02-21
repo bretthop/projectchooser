@@ -3,6 +3,14 @@ session = (function() {
 
     sesh.setUser = function(user, password)
     {
+        if (!user) {
+            console.log('A user has been set into the session without a username!');
+        }
+
+        if (!password) {
+            console.log('A user has been set into the session without a password!');
+        }
+
         // TODO: Store the base64 representation of the password, instead of the actual password
         user.password = password;
 
