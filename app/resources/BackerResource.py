@@ -1,4 +1,6 @@
 from google.appengine.ext import webapp
+from app.data.enums.PermissionNameEnum import PermissionNameEnum
+from app.decorator.Secure import Secured
 from app.data.factory.JsonFactory import *
 from app.decorator.ProduceJson import ProduceJson
 
@@ -8,6 +10,13 @@ from app.services.BackerService import BackerService
 class BackerResource(webapp.RequestHandler):
 
     _backerService = BackerService()
+
+    @Secured([PermissionNameEnum.AVAILABLE_ALL])
+    @ProduceJson
+    def get(self):
+        backer = self._backerService.GetBackerByEmail(self.currentUser.email)
+
+        return RestApiResponse.init('200', backer)
 
     @ProduceJson
     def post(self):

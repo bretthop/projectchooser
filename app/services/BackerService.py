@@ -15,12 +15,17 @@ class BackerService:
     def GetBackerByEmail(self, email):
         backer = Backer.gql("WHERE email = '%s'" % email).get()
 
+        #TODO: Pass in a hashmap (or something) from the resource layer that includes a list of fields the user is expanding on
+        #TODO: and use this to determine weather or not to include the current proposals in the result
         if backer:
             #fetch a list of open proposals with vote from backer
             curProposals = BackerVoteService().GetBackerCurrentProposals(backer.key().id())
 
-            #TOFIX: each proposal is fully serialised, limit it to just name and id
-            #setattr(backer, 'currentProposals', curProposals)
+            # Apparently you can't set empty lists to dynamic properties, so check for nulls (this has to be researched more)
+            if curProposals:
+                curProposals = sorted(curProposals, key=lambda Proposal: Proposal.totalRating, reverse=True)
+
+                setattr(backer, 'currentProposals', curProposals)
 
         return backer
 

@@ -1,5 +1,5 @@
 from google.appengine.ext import webapp
-from app.resources.AuditService import AuditResource
+from app.resources.AuditResource import AuditResource
 from app.resources.BackerResource import BackerResource
 from app.resources.BackerVoteResource import BackerVoteResource
 from app.resources.DemoResources import *

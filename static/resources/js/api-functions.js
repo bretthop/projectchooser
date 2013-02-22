@@ -150,6 +150,8 @@ function loadDomains()
 
     loadWinningProposals();
 
+    loadCurrentProposals();
+
     fetchTmpl(DASHBOARD_BACKER_TMPL_URL, function(tmpl) {
         var renderedHtml = _.template(tmpl, session.currentUser());
         $('.backerTmpl-rendered').html(renderedHtml);
@@ -189,6 +191,16 @@ function loadWinningProposals()
         ajax.req({method: 'get', url: 'api/proposals/winning?filter=Proposal(name,totalRating)', doneCallback: function(responseItems){
             var renderedHtml = _.template(tmpl, {proposals: responseItems});
             $('.winningProposalsTmpl-rendered').html(renderedHtml);
+        }});
+    });
+}
+
+function loadCurrentProposals()
+{
+    fetchTmpl(CURRENT_PROPOSALS_TMPL_URL, function(tmpl) {
+        ajax.req({method: 'get', url: 'api/backers?filter=Backer(currentProposals)~Proposal(name,totalRating)', doneCallback: function(backer){
+            var renderedHtml = _.template(tmpl, {currentProposals: backer[0].currentProposals});
+            $('.currentProposalsTmpl-rendered').html(renderedHtml);
         }});
     });
 }

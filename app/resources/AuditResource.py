@@ -1,10 +1,8 @@
 from google.appengine.ext import webapp
-from app.data.factory.JsonFactory import *
 from app.decorator.ProduceJson import ProduceJson
 
 from app.resources.RestApiResponse import RestApiResponse
 from app.services.AuditService import AuditService
-from app.services.BackerService import BackerService
 
 class AuditResource(webapp.RequestHandler):
 
