@@ -21,7 +21,7 @@ class ProposalWinningResource(webapp.RequestHandler):
                 result.append(p)
 
         #sort all voted proposals by totalRating DESC
-        sorted(result, key=lambda Proposal: Proposal.totalRating, reverse=True)
+        result = sorted(result, key=lambda Proposal: Proposal.totalRating, reverse=True)
 
         #keep only the top 3 proposals
         result = result[0:3]
