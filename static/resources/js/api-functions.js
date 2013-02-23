@@ -198,8 +198,8 @@ function loadWinningProposals()
 function loadCurrentProposals()
 {
     fetchTmpl(CURRENT_PROPOSALS_TMPL_URL, function(tmpl) {
-        ajax.req({method: 'get', url: 'api/backers?filter=Backer(currentProposals)~Proposal(name,totalRating)', doneCallback: function(backer){
-            var renderedHtml = _.template(tmpl, {currentProposals: backer[0].currentProposals});
+        ajax.req({method: 'get', url: 'api/backers?filter=Backer(currentVotes)~Proposal(name,totalRating)~Vote(proposal,voteType)~VoteType(*)', doneCallback: function(backer){
+            var renderedHtml = _.template(tmpl, {currentVotes: backer[0].currentVotes});
             $('.currentProposalsTmpl-rendered').html(renderedHtml);
         }});
     });

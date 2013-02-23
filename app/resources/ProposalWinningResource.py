@@ -12,18 +12,22 @@ class ProposalWinningResource(webapp.RequestHandler):
     @Secured([PermissionNameEnum.CAN_VIEW_PROPOSAL])
     @ProduceJson
     def get(self):
-        result = []
+        result = None
         proposals = self._proposalService.GetProposalsByStatus('OPEN')
 
         #filter out proposals that have no votes
         for p in proposals:
             if p.totalRating > 0:
+                if result is None:
+                    result = []
+
                 result.append(p)
 
-        #sort all voted proposals by totalRating DESC
-        result = sorted(result, key=lambda Proposal: Proposal.totalRating, reverse=True)
+        if result:
+            #sort all voted proposals by totalRating DESC
+            result = sorted(result, key=lambda Proposal: Proposal.totalRating, reverse=True)
 
-        #keep only the top 3 proposals
-        result = result[0:3]
+            #keep only the top 3 proposals
+            result = result[0:3]
 
         return RestApiResponse.init('200', result)

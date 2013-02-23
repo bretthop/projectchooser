@@ -18,14 +18,14 @@ class BackerService:
         #TODO: Pass in a hashmap (or something) from the resource layer that includes a list of fields the user is expanding on
         #TODO: and use this to determine weather or not to include the current proposals in the result
         if backer:
-            #fetch a list of open proposals with vote from backer
-            curProposals = BackerVoteService().GetBackerCurrentProposals(backer.key().id())
+            #fetch a list of backer's votes for open proposals
+            curVotes = BackerVoteService().GetBackerCurrentVotes(backer.key().id())
 
             # Apparently you can't set empty lists to dynamic properties, so check for nulls (this has to be researched more)
-            if curProposals:
-                curProposals = sorted(curProposals, key=lambda Proposal: Proposal.totalRating, reverse=True)
+            if curVotes:
+                curVotes = sorted(curVotes, key=lambda Vote: Vote.voteType.weight, reverse=True)
 
-                setattr(backer, 'currentProposals', curProposals)
+                setattr(backer, 'currentVotes', curVotes)
 
         return backer
 

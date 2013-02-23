@@ -1,13 +1,17 @@
 <h5>Top 3 proposals:</h5>
 
 <div class="proposalsList">
-    <ol>
-        <% _.each(proposals, function(proposal) { %>
-        <li style="margin:0; padding:0; font-size:12px;">
-            <div>
-                <%= proposal.name %> (<%= proposal.totalRating %>)
-            </div>
-        </li>
-        <% }) %>
-    </ol>
+    <% if (proposals.length < 1) { %>
+        <p>No open Proposals (with votes) found.</p>
+    <%} else { %>
+        <ol>
+            <% _.each(proposals, function(proposal) { %>
+            <li style="margin:0; padding:0; font-size:12px;">
+                <div>
+                    <%= proposal.name %> (rating: <%= proposal.totalRating %>)
+                </div>
+            </li>
+            <% }) %>
+        </ol>
+    <% } %>
 </div>

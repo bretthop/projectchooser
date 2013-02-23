@@ -7,7 +7,7 @@ class BackerVoteService:
 
         return BackerVote.gql("WHERE backer = :backer", backer = _backer)
 
-    def GetBackerCurrentProposals(self, backerId):
+    def GetBackerCurrentVotes(self, backerId):
         _backer = Backer.get_by_id(int(backerId))
         result = []
 
@@ -15,6 +15,6 @@ class BackerVoteService:
 
         for v in votes:
             if v.proposal.status == 'OPEN':
-                result.append(v.proposal)
+                result.append(v)
 
         return result

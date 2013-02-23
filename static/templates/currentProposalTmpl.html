@@ -1,14 +1,16 @@
 <h5>Proposals you've voted for:</h5>
 
 <div class="currentProposalsList">
-    <% if (!currentProposals) { %>
+    <% if (!currentVotes) { %>
         <p>You haven't voted for any Proposals yet.</p>
     <%} else { %>
         <ul>
-            <% _.each(currentProposals, function(currentProposal) { %>
+            <% _.each(currentVotes, function(currentVote) { %>
             <li style="margin:0; padding:0; font-size:12px;">
                 <div>
-                    <%= currentProposal.name %> (<%= currentProposal.totalRating %>)
+                    <%= currentVote.voteType.label %>:
+                    <br/>
+                    <%= currentVote.proposal.name %> (rating: <%= currentVote.proposal.totalRating %>)
                 </div>
             </li>
             <% }) %>
